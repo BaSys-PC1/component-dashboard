@@ -3,14 +3,14 @@ Install all dependencies
 npm install
 ```
 
-#Development
+# Development
 Run Grunt tasks:
 ```bash
 grunt run
 ```
 Go to http://localhost:9001
 
-#Production
+# Production
 Build www folder:
 ```bash
 grunt release
