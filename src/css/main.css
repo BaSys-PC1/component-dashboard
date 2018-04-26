@@ -97,21 +97,6 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
-.tile {
-    height: 400px;
-    width: 400px;
-    margin: 10px;
-    padding: 10px;
-    background-color: #555555;
-    color: white;
-}
-.tile img{
-    width: 200px;
-    float: left;
-}
-
-
-
 
 
 /* ==========================================================================
