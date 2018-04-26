@@ -13,5 +13,5 @@ Go to http://localhost:9001
 #Production
 Build www folder:
 ```bash
-grunt
+grunt release
 ```

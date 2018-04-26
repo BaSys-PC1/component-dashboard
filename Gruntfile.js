@@ -111,6 +111,7 @@ module.exports = function(grunt) {
 
     // Default task(s).
     grunt.registerTask('default', ['clean', 'less:live','uglify:libs', 'copy:for_www']);
+    grunt.registerTask('release', ['clean', 'less:live','uglify:libs', 'copy:for_www']);
     grunt.registerTask('run', ['clean', 'less:dev','uglify:libs', 'copy:for_www', 'connect', 'watch']);
 
 };
