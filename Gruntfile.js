@@ -12,6 +12,17 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         paths: pathConfig,
 
+        connect: {
+            server: {
+                options: {
+                    hostname: 'localhost',
+                    port: 9001,
+                    base: 'www',
+                    livereload: true
+                }
+            }
+        },
+
         clean: {
             build: {
                 src: ['www/*']
@@ -95,11 +106,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-clean');
-
+    grunt.loadNpmTasks('grunt-contrib-connect');
 
 
     // Default task(s).
     grunt.registerTask('default', ['clean', 'less:live','uglify:libs', 'copy:for_www']);
-    grunt.registerTask('run', ['clean', 'less:dev','uglify:libs', 'copy:for_www', 'watch']);
+    grunt.registerTask('run', ['clean', 'less:dev','uglify:libs', 'copy:for_www', 'connect', 'watch']);
 
 };
