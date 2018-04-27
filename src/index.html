@@ -24,7 +24,7 @@
         <!-- Add your site or application content here -->
         <nav class="navbar navbar-light bg-light">
             <a class="navbar-brand" href="#">
-                <img src="https://www.dfki.de/web/logo_190_52_30jahre.png" width="190" height="52" alt="">
+                <img src="https://www.dfki.de/web/logo_190_52_30jahre.png" width="150" alt="">
             </a>
             <select data-bind="value: language">
                 <option value="en">English</option>
@@ -57,10 +57,16 @@
                     </div>
                 </div>
                 </div>
+                <button type="button" class="btn btn-info float-right">Details</button>
             </div>
         </div>
 
-        <script src="js/libs.min.js"></script>
+        <!-- <script src="libs/modernizr/bin/modernizr.js"></script> -->
+         <script src="libs/knockout/knockout.js"></script>
+         <script src="js/i18next-ko.bundle.js"></script>
+        <script src="libs/jquery/jquery.js"></script>
+        <script src="libs/bootstrap/dist/js/bootstrap.js"></script>
+
         <script src="js/main.js"></script>
 
     </body>

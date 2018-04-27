@@ -1,0 +1,21 @@
+{
+  "name": "robot-status-webapp",
+  "description": "Dashboard for robots in HRC",
+  "main": "Gruntfile.js",
+  "authors": [
+    "Jonas Mohr (jonas.mohr@dfki.de)"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.3.1",
+    "knockout": "knockoutjs#^3.4.2",
+    "bootstrap": "^4.1.0",
+    "modernizr": "^3.6.0"
+  }
+}

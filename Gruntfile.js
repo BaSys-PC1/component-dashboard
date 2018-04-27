@@ -25,7 +25,7 @@ module.exports = function(grunt) {
 
         clean: {
             build: {
-                src: ['www/*']
+                src: ['<%= paths.dist %>/*']
             }
         },
 
@@ -38,8 +38,8 @@ module.exports = function(grunt) {
                     outputSourceFiles: true
                 },
                 files: {
-                    'www/css/custom.css': 'src/less/custom.less',
-                    'www/css/normalize.css': 'src/less/normalize.less',
+                    '<%= paths.dist %>/css/custom.css': '<%= paths.src %>/less/custom.less',
+                    '<%= paths.dist %>/css/normalize.css': '<%= paths.src %>/less/normalize.less',
                 }
             },
             live: {
@@ -49,8 +49,8 @@ module.exports = function(grunt) {
                     sourceMap: false
                 },
                 files: {
-                    'www/css/custom.css': 'src/less/custom.less',
-                    'www/css/normalize.css': 'src/less/normalize.less',
+                    '<%= paths.dist %>/css/custom.css': '<%= paths.src %>/less/custom.less',
+                    '<%= paths.dist %>/css/normalize.css': '<%= paths.src %>/less/normalize.less',
                 }
             }
         },
@@ -60,32 +60,24 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'src/',
-                        src: ['css/*','img/*','fonts/*','js/main.js', 'index.html'],
-                        dest: 'www'
+                        cwd: '<%= paths.src %>/',
+                        src: ['css/*','img/*','fonts/*','js/*', 'index.html'],
+                        dest: '<%= paths.dist %>'
                     },
                 ]
             }
         },
 
-        uglify: {
-            libs: {
+        bower: {
+            install: {
                 options: {
-                    sourceMap: false,
-                    sourceMapIncludeSources: true
-                },
-                files: {
-                    'www/js/libs.min.js': [
-                        'src/js/vendor/modernizr-3.5.0.min.js',
-                        'src/js/vendor/knockout-3.4.2.js',
-                        'src/js/vendor/i18next-ko.bundle.js',
-                        'src/js/vendor/jquery-3.2.1.min.js',
-                        'src/js/vendor/bootstrap.min.js'
-                    ]
+                    layout: 'byType',
+                    targetDir: '<%= paths.dist %>/libs',
+                    copy: true,
+                    cleanup: true
                 }
             }
         },
-
         watch: {
             options: {
                 spawn: false,
@@ -93,14 +85,14 @@ module.exports = function(grunt) {
             },
             less: {
                 files: [
-                    'src/less/**',
-                    '!src/less/*.map'
+                    '<%= paths.src %>/less/**',
+                    '!<%= paths.src %>/less/*.map'
                 ],
                 tasks: ['less:dev']
             },
             html: {
                 files: [
-                    'src/index.html',
+                    '<%= paths.src %>/index.html',
                 ],
                 tasks: ['copy:for_www']
             }
@@ -114,11 +106,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-bower-task');
 
 
     // Default task(s).
-    grunt.registerTask('default', ['clean', 'less:live','uglify:libs', 'copy:for_www']);
-    grunt.registerTask('release', ['clean', 'less:live','uglify:libs', 'copy:for_www']);
-    grunt.registerTask('run', ['clean', 'less:dev','uglify:libs', 'copy:for_www', 'connect', 'watch']);
+    grunt.registerTask('default', ['clean', 'bower:install', 'less:live', 'copy:for_www']);
+    grunt.registerTask('release', ['clean','bower:install', 'less:live', 'copy:for_www']);
+    grunt.registerTask('run', ['clean','bower:install', 'less:dev', 'copy:for_www', 'connect', 'watch']);
 
 };
