@@ -12,6 +12,7 @@
         <!-- Place favicon.ico in the root directory -->
 
         <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/custom.css">
     </head>
@@ -21,26 +22,46 @@
         <![endif]-->
 
         <!-- Add your site or application content here -->
-        <div class="tile">
-            <img src="img/tile.png"/>
-            <span data-bind="i18n: 'type_k'"></span>: <span data-bind="i18n: 'type_v'"></span><br>
-            <span data-bind="i18n: 'name_k'"></span>: <span data-bind="text: name_v"></span><br>
-            <span data-bind="i18n: 'location_k'"></span>: <span data-bind="text: location_v"></span><br>
-            <span data-bind="i18n: 'serial_k'"></span>: <span data-bind="text: serial_v"></span><br>
-            <span data-bind="i18n: 'role_k'"></span>: <span data-bind="i18n: 'role_v'"></span><br>
-        </div>
-
-        <p>
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="https://www.dfki.de/web/logo_190_52_30jahre.png" width="190" height="52" alt="">
+            </a>
             <select data-bind="value: language">
                 <option value="en">English</option>
                 <option value="de">Deutsch</option>
             </select>
-        </p>
+        </nav>
+
+        <div class="card">
+            <div class="card-header">
+                <span data-bind="text: name_v"></span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><span data-bind="text: name_v"></span></h5>
+                <div class="container">
+                <div class="row">
+                    <div class="col-sm">
+                        <img src="img/tile.png"/>
+                    </div>
+                    <div class="col-sm">
+                        <span data-bind="i18n: 'type_k'"></span>: <br>
+                        <span data-bind="i18n: 'location_k'"></span>: <br>
+                        <span data-bind="i18n: 'serial_k'"></span>: <br>
+                        <span data-bind="i18n: 'role_k'"></span>: <br>
+                    </div>
+                    <div class="col-sm">
+                        <span data-bind="i18n: 'type_v'"></span><br>
+                        <span data-bind="text: location_v"></span><br>
+                        <span data-bind="text: serial_v"></span><br>
+                        <span data-bind="i18n: 'role_v'"></span><br>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
 
         <script src="js/libs.min.js"></script>
         <script src="js/main.js"></script>
-
-
 
     </body>
 </html>

@@ -61,7 +61,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'src/',
-                        src: ['css/*','img/*','js/main.js', 'index.html'],
+                        src: ['css/*','img/*','fonts/*','js/main.js', 'index.html'],
                         dest: 'www'
                     },
                 ]
@@ -79,7 +79,8 @@ module.exports = function(grunt) {
                         'src/js/vendor/modernizr-3.5.0.min.js',
                         'src/js/vendor/knockout-3.4.2.js',
                         'src/js/vendor/i18next-ko.bundle.js',
-                        'src/js/vendor/jquery-3.2.1.min.js'
+                        'src/js/vendor/jquery-3.2.1.min.js',
+                        'src/js/vendor/bootstrap.min.js'
                     ]
                 }
             }
@@ -96,6 +97,12 @@ module.exports = function(grunt) {
                     '!src/less/*.map'
                 ],
                 tasks: ['less:dev']
+            },
+            html: {
+                files: [
+                    'src/index.html',
+                ],
+                tasks: ['copy:for_www']
             }
         }
     });
