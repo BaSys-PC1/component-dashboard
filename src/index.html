@@ -31,35 +31,37 @@
                 <option value="de">Deutsch</option>
             </select>
         </nav>
-
-        <div class="card">
-            <div class="card-header">
-                <span data-bind="text: name_v"></span>
-            </div>
-            <div class="card-body">
-                <h5 class="card-title"><span data-bind="text: name_v"></span></h5>
-                <div class="container">
-                <div class="row">
-                    <div class="col-sm">
-                        <img src="img/tile.png"/>
-                    </div>
-                    <div class="col-sm">
-                        <span data-bind="i18n: 'type_k'"></span>: <br>
-                        <span data-bind="i18n: 'location_k'"></span>: <br>
-                        <span data-bind="i18n: 'serial_k'"></span>: <br>
-                        <span data-bind="i18n: 'role_k'"></span>: <br>
-                    </div>
-                    <div class="col-sm">
-                        <span data-bind="i18n: 'type_v'"></span><br>
-                        <span data-bind="text: location_v"></span><br>
-                        <span data-bind="text: serial_v"></span><br>
-                        <span data-bind="i18n: 'role_v'"></span><br>
-                    </div>
+        <div class="cardContainer" data-bind="foreach: instances">
+            <div class="card" >
+                <div class="card-header">
+                    <span data-bind="text: type"></span>
                 </div>
+                <div class="card-body">
+                    <h5 class="card-title"><span data-bind="text: name"></span></h5>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm">
+                                <img src="img/MiR.png"/>
+                            </div>
+                            <div class="col-sm">
+                                <span data-bind="i18n: 'type_k'"></span>: <br>
+                                <span data-bind="i18n: 'location_k'"></span>: <br>
+                                <span data-bind="i18n: 'serial_k'"></span>: <br>
+                                <span data-bind="i18n: 'role_k'"></span>: <br>
+                            </div>
+                            <div class="col-sm">
+                                <span data-bind="text: type"></span><br>
+                                <span data-bind="text: location"></span><br>
+                                <span data-bind="text: serial"></span><br>
+                                <span data-bind="text: role"></span><br>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-info float-right">Details</button>
                 </div>
-                <button type="button" class="btn btn-info float-right">Details</button>
             </div>
         </div>
+
 
         <!-- <script src="libs/modernizr/bin/modernizr.js"></script> -->
          <script src="libs/knockout/knockout.js"></script>

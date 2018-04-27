@@ -93,6 +93,7 @@ module.exports = function(grunt) {
             html: {
                 files: [
                     '<%= paths.src %>/index.html',
+                    '<%= paths.src %>/js/*'
                 ],
                 tasks: ['copy:for_www']
             }
