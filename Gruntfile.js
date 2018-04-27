@@ -39,7 +39,6 @@ module.exports = function(grunt) {
                 },
                 files: {
                     '<%= paths.dist %>/css/custom.css': '<%= paths.src %>/less/custom.less',
-                    '<%= paths.dist %>/css/normalize.css': '<%= paths.src %>/less/normalize.less',
                 }
             },
             live: {
@@ -50,7 +49,6 @@ module.exports = function(grunt) {
                 },
                 files: {
                     '<%= paths.dist %>/css/custom.css': '<%= paths.src %>/less/custom.less',
-                    '<%= paths.dist %>/css/normalize.css': '<%= paths.src %>/less/normalize.less',
                 }
             }
         },
@@ -75,6 +73,16 @@ module.exports = function(grunt) {
                     targetDir: '<%= paths.dist %>/libs',
                     copy: true,
                     cleanup: true
+                }
+            }
+        },
+        wiredep: {
+            task: {
+                src: [
+                    '<%= paths.dist %>/index.html',
+                ],
+                options: {
+                    directory:'<%= paths.dist %>/libs/*',
                 }
             }
         },
@@ -108,6 +116,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-bower-task');
+    grunt.loadNpmTasks('grunt-wiredep');
 
 
     // Default task(s).
