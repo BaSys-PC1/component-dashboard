@@ -29,7 +29,7 @@ var instances = [{
     },
     {
         type: 'UR10',
-        name: 'U89323',
+        name: 'U323',
         location: 'Station 2',
         serial: '5H843834',
         role: 'Greifen'
