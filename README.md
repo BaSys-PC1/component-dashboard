@@ -3,6 +3,11 @@ Install all dependencies
 npm install
 ```
 
+Install the CLI
+```bash
+npm install -g grunt-cli
+```
+
 # Development
 Run Grunt tasks:
 ```bash

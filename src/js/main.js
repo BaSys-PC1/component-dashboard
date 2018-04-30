@@ -33,6 +33,27 @@ var instances = [{
         location: 'Station 2',
         serial: '5H843834',
         role: 'Greifen'
+    },
+    {
+        type: 'Franka',
+        name: 'F165',
+        location: 'Station 3',
+        serial: 'K73F892',
+        role: 'Greifen'
+    },
+    {
+        type: 'Kuka',
+        name: 'K565',
+        location: 'Station 3',
+        serial: '78G7876',
+        role: 'Greifen'
+    },
+    {
+        type: 'Yumi',
+        name: 'Y565',
+        location: 'Station 4',
+        serial: '65J987',
+        role: 'Greifen'
     }];
 
 i18nextko.init(resources, 'en', ko);
