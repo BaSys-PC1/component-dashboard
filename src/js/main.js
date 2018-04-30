@@ -25,7 +25,7 @@ var instances = [{
         name: 'R195',
         location: 'Station 1',
         serial: '9H8734834',
-        role: 'Transport'
+        role: 'Transport',
     },
     {
         type: 'UR10',
