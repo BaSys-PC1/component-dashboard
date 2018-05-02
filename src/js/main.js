@@ -7,6 +7,7 @@ var resources = {
             'location_k': 'Location',
             'serial_k': 'Serial',
             'role_k': 'Role',
+            'set_language': 'Language'
         }
     },
     'de': {
@@ -16,6 +17,7 @@ var resources = {
             'location_k': 'Ort',
             'serial_k': 'Seriennummer',
             'role_k': 'Rolle',
+            'set_language': 'Sprache'
         }
     }
 };
@@ -67,21 +69,21 @@ function AppViewModel() {
 
     self.instances = instances;
 
-}
+    self.mqttConfig = {
+        hostname: ko.observable("broker.mqttdashboard.com"),
+        port: ko.observable(8000),
+        clientID: ko.observable("client-Z3M4")
+    };
 
-ko.applyBindings(new AppViewModel());
+}
+var viewModel = new AppViewModel();
+ko.applyBindings(viewModel);
 
 
 //MQTT
 
-var mqttConfig = {
-    hostname: "broker.mqttdashboard.com",
-    port: 8000,
-    clientID: "client-Z3M4"
-};
-
 // Create a client instance
-client = new Paho.MQTT.Client(mqttConfig.hostname, Number(mqttConfig.port), mqttConfig.clientID);
+client = new Paho.MQTT.Client(viewModel.mqttConfig.hostname(), Number(viewModel.mqttConfig.port()), viewModel.mqttConfig.clientID());
 
 // set callback handlers
 client.onConnectionLost = onConnectionLost;

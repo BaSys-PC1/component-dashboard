@@ -1,98 +1,133 @@
 <!doctype html>
 <html class="no-js" lang="">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- Place favicon.ico in the root directory -->
+    <!-- Place favicon.ico in the root directory -->
 
-        <!-- bower:css -->
-        <!-- endbower -->
+    <!-- bower:css -->
+    <!-- endbower -->
 
-        <link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.css">
-        <link rel="stylesheet" href="css/custom.css">
-    </head>
-    <body>
-        <!--[if lte IE 9]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-        <![endif]-->
+    <link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/custom.css">
+</head>
+<body>
+<!--[if lte IE 9]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade
+    your browser</a> to improve your experience and security.</p>
+<![endif]-->
 
-        <!-- Add your site or application content here -->
-        <nav class="navbar navbar-light bg-light">
-            <a class="navbar-brand" href="#">
-                <img src="https://www.dfki.de/web/logo_190_52_30jahre.png" width="150" alt="">
-            </a>
-            <select data-bind="value: language">
-                <option value="en">English</option>
-                <option value="de">Deutsch</option>
-            </select>
-        </nav>
-        <div class="cardContainer" data-bind="foreach: instances">
-            <div class="card" >
-                <div class="card-header">
-                    <h5 class="card-title"><span data-bind="text: name"></span>
-                    <button type="button"  data-toggle="modal" data-target="#myModal" class="btn btn-info float-right">Details</button>
-                    </h5>
+<!-- Add your site or application content here -->
+<nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <img src="https://www.dfki.de/web/logo_190_52_30jahre.png" width="150" alt="">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <span data-bind="i18n: 'set_language'"></span>:
                 </div>
-                <div class="card-body">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-5">
-                                <img data-bind="attr: { 'src': '/img/' + type + '.png' }"/>
-                            </div>
-                            <div class="col-4">
-                                <span data-bind="i18n: 'type_k'"></span>: <br>
-                                <span data-bind="i18n: 'location_k'"></span>: <br>
-                                <span data-bind="i18n: 'serial_k'"></span>: <br>
-                                <span data-bind="i18n: 'role_k'"></span>: <br>
-                            </div>
-                            <div class="col-3">
-                                <span data-bind="text: type"></span><br>
-                                <span data-bind="text: location"></span><br>
-                                <span data-bind="text: serial"></span><br>
-                                <span data-bind="text: role"></span><br>
-                            </div>
-                        </div>
-                    </div>
-
+                <div class="col">
+                    <select data-bind="value: language">
+                        <option value="en">English</option>
+                        <option value="de">Deutsch</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    Broker URL:
+                </div>
+                <div class="col">
+                    <input class="form-control" data-bind="value: mqttConfig.hostname" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    Broker Port:
+                </div>
+                <div class="col">
+                    <input class="form-control" data-bind="value: mqttConfig.port" />
                 </div>
             </div>
         </div>
+    </div>
 
-
-        <div class="modal" id="myModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Finite Automaton</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+</nav>
+<div class="cardContainer" data-bind="foreach: instances">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title"><span data-bind="text: name"></span>
+                <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-info float-right">
+                    Details
+                </button>
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-5">
+                        <img data-bind="attr: { 'src': '/img/' + type + '.png' }"/>
                     </div>
-                    <div class="modal-body">
-                        <p>Finite Automaton goes here.</p>
+                    <div class="col-4">
+                        <span data-bind="i18n: 'type_k'"></span>: <br>
+                        <span data-bind="i18n: 'location_k'"></span>: <br>
+                        <span data-bind="i18n: 'serial_k'"></span>: <br>
+                        <span data-bind="i18n: 'role_k'"></span>: <br>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <div class="col-3">
+                        <span data-bind="text: type"></span><br>
+                        <span data-bind="text: location"></span><br>
+                        <span data-bind="text: serial"></span><br>
+                        <span data-bind="text: role"></span><br>
                     </div>
                 </div>
             </div>
+
         </div>
+    </div>
+</div>
 
 
-        <script src="libs/knockout/knockout.js"></script>
-        <script src="libs/js/i18next-ko/i18next-ko.bundle.js"></script>
-        <script src="libs/jquery/jquery.js"></script>
-        <script src="libs/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="libs/paho-mqtt/mqttws31.js"></script>
+<div class="modal" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Finite Automaton</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Finite Automaton goes here.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-        <!-- bower:js -->
-        <!-- endbower -->
 
-        <script src="js/main.js"></script>
+<script src="libs/knockout/knockout.js"></script>
+<script src="libs/js/i18next-ko/i18next-ko.bundle.js"></script>
+<script src="libs/jquery/jquery.js"></script>
+<script src="libs/bootstrap/dist/js/bootstrap.js"></script>
+<script src="libs/paho-mqtt/mqttws31.js"></script>
 
-    </body>
+<!-- bower:js -->
+<!-- endbower -->
+
+<script src="js/main.js"></script>
+
+</body>
 </html>
