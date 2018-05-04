@@ -26,14 +26,14 @@ var instances = [{
         type: 'MiR',
         name: 'R195',
         location: 'Station 1',
-        serial: '9H8734834',
+        serial: '9H873834',
         role: 'Transport',
     },
     {
         type: 'UR10',
         name: 'U323',
         location: 'Station 2',
-        serial: '5H843834',
+        serial: '5H84334',
         role: 'Greifen'
     },
     {
@@ -114,3 +114,50 @@ function onConnectionLost(responseObject) {
 function onMessageArrived(message) {
     console.log("onMessageArrived:"+message.payloadString);
 }
+
+//mxgraph
+
+// Program starts here. Creates a sample graph in the
+// DOM node with the specified ID. This function is invoked
+// from the onLoad event handler of the document (see below).
+function main(container)
+{
+    if (mxClient.isBrowserSupported())
+    {
+        var divs = document.getElementsByTagName('*');
+
+        for (var i = 0; i < divs.length; i++)
+        {
+            if (divs[i].className.toString().indexOf('mxgraph') >= 0)
+            {
+                (function(container)
+                {
+                    var xml = mxUtils.getTextContent(container);
+                    var xmlDocument = mxUtils.parseXml(xml);
+
+                    if (xmlDocument.documentElement != null && xmlDocument.documentElement.nodeName == 'mxGraphModel')
+                    {
+                        var decoder = new mxCodec(xmlDocument);
+                        var node = xmlDocument.documentElement;
+
+                        container.innerHTML = '';
+
+                        var graph = new mxGraph(container);
+                        graph.setTooltips(false);
+                        graph.setEnabled(false);
+
+                        // Changes the default style for edges "in-place"
+                        var style = graph.getStylesheet().getDefaultEdgeStyle();
+                        style[mxConstants.STYLE_EDGE] = mxEdgeStyle.ElbowConnector;
+
+                        decoder.decode(node, graph.getModel());
+                        graph.resizeContainer = true;
+
+                    }
+                })(divs[i]);
+            }
+        }
+    }
+};
+
+main();
