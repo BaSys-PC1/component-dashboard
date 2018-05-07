@@ -115,49 +115,70 @@ function onMessageArrived(message) {
     console.log("onMessageArrived:"+message.payloadString);
 }
 
+
 //mxgraph
 
-// Program starts here. Creates a sample graph in the
-// DOM node with the specified ID. This function is invoked
-// from the onLoad event handler of the document (see below).
-function main(container)
+var graph = null;
+
+if (mxClient.isBrowserSupported())
 {
-    if (mxClient.isBrowserSupported())
+    var divs = document.getElementsByClassName('mxgraph');
+
+    for (var i = 0; i < divs.length; i++)
     {
-        var divs = document.getElementsByTagName('*');
-
-        for (var i = 0; i < divs.length; i++)
-        {
-            if (divs[i].className.toString().indexOf('mxgraph') >= 0)
+            (function(container)
             {
-                (function(container)
+                var xml = mxUtils.getTextContent(container);
+                var xmlDocument = mxUtils.parseXml(xml);
+
+                if (xmlDocument.documentElement != null && xmlDocument.documentElement.nodeName == 'mxGraphModel')
                 {
-                    var xml = mxUtils.getTextContent(container);
-                    var xmlDocument = mxUtils.parseXml(xml);
+                    var codec = new mxCodec(xmlDocument);
+                    var node = xmlDocument.documentElement;
 
-                    if (xmlDocument.documentElement != null && xmlDocument.documentElement.nodeName == 'mxGraphModel')
-                    {
-                        var decoder = new mxCodec(xmlDocument);
-                        var node = xmlDocument.documentElement;
+                    container.innerHTML = '';
 
-                        container.innerHTML = '';
+                    graph = new mxGraph(container);
+                    graph.setTooltips(false);
+                    graph.setEnabled(false);
 
-                        var graph = new mxGraph(container);
-                        graph.setTooltips(false);
-                        graph.setEnabled(false);
+                    // Changes the default style for edges "in-place"
+                    //var style = graph.getStylesheet().getDefaultEdgeStyle();
+                    //style[mxConstants.STYLE_EDGE] = mxEdgeStyle.ElbowConnector;
 
-                        // Changes the default style for edges "in-place"
-                        var style = graph.getStylesheet().getDefaultEdgeStyle();
-                        style[mxConstants.STYLE_EDGE] = mxEdgeStyle.ElbowConnector;
 
-                        decoder.decode(node, graph.getModel());
-                        graph.resizeContainer = true;
+                    codec.decode(node, graph.getModel());
+                    //graph.resizeContainer = true;
 
-                    }
-                })(divs[i]);
-            }
+                }
+            })(divs[i]);
+        }
+
+}
+
+
+var markCurrentState = function(state){
+
+    var currentCell = null,
+        vertices = graph.getChildCells(graph.getDefaultParent(), true, false);
+
+    for (let i = 0; i < vertices.length; i++){
+        if (vertices[i].value === state) {
+            currentCell = vertices[i];
         }
     }
+
+    //change style of active state
+    if (currentCell !== null){
+        graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, "#F00", [currentCell]);
+    }
+    else{
+        console.error("Current state '" + state + "' not found.");
+    }
+
 };
 
-main();
+
+var state = "SUSPENDED";
+markCurrentState(state);
+
