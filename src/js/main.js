@@ -5,31 +5,30 @@
 let resources,
     viewModel,
     instances,
-    graph;
+    graph,
+    robots,
+    oldStyle,
+    currentCell;
 
-$.getJSON("/data/service_register.json", function(data) {
+//initially get data from all services
+$.when(
+    $.getJSON("/data/service_register.json"),
+    $.getJSON("/data/service_instances.json"),
+    $.getJSON("/data/service_types.json"),
+    $.getJSON("/data/service_topology.json")
+    )
+    .done(function(reg, inst, typ, top) {
+        //TODO: merge data from all services
 
-    //var parsed = JSON.parse(data);
-   // console.log(data);
+        robots = reg[0];
+    })
+    .fail(function() {
+        // Executed if at least one request fails
+        console.error("Failed to get JSON data");
+    });
 
-// Update view model properties
-    //viewModel.firstName(parsed.firstName);
 
-});
-
-$.getJSON("/data/service_instances.json", function(data) {
-  //  console.log(data);
-});
-
-$.getJSON("/data/service_types.json", function(data) {
-   // console.log(data);
-});
-
-$.getJSON("/data/service_topology.json", function(data) {
-   // console.log(data);
-});
-
-//mockup data
+//translation and mockup data
 let transReq = $.getJSON("/data/translation.json");
 let instReq = $.getJSON("/data/instances.json");
 
@@ -75,7 +74,7 @@ function AppViewModel() {
         MQTT
 ################*/
 
-var initMQTT = function(){
+function initMQTT(){
 
     // Create a client instance
     client = new Paho.MQTT.Client(viewModel.mqttConfig.hostname(), Number(viewModel.mqttConfig.port()), viewModel.mqttConfig.clientID());
@@ -86,7 +85,7 @@ var initMQTT = function(){
 
     // connect the client
     client.connect({onSuccess:onConnect});
-};
+}
 
 
 // called when the client connects
@@ -116,7 +115,7 @@ function onMessageArrived(message) {
         MxGraph
 ################*/
 
-var initGraph = function(){
+function initGraph(){
     if (mxClient.isBrowserSupported())
     {
         var divs = document.getElementsByClassName('mxgraph');
@@ -151,19 +150,18 @@ var initGraph = function(){
             })(divs[i]);
         }
 
-        //zoom out to fit the modal size
+        //zoom out to fit the modal size (leads to display errors on tablet)
         graph.zoomFactor = 1.15;
         graph.zoomOut();
 
         return graph;
 
     }
-};
+}
 
-var markCurrentState = function(state){
+function markCurrentState(state){
 
-    var currentCell = null,
-        vertices = graph.getChildCells(graph.getDefaultParent(), true, false);
+    let vertices = graph.getChildCells(graph.getDefaultParent(), true, false);
 
     for (let i = 0; i < vertices.length; i++){
         if (vertices[i].value === state) {
@@ -173,13 +171,33 @@ var markCurrentState = function(state){
 
     //change style of active state
     if (currentCell !== null){
+
+        let oldColor = graph.getCellStyle(currentCell)[mxConstants.STYLE_STROKECOLOR];
+
         graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, "#F00", [currentCell]);
+
+        return oldColor;
     }
     else{
         console.error("Current state '" + state + "' not found.");
+        return null;
     }
 
-};
+}
+
+$('#finiteAutomaton').on('show.bs.modal', function (event) {
+
+    let button = $(event.relatedTarget); // Button that triggered the modal
+    let state = button.data('state'); // Extract info from data-* attributes
+
+    oldStyle = markCurrentState(state);
+
+}).on('hidden.bs.modal', function (event) {
+
+    //reset stroke color when closing the modal
+    graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, oldStyle, [currentCell]);
+
+});
 
 /*################
         Main
@@ -195,8 +213,7 @@ function main() {
     initMQTT();
 
     graph = initGraph();
-    let state = "EXECUTE";
-    markCurrentState(state);
+
 }
 
 

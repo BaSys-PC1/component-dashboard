@@ -1,37 +1,52 @@
 [
   {
+    "componentId": "1",
     "type": "MiR",
-    "name": "R195",
+    "componentName": "R195",
     "location": "Station 1",
     "serial": "9H873834",
-    "role": "Transport"
+    "role": "Transport",
+    "currentState": "EXECUTE",
+    "currentMode": "PRODUCTION"
   },
   {
+    "componentId": "2",
     "type": "UR10",
-    "name": "U323",
+    "componentName": "U323",
     "location": "Station 2",
     "serial": "5H84334",
-    "role": "Greifen"
+    "role": "Greifen",
+    "currentState": "HELD",
+    "currentMode": "PRODUCTION"
   },
   {
+    "componentId": "3",
     "type": "Franka",
-    "name": "F165",
+    "componentName": "F165",
     "location": "Station 3",
     "serial": "K73F892",
-    "role": "Greifen"
+    "role": "Greifen",
+    "currentState": "SUSPENDED",
+    "currentMode": "PRODUCTION"
   },
   {
+    "componentId": "4",
     "type": "Kuka",
-    "name": "K565",
+    "componentName": "K565",
     "location": "Station 3",
     "serial": "78G7876",
-    "role": "Greifen"
+    "role": "Greifen",
+    "currentState": "EXECUTE",
+    "currentMode": "PRODUCTION"
   },
   {
+    "componentId": "5",
     "type": "Yumi",
-    "name": "Y565",
+    "componentName": "Y565",
     "location": "Station 4",
     "serial": "65J987",
-    "role": "Greifen"
+    "role": "Greifen",
+    "currentState": "EXECUTE",
+    "currentMode": "PRODUCTION"
   }
 ]
