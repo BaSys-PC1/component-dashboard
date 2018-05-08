@@ -1,67 +1,59 @@
-//https://github.com/marcosdiez/i18next-ko
-var resources = {
-    'en': {
-        'translation': {
-            'type_k': 'Type',
-            'name_k': 'Name',
-            'location_k': 'Location',
-            'serial_k': 'Serial',
-            'role_k': 'Role',
-            'set_language': 'Language'
-        }
-    },
-    'de': {
-        'translation': {
-            'type_k': 'Typ',
-            'name_k': 'Name',
-            'location_k': 'Ort',
-            'serial_k': 'Seriennummer',
-            'role_k': 'Rolle',
-            'set_language': 'Sprache'
-        }
-    }
-};
+/*######################
+        API Requests
+######################*/
 
-var instances = [{
-        type: 'MiR',
-        name: 'R195',
-        location: 'Station 1',
-        serial: '9H873834',
-        role: 'Transport',
-    },
-    {
-        type: 'UR10',
-        name: 'U323',
-        location: 'Station 2',
-        serial: '5H84334',
-        role: 'Greifen'
-    },
-    {
-        type: 'Franka',
-        name: 'F165',
-        location: 'Station 3',
-        serial: 'K73F892',
-        role: 'Greifen'
-    },
-    {
-        type: 'Kuka',
-        name: 'K565',
-        location: 'Station 3',
-        serial: '78G7876',
-        role: 'Greifen'
-    },
-    {
-        type: 'Yumi',
-        name: 'Y565',
-        location: 'Station 4',
-        serial: '65J987',
-        role: 'Greifen'
-    }];
+let resources,
+    viewModel,
+    instances,
+    graph;
 
-i18nextko.init(resources, 'en', ko);
+$.getJSON("/data/service_register.json", function(data) {
+
+    //var parsed = JSON.parse(data);
+   // console.log(data);
+
+// Update view model properties
+    //viewModel.firstName(parsed.firstName);
+
+});
+
+$.getJSON("/data/service_instances.json", function(data) {
+  //  console.log(data);
+});
+
+$.getJSON("/data/service_types.json", function(data) {
+   // console.log(data);
+});
+
+$.getJSON("/data/service_topology.json", function(data) {
+   // console.log(data);
+});
+
+//mockup data
+let transReq = $.getJSON("/data/translation.json");
+let instReq = $.getJSON("/data/instances.json");
+
+$.when(transReq, instReq)
+    .done(function(trans, inst) {
+        resources = trans[0];
+        instances = inst[0];
+        //data needs to be loaded before executing main()
+        main();
+    })
+    .fail(function() {
+        // Executed if at least one request fails
+        console.error("Failed to get JSON data");
+    });
+
+
+/*#################################################
+        Knockout/i18next
+        https://github.com/marcosdiez/i18next-ko
+#################################################*/
+
 
 function AppViewModel() {
-    var self = this;
+    let self = this;
     self.language = ko.observable('en');
     self.language.subscribe(function (value) {
         i18nextko.setLanguage(value);
@@ -76,21 +68,25 @@ function AppViewModel() {
     };
 
 }
-var viewModel = new AppViewModel();
-ko.applyBindings(viewModel);
 
 
-//MQTT
 
-// Create a client instance
-client = new Paho.MQTT.Client(viewModel.mqttConfig.hostname(), Number(viewModel.mqttConfig.port()), viewModel.mqttConfig.clientID());
+/*################
+        MQTT
+################*/
 
-// set callback handlers
-client.onConnectionLost = onConnectionLost;
-client.onMessageArrived = onMessageArrived;
+var initMQTT = function(){
 
-// connect the client
-client.connect({onSuccess:onConnect});
+    // Create a client instance
+    client = new Paho.MQTT.Client(viewModel.mqttConfig.hostname(), Number(viewModel.mqttConfig.port()), viewModel.mqttConfig.clientID());
+
+    // set callback handlers
+    client.onConnectionLost = onConnectionLost;
+    client.onMessageArrived = onMessageArrived;
+
+    // connect the client
+    client.connect({onSuccess:onConnect});
+};
 
 
 // called when the client connects
@@ -116,16 +112,17 @@ function onMessageArrived(message) {
 }
 
 
-//mxgraph
+/*################
+        MxGraph
+################*/
 
-var graph = null;
-
-if (mxClient.isBrowserSupported())
-{
-    var divs = document.getElementsByClassName('mxgraph');
-
-    for (var i = 0; i < divs.length; i++)
+var initGraph = function(){
+    if (mxClient.isBrowserSupported())
     {
+        var divs = document.getElementsByClassName('mxgraph');
+
+        for (var i = 0; i < divs.length; i++)
+        {
             (function(container)
             {
                 var xml = mxUtils.getTextContent(container);
@@ -154,8 +151,14 @@ if (mxClient.isBrowserSupported())
             })(divs[i]);
         }
 
-}
+        //zoom out to fit the modal size
+        graph.zoomFactor = 1.15;
+        graph.zoomOut();
 
+        return graph;
+
+    }
+};
 
 var markCurrentState = function(state){
 
@@ -178,7 +181,24 @@ var markCurrentState = function(state){
 
 };
 
+/*################
+        Main
+################*/
 
-var state = "SUSPENDED";
-markCurrentState(state);
+function main() {
+
+    i18nextko.init(resources, 'en', ko);
+
+    viewModel = new AppViewModel();
+    ko.applyBindings(viewModel);
+
+    initMQTT();
+
+    graph = initGraph();
+    let state = "EXECUTE";
+    markCurrentState(state);
+}
+
+
+
 

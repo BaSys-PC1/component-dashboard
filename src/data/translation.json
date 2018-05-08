@@ -1,0 +1,22 @@
+{
+  "en": {
+    "translation": {
+      "type_k": "Type",
+      "name_k": "Name",
+      "location_k": "Location",
+      "serial_k": "Serial",
+      "role_k": "Role",
+      "set_language": "Language"
+    }
+  },
+  "de": {
+    "translation": {
+      "type_k": "Typ",
+      "name_k": "Name",
+      "location_k": "Ort",
+      "serial_k": "Seriennummer",
+      "role_k": "Rolle",
+      "set_language": "Sprache"
+    }
+  }
+}
