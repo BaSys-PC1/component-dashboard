@@ -58,13 +58,22 @@ function AppViewModel() {
         i18nextko.setLanguage(value);
     });
 
-    self.instances = instances;
+    self.instances = ko.mapping.fromJS(instances);
 
     self.mqttConfig = {
         hostname: ko.observable("broker.mqttdashboard.com"),
         port: ko.observable(8000),
         clientID: ko.observable("client-Z3M4")
     };
+
+    ko.computed(function() {
+        return ko.toJSON(self.mqttConfig);
+    }).subscribe(function() {
+        // called whenever any of the properties of mqttConfig changes
+        console.log("changed mqtt settings");
+        initMQTT();
+    });
+
 
 }
 
@@ -92,10 +101,11 @@ function initMQTT(){
 function onConnect() {
     // Once a connection has been made, make a subscription and send a message.
     console.log("onConnect");
-    client.subscribe("World");
-    message = new Paho.MQTT.Message("Hello");
-    message.destinationName = "World";
-    client.send(message);
+    client.subscribe("hybrit/robots");
+    console.log("initial instances", instances);
+    //message = new Paho.MQTT.Message(viewModel.mqttConfig.clientID() + " connected");
+    //message.destinationName = "hybrit/robots";
+    //client.send(message);
 }
 
 // called when the client loses its connection
@@ -107,7 +117,8 @@ function onConnectionLost(responseObject) {
 
 // called when a message arrives
 function onMessageArrived(message) {
-    console.log("onMessageArrived:"+message.payloadString);
+    ko.mapping.fromJSON(message.payloadString, viewModel.instances);
+    console.log("updated instances", instances);
 }
 
 
@@ -191,6 +202,11 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
     let state = button.data('state'); // Extract info from data-* attributes
 
     oldStyle = markCurrentState(state);
+
+    //TODO: detect changes to relevant data-state attribute for further UI updates
+    //state.change(function(){
+    //    console.log("data changed");
+    //});
 
 }).on('hidden.bs.modal', function (event) {
 
