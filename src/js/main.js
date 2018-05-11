@@ -8,7 +8,7 @@ let resources,
     graph,
     robots,
     oldStyle,
-    currentCell;
+    currentCell, sub;
 
 //initially get data from all services
 $.when(
@@ -102,7 +102,6 @@ function onConnect() {
     // Once a connection has been made, make a subscription and send a message.
     console.log("onConnect");
     client.subscribe("hybrit/robots");
-    console.log("initial instances", instances);
     //message = new Paho.MQTT.Message(viewModel.mqttConfig.clientID() + " connected");
     //message.destinationName = "hybrit/robots";
     //client.send(message);
@@ -118,7 +117,7 @@ function onConnectionLost(responseObject) {
 // called when a message arrives
 function onMessageArrived(message) {
     ko.mapping.fromJSON(message.payloadString, viewModel.instances);
-    console.log("updated instances", instances);
+    console.log("updated instances");
 }
 
 
@@ -199,17 +198,26 @@ function markCurrentState(state){
 $('#finiteAutomaton').on('show.bs.modal', function (event) {
 
     let button = $(event.relatedTarget); // Button that triggered the modal
-    let state = button.data('state'); // Extract info from data-* attributes
+    // Extract info from data-* attributes
+    let state = button.data('state'),
+        index = button.data('index');
 
     oldStyle = markCurrentState(state);
 
-    //TODO: detect changes to relevant data-state attribute for further UI updates
-    //state.change(function(){
-    //    console.log("data changed");
-    //});
+    //detect changes on currently opened instance for further UI updates
+    sub = ko.computed(function() {
+        return ko.toJSON(viewModel.instances()[index]);
+    }).subscribe(function() {
+        let unmapped = ko.mapping.toJS(viewModel.instances);
+        console.log("changed to ", unmapped[index].currentState);
+        graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, oldStyle, [currentCell]);
+        oldStyle = markCurrentState(unmapped[index].currentState);
+    });
 
 }).on('hidden.bs.modal', function (event) {
 
+    //remove subscription
+    sub.dispose();
     //reset stroke color when closing the modal
     graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, oldStyle, [currentCell]);
 
@@ -231,7 +239,3 @@ function main() {
     graph = initGraph();
 
 }
-
-
-
-
