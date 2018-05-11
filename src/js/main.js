@@ -145,12 +145,16 @@ function initGraph(){
                     container.innerHTML = '';
 
                     graph = new mxGraph(container);
-                    graph.setTooltips(false);
+                    graph.setTooltips(true);
                     graph.setEnabled(false);
+                    //graph.htmlLabels = true;
 
                     // Changes the default style for edges "in-place"
-                    //var style = graph.getStylesheet().getDefaultEdgeStyle();
+                    var style = graph.getStylesheet().getDefaultEdgeStyle();
                     //style[mxConstants.STYLE_EDGE] = mxEdgeStyle.ElbowConnector;
+
+                    style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                    //style[mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = "#fff";
 
 
                     codec.decode(node, graph.getModel());
