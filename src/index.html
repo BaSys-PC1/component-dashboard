@@ -27,10 +27,18 @@
     <a class="navbar-brand" href="#">
         <img src="https://www.dfki.de/web/logo_190_52_30jahre.png" width="150" alt="">
     </a>
+
+    <ul class="nav navbar-nav flex-row" id="pagination">
+        <li class="nav-item active"><a id="robot-link" class="nav-link pr-3" href="#">Robots</a></li>
+        <li class="nav-item"><a id="management-link" class="nav-link pr-3" href="#">Management</a></li>
+        <li class="nav-item"><a id="service-link" class="nav-link" href="#">Service</a></li>
+    </ul>
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="container">
             <div class="row">
@@ -64,13 +72,75 @@
     </div>
 
 </nav>
-<div class="cardContainer" data-bind="foreach: instances">
+<div class="cardContainer" id="robotContainer" data-bind="foreach: instances">
     <div class="card">
         <div class="card-header">
             <h5 class="card-title"><span data-bind="text: componentName"></span>
                 <button type="button" data-toggle="modal" data-target="#finiteAutomaton" class="btn btn-info float-right" data-bind="attr: { 'data-state': currentState, 'data-index': $index }">
                     Details
                 </button>
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-5">
+                        <img data-bind="attr: { 'src': '/img/' + type() + '.png' }"/>
+                    </div>
+                    <div class="col-4">
+                        <span data-bind="i18n: 'type_k'"></span>: <br>
+                        <span data-bind="i18n: 'location_k'"></span>: <br>
+                        <span data-bind="i18n: 'serial_k'"></span>: <br>
+                        <span data-bind="i18n: 'role_k'"></span>: <br>
+                    </div>
+                    <div class="col-3">
+                        <span data-bind="text: type"></span><br>
+                        <span data-bind="text: location"></span><br>
+                        <span data-bind="text: serial"></span><br>
+                        <span data-bind="text: role"></span><br>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="cardContainer" id="managementContainer" data-bind="foreach: instances">
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title"><span data-bind="text: componentName"></span>
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-5">
+                    <img data-bind="attr: { 'src': '/img/' + type() + '.png' }"/>
+                </div>
+                <div class="col-4">
+                    <span data-bind="i18n: 'type_k'"></span>: <br>
+                    <span data-bind="i18n: 'location_k'"></span>: <br>
+                    <span data-bind="i18n: 'serial_k'"></span>: <br>
+                    <span data-bind="i18n: 'role_k'"></span>: <br>
+                </div>
+                <div class="col-3">
+                    <span data-bind="text: type"></span><br>
+                    <span data-bind="text: location"></span><br>
+                    <span data-bind="text: serial"></span><br>
+                    <span data-bind="text: role"></span><br>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<div class="cardContainer" id="serviceContainer" data-bind="foreach: instances">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title"><span data-bind="text: componentName"></span>
             </h5>
         </div>
         <div class="card-body">

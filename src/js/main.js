@@ -156,7 +156,6 @@ function initGraph(){
                     style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
                     //style[mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = "#fff";
 
-
                     codec.decode(node, graph.getModel());
                     //graph.resizeContainer = true;
 
@@ -227,11 +226,48 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
 
 });
 
+
+/*#####################
+        Pagination
+#####################*/
+
+
+$( "#robot-link" ).click(function() {
+    $('#pagination li').removeClass('active');
+    $(this).parent().addClass("active");
+
+    $("#robotContainer").show();
+    $("#managementContainer").hide();
+    $("#serviceContainer").hide();
+});
+
+$( "#management-link" ).click(function() {
+    $('#pagination li').removeClass('active');
+    $(this).parent().addClass("active");
+
+    $("#robotContainer").hide();
+    $("#managementContainer").show();
+    $("#serviceContainer").hide();
+});
+
+$( "#service-link" ).click(function() {
+    $('#pagination li').removeClass('active');
+    $(this).parent().addClass("active");
+
+    $("#robotContainer").hide();
+    $("#managementContainer").hide();
+    $("#serviceContainer").show();
+});
+
 /*################
         Main
 ################*/
 
 function main() {
+
+    $("#robotContainer").show();
+    $("#managementContainer").hide();
+    $("#serviceContainer").hide();
 
     i18nextko.init(resources, 'en', ko);
 
