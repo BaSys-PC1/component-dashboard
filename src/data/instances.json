@@ -5,7 +5,7 @@
     "componentName": "R195",
     "location": "Station 1",
     "serial": "9H873834",
-    "role": "Transport",
+    "capability": "Transport",
     "currentState": "EXECUTE",
     "currentMode": "PRODUCTION"
   },
@@ -15,7 +15,7 @@
     "componentName": "U323",
     "location": "Station 2",
     "serial": "5H84334",
-    "role": "Greifen",
+    "capability": "Greifen",
     "currentState": "HELD",
     "currentMode": "PRODUCTION"
   },
@@ -25,7 +25,7 @@
     "componentName": "F165",
     "location": "Station 3",
     "serial": "K73F892",
-    "role": "Greifen",
+    "capability": "Greifen",
     "currentState": "SUSPENDED",
     "currentMode": "PRODUCTION"
   },
@@ -35,7 +35,7 @@
     "componentName": "K565",
     "location": "Station 3",
     "serial": "78G7876",
-    "role": "Greifen",
+    "capability": "Greifen",
     "currentState": "EXECUTE",
     "currentMode": "PRODUCTION"
   },
@@ -45,7 +45,7 @@
     "componentName": "Y565",
     "location": "Station 4",
     "serial": "65J987",
-    "role": "Greifen",
+    "capability": "Greifen",
     "currentState": "EXECUTE",
     "currentMode": "PRODUCTION"
   }

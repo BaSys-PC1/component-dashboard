@@ -14,6 +14,12 @@
 
     <link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="css/custom.css">
+    <!--<link rel="stylesheet" href="libs/components-font-awesome/fontawesome-all.css">-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+
+
+
 
 </head>
 <body>
@@ -29,9 +35,9 @@
     </a>
 
     <ul class="nav navbar-nav flex-row" id="pagination">
-        <li class="nav-item active"><a id="robot-link" class="nav-link pr-3" href="#">Robots</a></li>
-        <li class="nav-item"><a id="management-link" class="nav-link pr-3" href="#">Management</a></li>
-        <li class="nav-item"><a id="service-link" class="nav-link" href="#">Service</a></li>
+        <li class="nav-item active"><a id="devices-link" class="nav-link pr-3" href="#">Devices</a></li>
+        <li class="nav-item"><a id="service-link" class="nav-link pr-3" href="#">Services</a></li>
+        <li class="nav-item"><a id="management-link" class="nav-link" href="#">Management</a></li>
     </ul>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
@@ -72,7 +78,7 @@
     </div>
 
 </nav>
-<div class="cardContainer" id="robotContainer" data-bind="foreach: instances">
+<div class="cardContainer" id="deviceContainer" data-bind="foreach: devices">
     <div class="card">
         <div class="card-header">
             <h5 class="card-title"><span data-bind="text: componentName"></span>
@@ -91,13 +97,13 @@
                         <span data-bind="i18n: 'type_k'"></span>: <br>
                         <span data-bind="i18n: 'location_k'"></span>: <br>
                         <span data-bind="i18n: 'serial_k'"></span>: <br>
-                        <span data-bind="i18n: 'role_k'"></span>: <br>
+                        <span data-bind="i18n: 'capability_k'"></span>: <br>
                     </div>
                     <div class="col-3">
                         <span data-bind="text: type"></span><br>
                         <span data-bind="text: location"></span><br>
                         <span data-bind="text: serial"></span><br>
-                        <span data-bind="text: role"></span><br>
+                        <span data-bind="text: capability"></span><br>
                     </div>
                 </div>
             </div>
@@ -106,38 +112,7 @@
     </div>
 </div>
 
-<div class="cardContainer" id="managementContainer" data-bind="foreach: instances">
-<div class="card">
-    <div class="card-header">
-        <h5 class="card-title"><span data-bind="text: componentName"></span>
-        </h5>
-    </div>
-    <div class="card-body">
-        <div class="container">
-            <div class="row">
-                <div class="col-5">
-                    <img data-bind="attr: { 'src': '/img/' + type() + '.png' }"/>
-                </div>
-                <div class="col-4">
-                    <span data-bind="i18n: 'type_k'"></span>: <br>
-                    <span data-bind="i18n: 'location_k'"></span>: <br>
-                    <span data-bind="i18n: 'serial_k'"></span>: <br>
-                    <span data-bind="i18n: 'role_k'"></span>: <br>
-                </div>
-                <div class="col-3">
-                    <span data-bind="text: type"></span><br>
-                    <span data-bind="text: location"></span><br>
-                    <span data-bind="text: serial"></span><br>
-                    <span data-bind="text: role"></span><br>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-</div>
-
-<div class="cardContainer" id="serviceContainer" data-bind="foreach: instances">
+<div class="cardContainer" id="serviceContainer" data-bind="foreach: services">
     <div class="card">
         <div class="card-header">
             <h5 class="card-title"><span data-bind="text: componentName"></span>
@@ -147,25 +122,48 @@
             <div class="container">
                 <div class="row">
                     <div class="col-5">
-                        <img data-bind="attr: { 'src': '/img/' + type() + '.png' }"/>
+                        <i class="fas fa-cogs fa-6x"></i>
                     </div>
                     <div class="col-4">
                         <span data-bind="i18n: 'type_k'"></span>: <br>
                         <span data-bind="i18n: 'location_k'"></span>: <br>
-                        <span data-bind="i18n: 'serial_k'"></span>: <br>
-                        <span data-bind="i18n: 'role_k'"></span>: <br>
                     </div>
                     <div class="col-3">
                         <span data-bind="text: type"></span><br>
                         <span data-bind="text: location"></span><br>
-                        <span data-bind="text: serial"></span><br>
-                        <span data-bind="text: role"></span><br>
                     </div>
                 </div>
             </div>
 
         </div>
     </div>
+</div>
+
+<div class="cardContainer" id="managementContainer" data-bind="foreach: management">
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title"><span data-bind="text: componentName"></span>
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-5">
+                    <i class="fas fa-cogs fa-6x"></i>
+                </div>
+                <div class="col-4">
+                    <span data-bind="i18n: 'type_k'"></span>: <br>
+                    <span data-bind="i18n: 'location_k'"></span>: <br>
+                </div>
+                <div class="col-3">
+                    <span data-bind="text: type"></span><br>
+                    <span data-bind="text: location"></span><br>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 </div>
 
 

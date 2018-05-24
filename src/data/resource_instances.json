@@ -1,0 +1,274 @@
+{
+    "eClass": "http://www.dfki.de/iui/basys/model/resourceinstance#//ResourceInstanceRepository",
+    "resourceInstances": [
+        {
+            "id": "_SE5NIDB4Eei1bbwBPPZWOA",
+            "name": "My Festo Component",
+            "serialNumber": "65465464",
+            "resourceType": {
+                "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//ResourceType",
+                "$ref": "model.resourcetype/_yIFSQjB3Eei1bbwBPPZWOA"
+            },
+            "capabilityApplications": [
+                {
+                    "capabilityAssertion": {
+                        "eClass": "http://www.dfki.de/iui/basys/model/capability#//CapabilityAssertion",
+                        "$ref": "model.resourcetype/_syqRQEjXEei9gKvc5bxWyQ"
+                    },
+                    "capabilityVariants": [
+                        {
+                            "eClass": "http://www.dfki.de/iui/basys/model/resourceinstance#//ManufacturingCapabilityVariant",
+                            "capability": {
+                                "eClass": "http://www.dfki.de/iui/basys/model/capability#//Pressing",
+                                "id": "_KhijZl29EeixDOGCyjgf_g"
+                            },
+                            "appliedOn": [
+                                {
+                                    "eClass": "http://www.dfki.de/iui/basys/model/productdefinition#//MaterialEntry",
+                                    "$ref": "model.productdefinition/_IpqbzV29EeixDOGCyjgf_g"
+                                },
+                                {
+                                    "eClass": "http://www.dfki.de/iui/basys/model/productdefinition#//AssemblyGroupEntry",
+                                    "$ref": "model.productdefinition/_IpqbzF29EeixDOGCyjgf_g"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "role": {
+                "eClass": "http://www.dfki.de/iui/basys/model/topology#//EquipmentModule",
+                "$ref": "model.topology/_6CV9oDB4Eei1bbwBPPZWOA"
+            }
+        },
+        {
+            "id": "_jJdx4DD7EeiuBvcKgWzd3Q",
+            "name": "My UR3",
+            "serialNumber": "123",
+            "resourceType": {
+                "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//ResourceType",
+                "$ref": "model.resourcetype/_Hi37STD5EeiuBvcKgWzd3Q"
+            },
+            "capabilityApplications": [
+                {
+                    "capabilityAssertion": {
+                        "eClass": "http://www.dfki.de/iui/basys/model/capability#//CapabilityAssertion",
+                        "$ref": "model.resourcetype/_jNgp8FNhEeibbdo05KXxGQ"
+                    },
+                    "capabilityVariants": [
+                        {
+                            "capability": {
+                                "eClass": "http://www.dfki.de/iui/basys/model/capability#//PickAndPlace",
+                                "id": "_BJmlHlN0Eeiceaq8G123Yg"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "_mQ0kYDD7EeiuBvcKgWzd3Q",
+            "name": "My UR5",
+            "serialNumber": "345",
+            "resourceType": {
+                "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//ResourceType",
+                "$ref": "model.resourcetype/_Jve8yTD5EeiuBvcKgWzd3Q"
+            },
+            "capabilityApplications": [
+                {
+                    "capabilityAssertion": {
+                        "eClass": "http://www.dfki.de/iui/basys/model/capability#//CapabilityAssertion",
+                        "$ref": "model.resourcetype/_jNgp8FNxEeibbdo05KXzGQ"
+                    },
+                    "capabilityVariants": [
+                        {
+                            "capability": {
+                                "eClass": "http://www.dfki.de/iui/basys/model/capability#//PickAndPlace",
+                                "id": "_Cs7ZDlN0Eeiceaq8G123Yg"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "_r4sy4DD7EeiuBvcKgWzd3Q",
+            "name": "My UR10",
+            "serialNumber": "345",
+            "resourceType": {
+                "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//ResourceType",
+                "$ref": "model.resourcetype/_LILOCTD5EeiuBvcKgWzd3Q"
+            },
+            "capabilityApplications": [
+                {
+                    "capabilityAssertion": {
+                        "eClass": "http://www.dfki.de/iui/basys/model/capability#//CapabilityAssertion",
+                        "$ref": "model.resourcetype/_jNgp8FNhEexbbdo05KXzGQ"
+                    },
+                    "capabilityVariants": [
+                        {
+                            "capability": {
+                                "eClass": "http://www.dfki.de/iui/basys/model/capability#//PickAndPlace",
+                                "id": "_DmwkDlN0Eeiceaq8G123Yg"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "_uFLRgDD7EeiuBvcKgWzd3Q",
+            "name": "My iiwa",
+            "serialNumber": "456",
+            "resourceType": {
+                "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//ResourceType",
+                "$ref": "model.resourcetype/_Vvb1uTD7EeiuBvcKgWzd3Q"
+            },
+            "capabilityApplications": [
+                {
+                    "capabilityAssertion": {
+                        "eClass": "http://www.dfki.de/iui/basys/model/capability#//CapabilityAssertion",
+                        "$ref": "model.resourcetype/_jNgx8FNhEeibbdo05KXzGQ"
+                    },
+                    "capabilityVariants": [
+                        {
+                            "capability": {
+                                "eClass": "http://www.dfki.de/iui/basys/model/capability#//PickAndPlace",
+                                "id": "_EPibTlN0Eeiceaq8G123Yg"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "_wojNMDD7EeiuBvcKgWzd3Q",
+            "name": "My YuMi",
+            "serialNumber": "567",
+            "resourceType": {
+                "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//ResourceType",
+                "$ref": "model.resourcetype/_NnuuyTD7EeiuBvcKgWzd3Q"
+            },
+            "capabilityApplications": [
+                {
+                    "capabilityAssertion": {
+                        "eClass": "http://www.dfki.de/iui/basys/model/capability#//CapabilityAssertion",
+                        "$ref": "model.resourcetype/_jNg99FNhEeibbdo05KXzGQ"
+                    },
+                    "capabilityVariants": [
+                        {
+                            "capability": {
+                                "eClass": "http://www.dfki.de/iui/basys/model/capability#//PickAndPlace",
+                                "id": "_EzBi3lN0Eeiceaq8G123Yg"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "_I4a_oDD-EeiuBvcKgWzd3Q",
+            "name": "My Panda",
+            "serialNumber": "678",
+            "resourceType": {
+                "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//ResourceType",
+                "$ref": "model.resourcetype/_0xCaqTD9EeiuBvcKgWzd3Q"
+            },
+            "capabilityApplications": [
+                {
+                    "capabilityAssertion": {
+                        "eClass": "http://www.dfki.de/iui/basys/model/capability#//CapabilityAssertion",
+                        "$ref": "model.resourcetype/_jNgp8FNhEeibbdo05KXzGQ"
+                    },
+                    "capabilityVariants": [
+                        {
+                            "capability": {
+                                "eClass": "http://www.dfki.de/iui/basys/model/capability#//PickAndPlace",
+                                "id": "_GYV63lN0Eeiceaq8G123Yg"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "_rUJzsDJhEei1p5hKOf5Slw",
+            "name": "My MiR 100",
+            "serialNumber": "789",
+            "resourceType": {
+                "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//ResourceType",
+                "$ref": "model.resourcetype/_ZRW8sjJhEei1p5hKOf5Slw"
+            },
+            "capabilityApplications": [
+                {
+                    "capabilityAssertion": {
+                        "eClass": "http://www.dfki.de/iui/basys/model/capability#//CapabilityAssertion",
+                        "$ref": "model.resourcetype/_vmBh8FNlEei1Nvtoff5AwQ"
+                    },
+                    "capabilityVariants": [
+                        {
+                            "capability": {
+                                "eClass": "http://www.dfki.de/iui/basys/model/capability#//Transport",
+                                "id": "_G54hr1N0Eeiceaq8G123Yg"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "_PwPREFIxEeidSe5vp9A3oA",
+            "name": "My Button",
+            "serialNumber": "890",
+            "resourceType": {
+                "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//ResourceType",
+                "$ref": "model.resourcetype/_GHTn8lIxEeidSe5vp9A3oA"
+            },
+            "capabilityApplications": [
+                {
+                    "capabilityVariants": [
+                        {}
+                    ]
+                }
+            ],
+            "role": {
+                "eClass": "http://www.dfki.de/iui/basys/model/topology#//EquipmentModule",
+                "$ref": "model.topology/_rcKlkFIxEeidSe5vp9A3oA"
+            }
+        },
+        {
+            "binding": "",
+            "id": "_RtlHgFIxEeidSe5vp9A3oA",
+            "name": "My Laser",
+            "serialNumber": "901",
+            "resourceType": {
+                "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//ResourceType",
+                "$ref": "model.resourcetype/_BcwkYlIxEeidSe5vp9A3oA"
+            },
+            "capabilityApplications": [
+                {
+                    "capabilityVariants": [
+                        {}
+                    ]
+                }
+            ],
+            "role": {
+                "eClass": "http://www.dfki.de/iui/basys/model/topology#//EquipmentModule",
+                "$ref": "model.topology/_gUuXFFIxEeidSe5vp9A3oA"
+            }
+        },
+        {
+            "id": "_8cLJ8FIxEeidSe5vp9A3oA",
+            "name": "Worker Guidance S2",
+            "serialNumber": "1233",
+            "resourceType": {
+                "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//ResourceType",
+                "$ref": "model.resourcetype/_3cuNYlIxEeidSe5vp9A3oA"
+            },
+            "role": {
+                "eClass": "http://www.dfki.de/iui/basys/model/topology#//EquipmentModule",
+                "$ref": "model.topology/_AzQQwDB5Eei1bbwBPPZWOA"
+            }
+        }
+    ]
+}

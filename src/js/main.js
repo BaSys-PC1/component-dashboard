@@ -6,21 +6,92 @@ let resources,
     viewModel,
     instances,
     graph,
-    robots,
+    devices,
+    services,
+    management,
     oldStyle,
-    currentCell, sub;
+    currentCell, sub,
+    baseURL = "http://10.2.10.3:8080";
 
 //initially get data from all services
 $.when(
-    $.getJSON("/data/service_register.json"),
-    $.getJSON("/data/service_instances.json"),
-    $.getJSON("/data/service_types.json"),
-    $.getJSON("/data/service_topology.json")
+    $.getJSON("/data/device_components.json"), //baseURL + "/services/registry/DEVICE_COMPONENT"
+    $.getJSON("/data/management_components.json"), //baseURL + "/services/registry/MANAGEMENT_COMPONENT"
+    $.getJSON("/data/service_components.json"), //baseURL + "/services/registry/SERVICE_COMPONENT"
+    $.getJSON("/data/topology.json"), //baseURL + "/services/topology/parent/{id}"
+    $.getJSON("/data/resource_instances.json"), //baseURL + "/services/resourceinstance/{id}"
+    $.getJSON("/data/resource_types.json") //baseURL + "/services/resourcetype/{id}"
     )
-    .done(function(reg, inst, typ, top) {
+    .done(function(dev, man, serv, top, inst, typ) {
         //TODO: merge data from all services
 
-        robots = reg[0];
+        devices = dev[0].map((val, index, arr) => {
+
+            //get instance of device
+            let instance = inst[0].resourceInstances.filter(val2 => val2.id === val.componentId);
+            //get capability
+            let capability = "";
+            if (typeof instance[0].capabilityApplications[0].capabilityVariants[0].capability !== 'undefined') {
+                capability = instance[0].capabilityApplications[0].capabilityVariants[0].capability.eClass;
+                capability = capability.substr(48); //remove http://www.dfki.de/iui/basys/model/capability#//
+            }
+            else {
+                capability = "Not Found";
+            }
+
+            //get type of instance
+            let typeId = instance[0].resourceType.$ref.substr(19);
+            let type = "";
+            //loop over manufactures
+            for (let i = 0; i < typ[0].catalogues.length; i++){
+                //loop over resourceTypes
+                type = typ[0].catalogues[i].resourceTypes.filter(val2 => val2.id === typeId);
+                if (type.length > 0) break; //resource found! Stop searching and overriding type
+
+            }
+
+            //get topology of instance
+            let topId = "";
+            if(typeof instance[0].role !== 'undefined'){
+                topId = instance[0].role.$ref.substr(15);
+            }
+            //TODO: get topology name over /services/topology/parent/{topId} later to save 3 nested loops
+
+            //object building
+            return {
+                "componentId": val.componentId,
+                "type": type[0].name, //from resource_types
+                "componentName": val.componentName,
+                "location": "S1", //from topology
+                "serial": instance[0].serialNumber, //from resource_instances
+                "capability": capability, //from resource_instances
+                "currentMode": val.currentMode,
+                "currentState": val.currentState,
+                "docuLink": type[0].documentation //from resource_types
+            };
+        });
+
+        services = serv[0].map((val, index, arr) => {
+            // return element to new Array
+            return {
+                "componentId": val.componentId,
+                "type": "MiR",
+                "componentName": val.componentName,
+                "location": val.hostName
+            };
+        });
+
+        management = man[0].map((val, index, arr) => {
+            // return element to new Array
+            return {
+                "componentId": val.componentId,
+                "type": "MiR",
+                "componentName": val.componentName,
+                "location": val.hostName
+            };
+        });
+
+        console.log("devices ", devices);
     })
     .fail(function() {
         // Executed if at least one request fails
@@ -58,7 +129,8 @@ function AppViewModel() {
         i18nextko.setLanguage(value);
     });
 
-    self.instances = ko.mapping.fromJS(instances);
+    self.devices = ko.mapping.fromJS(devices);
+    self.services = ko.mapping.fromJS(services);
 
     self.mqttConfig = {
         hostname: ko.observable("broker.mqttdashboard.com"),
@@ -116,8 +188,8 @@ function onConnectionLost(responseObject) {
 
 // called when a message arrives
 function onMessageArrived(message) {
-    ko.mapping.fromJSON(message.payloadString, viewModel.instances);
-    console.log("updated instances");
+    ko.mapping.fromJSON(message.payloadString, viewModel.devices);
+    console.log("updated devices");
 }
 
 
@@ -209,9 +281,9 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
 
     //detect changes on currently opened instance for further UI updates
     sub = ko.computed(function() {
-        return ko.toJSON(viewModel.instances()[index]);
+        return ko.toJSON(viewModel.devices()[index]);
     }).subscribe(function() {
-        let unmapped = ko.mapping.toJS(viewModel.instances);
+        let unmapped = ko.mapping.toJS(viewModel.devices);
         console.log("changed to ", unmapped[index].currentState);
         graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, oldStyle, [currentCell]);
         oldStyle = markCurrentState(unmapped[index].currentState);
@@ -232,11 +304,11 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
 #####################*/
 
 
-$( "#robot-link" ).click(function() {
+$( "#devices-link" ).click(function() {
     $('#pagination li').removeClass('active');
     $(this).parent().addClass("active");
 
-    $("#robotContainer").show();
+    $("#deviceContainer").show();
     $("#managementContainer").hide();
     $("#serviceContainer").hide();
 });
@@ -245,7 +317,7 @@ $( "#management-link" ).click(function() {
     $('#pagination li').removeClass('active');
     $(this).parent().addClass("active");
 
-    $("#robotContainer").hide();
+    $("#deviceContainer").hide();
     $("#managementContainer").show();
     $("#serviceContainer").hide();
 });
@@ -254,7 +326,7 @@ $( "#service-link" ).click(function() {
     $('#pagination li').removeClass('active');
     $(this).parent().addClass("active");
 
-    $("#robotContainer").hide();
+    $("#deviceContainer").hide();
     $("#managementContainer").hide();
     $("#serviceContainer").show();
 });
@@ -265,7 +337,7 @@ $( "#service-link" ).click(function() {
 
 function main() {
 
-    $("#robotContainer").show();
+    $("#deviceContainer").show();
     $("#managementContainer").hide();
     $("#serviceContainer").hide();
 

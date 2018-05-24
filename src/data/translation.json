@@ -5,7 +5,7 @@
       "name_k": "Name",
       "location_k": "Location",
       "serial_k": "Serial",
-      "role_k": "Role",
+      "capability_k": "Capability",
       "set_language": "Language"
     }
   },
@@ -15,7 +15,7 @@
       "name_k": "Name",
       "location_k": "Ort",
       "serial_k": "Seriennummer",
-      "role_k": "Rolle",
+      "capability_k": "Fähigkeit",
       "set_language": "Sprache"
     }
   }

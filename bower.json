@@ -19,7 +19,8 @@
     "i18next-ko": "https://github.com/marcosdiez/i18next-ko.git#^3.0.1",
     "paho-mqtt": "*",
     "mxgraph": "^3.9.3",
-    "knockout-mapping": "^2.4.1"
+    "knockout-mapping": "^2.4.1",
+    "components-font-awesome": "^5.0.6"
   },
   "exportsOverride": {
     "i18next-ko": {

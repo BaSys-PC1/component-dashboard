@@ -1,0 +1,122 @@
+[
+    {
+        "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
+        "componentId": "_PwPREFIxEeidSe5vp9A3oA",
+        "componentName": "My Button",
+        "componentCategory": "DEVICE_COMPONENT",
+        "inChannelName": "_PwPREFIxEeidSe5vp9A3oA#in",
+        "outChannelName": "_PwPREFIxEeidSe5vp9A3oA#out",
+        "statusChannelName": "basys#components#status#_PwPREFIxEeidSe5vp9A3oA",
+        "currentState": "STOPPED",
+        "currentMode": "PRODUCTION",
+        "hostName": "172.16.55.162"
+    },
+    {
+        "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
+        "componentId": "_r4sy4DD7EeiuBvcKgWzd3Q",
+        "componentName": "My UR10",
+        "componentCategory": "DEVICE_COMPONENT",
+        "inChannelName": "_r4sy4DD7EeiuBvcKgWzd3Q#in",
+        "outChannelName": "_r4sy4DD7EeiuBvcKgWzd3Q#out",
+        "statusChannelName": "basys#components#status#_r4sy4DD7EeiuBvcKgWzd3Q",
+        "currentState": "STOPPED",
+        "currentMode": "PRODUCTION",
+        "hostName": "172.16.55.162"
+    },
+    {
+        "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
+        "componentId": "_wojNMDD7EeiuBvcKgWzd3Q",
+        "componentName": "My YuMi",
+        "componentCategory": "DEVICE_COMPONENT",
+        "inChannelName": "_wojNMDD7EeiuBvcKgWzd3Q#in",
+        "outChannelName": "_wojNMDD7EeiuBvcKgWzd3Q#out",
+        "statusChannelName": "basys#components#status#_wojNMDD7EeiuBvcKgWzd3Q",
+        "currentState": "STOPPED",
+        "currentMode": "PRODUCTION",
+        "hostName": "172.16.55.162"
+    },
+    {
+        "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
+        "componentId": "_mQ0kYDD7EeiuBvcKgWzd3Q",
+        "componentName": "My UR5",
+        "componentCategory": "DEVICE_COMPONENT",
+        "inChannelName": "_mQ0kYDD7EeiuBvcKgWzd3Q#in",
+        "outChannelName": "_mQ0kYDD7EeiuBvcKgWzd3Q#out",
+        "statusChannelName": "basys#components#status#_mQ0kYDD7EeiuBvcKgWzd3Q",
+        "currentState": "STOPPED",
+        "currentMode": "PRODUCTION",
+        "hostName": "172.16.55.162"
+    },
+    {
+        "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
+        "componentId": "_RtlHgFIxEeidSe5vp9A3oA",
+        "componentName": "My LAP Laser",
+        "componentCategory": "DEVICE_COMPONENT",
+        "inChannelName": "_RtlHgFIxEeidSe5vp9A3oA#in",
+        "outChannelName": "_RtlHgFIxEeidSe5vp9A3oA#out",
+        "statusChannelName": "basys#components#status#_RtlHgFIxEeidSe5vp9A3oA",
+        "currentState": "STOPPED",
+        "currentMode": "PRODUCTION",
+        "hostName": "172.16.55.162"
+    },
+    {
+        "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
+        "componentId": "_rUJzsDJhEei1p5hKOf5Slw",
+        "componentName": "My MiR 100",
+        "componentCategory": "DEVICE_COMPONENT",
+        "inChannelName": "_rUJzsDJhEei1p5hKOf5Slw#in",
+        "outChannelName": "_rUJzsDJhEei1p5hKOf5Slw#out",
+        "statusChannelName": "basys#components#status#_rUJzsDJhEei1p5hKOf5Slw",
+        "currentState": "STOPPED",
+        "currentMode": "PRODUCTION",
+        "hostName": "172.16.55.162"
+    },
+    {
+        "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
+        "componentId": "_uFLRgDD7EeiuBvcKgWzd3Q",
+        "componentName": "My iiwa",
+        "componentCategory": "DEVICE_COMPONENT",
+        "inChannelName": "_uFLRgDD7EeiuBvcKgWzd3Q#in",
+        "outChannelName": "_uFLRgDD7EeiuBvcKgWzd3Q#out",
+        "statusChannelName": "basys#components#status#_uFLRgDD7EeiuBvcKgWzd3Q",
+        "currentState": "STOPPED",
+        "currentMode": "PRODUCTION",
+        "hostName": "172.16.55.162"
+    },
+    {
+        "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
+        "componentId": "_I4a_oDD-EeiuBvcKgWzd3Q",
+        "componentName": "My Panda",
+        "componentCategory": "DEVICE_COMPONENT",
+        "inChannelName": "_I4a_oDD-EeiuBvcKgWzd3Q#in",
+        "outChannelName": "_I4a_oDD-EeiuBvcKgWzd3Q#out",
+        "statusChannelName": "basys#components#status#_I4a_oDD-EeiuBvcKgWzd3Q",
+        "currentState": "STOPPED",
+        "currentMode": "PRODUCTION",
+        "hostName": "172.16.55.162"
+    },
+    {
+        "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
+        "componentId": "_jJdx4DD7EeiuBvcKgWzd3Q",
+        "componentName": "My UR3",
+        "componentCategory": "DEVICE_COMPONENT",
+        "inChannelName": "_jJdx4DD7EeiuBvcKgWzd3Q#in",
+        "outChannelName": "_jJdx4DD7EeiuBvcKgWzd3Q#out",
+        "statusChannelName": "basys#components#status#_jJdx4DD7EeiuBvcKgWzd3Q",
+        "currentState": "STOPPED",
+        "currentMode": "PRODUCTION",
+        "hostName": "172.16.55.162"
+    },
+    {
+        "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
+        "componentId": "_SE5NIDB4Eei1bbwBPPZWOA",
+        "componentName": "My Festo Component",
+        "componentCategory": "DEVICE_COMPONENT",
+        "inChannelName": "_SE5NIDB4Eei1bbwBPPZWOA#in",
+        "outChannelName": "_SE5NIDB4Eei1bbwBPPZWOA#out",
+        "statusChannelName": "basys#components#status#_SE5NIDB4Eei1bbwBPPZWOA",
+        "currentState": "STOPPED",
+        "currentMode": "PRODUCTION",
+        "hostName": "172.16.55.162"
+    }
+]
