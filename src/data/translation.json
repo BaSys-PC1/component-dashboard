@@ -14,7 +14,7 @@
       "type_k": "Typ",
       "name_k": "Name",
       "location_k": "Ort",
-      "serial_k": "Seriennummer",
+      "serial_k": "Seriennr.",
       "capability_k": "Fähigkeit",
       "set_language": "Sprache"
     }

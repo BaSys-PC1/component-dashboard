@@ -75,7 +75,7 @@ $.when(
             // return element to new Array
             return {
                 "componentId": val.componentId,
-                "type": "MiR",
+                "type": "Service",
                 "componentName": val.componentName,
                 "location": val.hostName
             };
@@ -85,7 +85,7 @@ $.when(
             // return element to new Array
             return {
                 "componentId": val.componentId,
-                "type": "MiR",
+                "type": "Management",
                 "componentName": val.componentName,
                 "location": val.hostName
             };
