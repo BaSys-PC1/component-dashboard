@@ -10,7 +10,7 @@ let resources,
     services,
     management,
     oldStyle,
-    currentCell, sub,
+    currentCell, sub, openedIndex,
     baseURL = "http://10.2.10.3:8080";
 
 //initially get data from all services
@@ -162,10 +162,10 @@ function initMQTT(){
 function onConnect() {
     // Once a connection has been made, make a subscription and send a message.
     console.log("onConnect");
-    client.subscribe("hybrit/robots");
-    //message = new Paho.MQTT.Message(viewModel.mqttConfig.clientID() + " connected");
-    //message.destinationName = "hybrit/robots";
-    //client.send(message);
+    client.subscribe("hybrit/devices");
+    message = new Paho.MQTT.Message(viewModel.mqttConfig.clientID() + " connected");
+    message.destinationName = "hybrit/devices/connection";
+    client.send(message);
 }
 
 // called when the client loses its connection
@@ -208,6 +208,22 @@ function onMessageArrived(message) {
     ko.mapping.fromJS(updatedDevices, viewModel.devices);
 
 }
+
+$("#stop-btn").click(function(){
+    let unmapped = ko.mapping.toJS(viewModel.devices);
+    console.log(unmapped[openedIndex]);
+    message = new Paho.MQTT.Message(unmapped[openedIndex].componentId);
+    message.destinationName = "hybrit/devices/stop";
+    client.send(message);
+});
+
+$("#reset-btn").click(function(){
+    let unmapped = ko.mapping.toJS(viewModel.devices);
+    console.log(unmapped[openedIndex]);
+    message = new Paho.MQTT.Message(unmapped[openedIndex].componentId);
+    message.destinationName = "hybrit/devices/reset";
+    client.send(message);
+});
 
 
 /*################
@@ -291,19 +307,19 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
 
     let button = $(event.relatedTarget); // Button that triggered the modal
     // Extract info from data-* attributes
-    let state = button.data('state'),
-        index = button.data('index');
+    let state = button.data('state');
+    openedIndex = button.data('index');
 
     oldStyle = markCurrentState(state);
 
     //detect changes on currently opened instance for further UI updates
     sub = ko.computed(function() {
-        return ko.toJSON(viewModel.devices()[index]);
+        return ko.toJSON(viewModel.devices()[openedIndex]);
     }).subscribe(function() {
         let unmapped = ko.mapping.toJS(viewModel.devices);
-        console.log("changed to ", unmapped[index].currentState);
+        console.log("changed to ", unmapped[openedIndex].currentState);
         graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, oldStyle, [currentCell]);
-        oldStyle = markCurrentState(unmapped[index].currentState);
+        oldStyle = markCurrentState(unmapped[openedIndex].currentState);
     });
 
 }).on('hidden.bs.modal', function (event) {
@@ -312,6 +328,8 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
     sub.dispose();
     //reset stroke color when closing the modal
     graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, oldStyle, [currentCell]);
+    //reset index
+    openedIndex = null;
 
 });
 
