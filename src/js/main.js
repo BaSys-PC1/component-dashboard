@@ -11,17 +11,26 @@ let resources,
     management,
     oldStyle,
     currentCell, sub, openedIndex,
-    baseURL = "http://10.2.10.3:8080";
+    mockData = true,
+    APIbaseURL = "http://10.2.10.3:8080";
+
+let dev_url = (mockData) ? "/data/device_components.json" : APIbaseURL + "/services/registry/DEVICE_COMPONENT",
+    man_url = (mockData) ? "/data/management_components.json" : APIbaseURL + "/services/registry/MANAGEMENT_COMPONENT",
+    serv_url = (mockData) ? "/data/service_components.json" : APIbaseURL + "/services/registry/SERVICE_COMPONENT",
+    top_url = (mockData) ? "/data/topology.json" : APIbaseURL + "/services/topology/parent/{id}",
+    inst_url = (mockData) ? "/data/resource_instances.json" : APIbaseURL + "/services/resourceinstance/{id}",
+    typ_url = (mockData) ? "/data/resource_types.json" : APIbaseURL + "/services/resourcetype/{id}",
+    trans_url = "/data/translation.json";
 
 //initially get data from all services
 $.when(
-    $.getJSON("/data/device_components.json"), //baseURL + "/services/registry/DEVICE_COMPONENT"
-    $.getJSON("/data/management_components.json"), //baseURL + "/services/registry/MANAGEMENT_COMPONENT"
-    $.getJSON("/data/service_components.json"), //baseURL + "/services/registry/SERVICE_COMPONENT"
-    $.getJSON("/data/topology.json"), //baseURL + "/services/topology/parent/{id}"
-    $.getJSON("/data/resource_instances.json"), //baseURL + "/services/resourceinstance/{id}"
-    $.getJSON("/data/resource_types.json"), //baseURL + "/services/resourcetype/{id}"
-    $.getJSON("/data/translation.json")
+    $.getJSON(dev_url),
+    $.getJSON(man_url),
+    $.getJSON(serv_url),
+    $.getJSON(top_url),
+    $.getJSON(inst_url),
+    $.getJSON(typ_url),
+    $.getJSON(trans_url)
     )
     .done(function(dev, man, serv, top, inst, typ, trans) {
         //TODO: merge data from all services
