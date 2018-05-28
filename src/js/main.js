@@ -20,9 +20,10 @@ $.when(
     $.getJSON("/data/service_components.json"), //baseURL + "/services/registry/SERVICE_COMPONENT"
     $.getJSON("/data/topology.json"), //baseURL + "/services/topology/parent/{id}"
     $.getJSON("/data/resource_instances.json"), //baseURL + "/services/resourceinstance/{id}"
-    $.getJSON("/data/resource_types.json") //baseURL + "/services/resourcetype/{id}"
+    $.getJSON("/data/resource_types.json"), //baseURL + "/services/resourcetype/{id}"
+    $.getJSON("/data/translation.json")
     )
-    .done(function(dev, man, serv, top, inst, typ) {
+    .done(function(dev, man, serv, top, inst, typ, trans) {
         //TODO: merge data from all services
 
         devices = dev[0].map((val, index, arr) => {
@@ -91,23 +92,11 @@ $.when(
             };
         });
 
-        console.log("devices ", devices);
-    })
-    .fail(function() {
-        // Executed if at least one request fails
-        console.error("Failed to get JSON data");
-    });
-
-
-//translation and mockup data
-let transReq = $.getJSON("/data/translation.json");
-let instReq = $.getJSON("/data/instances.json");
-
-$.when(transReq, instReq)
-    .done(function(trans, inst) {
         resources = trans[0];
-        instances = inst[0];
-        //data needs to be loaded before executing main()
+
+        console.log("devices ", devices);
+
+        //all data needs to be loaded first before executing main()
         main();
     })
     .fail(function() {
@@ -189,6 +178,7 @@ function onConnectionLost(responseObject) {
 // called when a message arrives
 function onMessageArrived(message) {
     ko.mapping.fromJSON(message.payloadString, viewModel.devices);
+    //TODO: needs to be changed
     console.log("updated devices");
 }
 

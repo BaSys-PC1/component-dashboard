@@ -6,7 +6,8 @@
       "location_k": "Location",
       "serial_k": "Serial",
       "capability_k": "Capability",
-      "set_language": "Language"
+      "set_language": "Language",
+      "menu_devices": "Devices"
     }
   },
   "de": {
@@ -16,7 +17,8 @@
       "location_k": "Ort",
       "serial_k": "Seriennr.",
       "capability_k": "Fähigkeit",
-      "set_language": "Sprache"
+      "set_language": "Sprache",
+      "menu_devices": "Geräte"
     }
   }
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title></title>
+    <title>Robot Status Webapp</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -17,25 +17,15 @@
     <!--<link rel="stylesheet" href="libs/components-font-awesome/fontawesome-all.css">-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 
-
-
-
-
 </head>
 <body>
-<!--[if lte IE 9]>
-<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade
-    your browser</a> to improve your experience and security.</p>
-<![endif]-->
-
-<!-- Add your site or application content here -->
 <nav class="navbar navbar-light bg-light">
     <a class="navbar-brand" href="#">
         <img src="https://www.dfki.de/web/logo_190_52_30jahre.png" width="150" alt="">
     </a>
 
     <ul class="nav navbar-nav flex-row" id="pagination">
-        <li class="nav-item active"><a id="devices-link" class="nav-link pr-3" href="#">Devices</a></li>
+        <li class="nav-item active"><a id="devices-link" class="nav-link pr-3" href="#"><span data-bind="i18n: 'menu_devices'"></span></a></li>
         <li class="nav-item"><a id="service-link" class="nav-link pr-3" href="#">Services</a></li>
         <li class="nav-item"><a id="management-link" class="nav-link" href="#">Management</a></li>
     </ul>
