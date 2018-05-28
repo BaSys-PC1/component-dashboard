@@ -177,9 +177,36 @@ function onConnectionLost(responseObject) {
 
 // called when a message arrives
 function onMessageArrived(message) {
-    ko.mapping.fromJSON(message.payloadString, viewModel.devices);
-    //TODO: needs to be changed
-    console.log("updated devices");
+
+    let msg = JSON.parse(message.payloadString);
+    console.log(msg.componentId);
+
+    let devices = ko.mapping.toJS(viewModel.devices()); //convert mapped object back to a regular JS object
+
+    //override values
+    let updatedDevices = devices.map((val, index, arr) => {
+
+        if (val.componentId === msg.componentId){  //update currentMode and currentState
+            return {
+                "componentId": val.componentId,
+                "type": val.type,
+                "componentName": val.componentName,
+                "location": val.location,
+                "serial": val.serial,
+                "capability": val.capability,
+                "currentMode": msg.currentMode, //update
+                "currentState": msg.currentState, //update
+                "docuLink": val.docuLink
+            }
+        }
+        else { //don't change properties
+            return val;
+        }
+    });
+
+    //update viewModel
+    ko.mapping.fromJS(updatedDevices, viewModel.devices);
+
 }
 
 
