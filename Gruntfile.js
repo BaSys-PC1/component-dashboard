@@ -61,7 +61,17 @@ module.exports = function(grunt) {
                         cwd: '<%= paths.src %>/',
                         src: ['css/*','img/*','data/*','fonts/*','js/*', 'index.html'],
                         dest: '<%= paths.dist %>'
-                    },
+                    }
+                ]
+            },
+            fontAwesome:{ //place fonts in the right relatively linked directory
+                files:[
+                    {
+                        expand: true,
+                    cwd: '<%= paths.dist %>/libs/components-font-awesome/',
+                    src: ['fa-*'],
+                    dest: '<%= paths.dist %>/libs/webfonts'
+                    }
                 ]
             }
         },
@@ -120,8 +130,8 @@ module.exports = function(grunt) {
 
 
     // Default task(s).
-    grunt.registerTask('default', ['clean', 'bower:install', 'less:live', 'copy:for_www']);
-    grunt.registerTask('release', ['clean','bower:install', 'less:live', 'copy:for_www']);
-    grunt.registerTask('run', ['clean','bower:install', 'less:dev', 'copy:for_www', 'connect', 'watch']);
+    grunt.registerTask('default', ['clean', 'bower:install', 'less:live', 'copy:for_www', 'copy:fontAwesome']);
+    grunt.registerTask('release', ['clean','bower:install', 'less:live', 'copy:for_www', 'copy:fontAwesome']);
+    grunt.registerTask('run', ['clean','bower:install', 'less:dev', 'copy:for_www','copy:fontAwesome', 'connect', 'watch']);
 
 };
