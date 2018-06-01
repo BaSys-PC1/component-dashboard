@@ -11,15 +11,16 @@ let resources,
     management,
     oldStyle,
     currentCell, sub, openedIndex,
-    mockData = true,
-    APIbaseURL = "http://10.2.10.3:8080";
+    mockData = false,
+    APIbaseURL = "http://10.2.0.68:8080",
+    BrokerURL = "basys-lnv-1";
 
 let dev_url = (mockData) ? "/data/device_components.json" : APIbaseURL + "/services/registry/DEVICE_COMPONENT",
     man_url = (mockData) ? "/data/management_components.json" : APIbaseURL + "/services/registry/MANAGEMENT_COMPONENT",
     serv_url = (mockData) ? "/data/service_components.json" : APIbaseURL + "/services/registry/SERVICE_COMPONENT",
-    top_url = (mockData) ? "/data/topology.json" : APIbaseURL + "/services/topology/parent/{id}",
-    inst_url = (mockData) ? "/data/resource_instances.json" : APIbaseURL + "/services/resourceinstance/{id}",
-    typ_url = (mockData) ? "/data/resource_types.json" : APIbaseURL + "/services/resourcetype/{id}",
+    top_url = (mockData) ? "/data/topology.json" : APIbaseURL + "/services/topology/",
+    inst_url = (mockData) ? "/data/resource_instances.json" : APIbaseURL + "/services/resourceinstance/",
+    typ_url = (mockData) ? "/data/resource_types.json" : APIbaseURL + "/services/resourcetype/",
     trans_url = "/data/translation.json";
 
 //initially get data from all services
@@ -41,16 +42,16 @@ $.when(
             let instance = inst[0].resourceInstances.filter(val2 => val2.id === val.componentId);
             //get capability
             let capability = "";
-            if (typeof instance[0].capabilityApplications[0].capabilityVariants[0].capability !== 'undefined') {
-                capability = instance[0].capabilityApplications[0].capabilityVariants[0].capability.eClass;
-                capability = capability.substr(48); //remove http://www.dfki.de/iui/basys/model/capability#//
-            }
-            else {
+           // if (typeof instance[0].capabilityApplications[0].capabilityVariants[0].capability !== 'undefined') {
+             //  capability = instance[0].capabilityApplications[0].capabilityVariants[0].capability.eClass;
+            //    capability = capability.substr(capability.lastIndexOf('/')+1); //remove http://www.dfki.de/iui/basys/model/capability#//
+          //  }
+           // else {
                 capability = "Not Found";
-            }
+          //  }
 
             //get type of instance
-            let typeId = instance[0].resourceType.$ref.substr(19);
+            let typeId = instance[0].resourceType.$ref.substr(instance[0].resourceType.$ref.lastIndexOf('/')+1);
             let type = "";
             //loop over manufactures
             for (let i = 0; i < typ[0].catalogues.length; i++){
@@ -61,18 +62,28 @@ $.when(
             }
 
             //get topology of instance
-            let topId = "";
+            let topId = "",
+                location = "";
             if(typeof instance[0].role !== 'undefined'){
-                topId = instance[0].role.$ref.substr(15);
+                topId = instance[0].role.$ref.substr(instance[0].role.$ref.lastIndexOf('/')+1);
             }
             //TODO: get topology name over /services/topology/parent/{topId} later to save 3 nested loops
+            $.getJSON(APIbaseURL + "/services/topology/parent/" + topId).done(function(top){
+                if (typeof top !== "undefined"){
+                    location = top.name;
+                }
+                else {
+                    location = "Not Found"
+                }
+                console.log(location);
+            });
 
             //object building
             return {
                 "componentId": val.componentId,
                 "type": type[0].name, //from resource_types
                 "componentName": val.componentName,
-                "location": "S1", //from topology
+                "location": location, //from topology
                 "serial": instance[0].serialNumber, //from resource_instances
                 "capability": capability, //from resource_instances
                 "currentMode": val.currentMode,
@@ -131,8 +142,8 @@ function AppViewModel() {
     self.services = ko.mapping.fromJS(services);
 
     self.mqttConfig = {
-        hostname: ko.observable("broker.mqttdashboard.com"),
-        port: ko.observable(8000),
+        hostname: ko.observable("10.2.0.68"),
+        port: ko.observable(9001),
         clientID: ko.observable("client-Z3M4")
     };
 
@@ -186,7 +197,7 @@ function onConnectionLost(responseObject) {
 
 // called when a message arrives
 function onMessageArrived(message) {
-
+    console.log("arrived", message);
     let msg = JSON.parse(message.payloadString);
     console.log(msg.componentId);
 
@@ -220,17 +231,17 @@ function onMessageArrived(message) {
 
 $("#stop-btn").click(function(){
     let unmapped = ko.mapping.toJS(viewModel.devices);
-    console.log(unmapped[openedIndex]);
-    message = new Paho.MQTT.Message(unmapped[openedIndex].componentId);
-    message.destinationName = "hybrit/devices/stop";
+    let msg = '{"eClass": "http://www.dfki.de/iui/basys/model/component#//CommandRequest","componentId" : "'+unmapped[openedIndex].componentId+'","controlCommand": "STOP"}';
+    message = new Paho.MQTT.Message(msg);
+    message.destinationName = "basys/components/command";
     client.send(message);
 });
 
 $("#reset-btn").click(function(){
     let unmapped = ko.mapping.toJS(viewModel.devices);
-    console.log(unmapped[openedIndex]);
-    message = new Paho.MQTT.Message(unmapped[openedIndex].componentId);
-    message.destinationName = "hybrit/devices/reset";
+    let msg = '{"eClass": "http://www.dfki.de/iui/basys/model/component#//CommandRequest","componentId" : "'+unmapped[openedIndex].componentId+'","controlCommand": "RESET"}';
+    message = new Paho.MQTT.Message(msg);
+    message.destinationName = "basys/components/command";
     client.send(message);
 });
 
