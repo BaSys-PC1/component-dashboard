@@ -6,16 +6,15 @@ let resources,
     viewModel,
     instances,
     graph,
-    devices,
-    services,
-    management,
+    devices = [],
+    services = [],
+    management = [],
     oldStyle,
     currentCell, sub, openedIndex,
-    mockData = true,
-    APIbaseURL = "10.2.0.68:8080",
+    mockData = false,
+    APIbaseURL = "http://10.2.0.68:8080",
     BrokerURL = "broker.mqttdashboard.com",
     BrokerPort = 8000;
-
 
 
 //initially get data from all services
@@ -35,68 +34,77 @@ function loadInitialData(mockData, callback) {
         $.getJSON(typ_url),
         $.getJSON(trans_url)
     )
-        .done(function(dev, man, serv, inst, typ, trans) {
-            //TODO: merge data from all services
+        .done(function (dev, man, serv, inst, typ, trans) {
 
-            devices = dev[0].map((val, index, arr) => {
+            //devices
+            let devCount = 0;
+
+            function addDevice(obj) {
+                devices.push(obj);
+                devCount++;
+                checkCallback();
+            }
+
+            let devs = dev[0];
+            for (let i = 0; i < devs.length; i++) {
+                let obj = {};
+                obj.componentId = devs[i].componentId;
+                obj.componentName = devs[i].componentName;
+                obj.currentMode = devs[i].currentMode;
+                obj.currentState = devs[i].currentState;
 
                 //get instance of device
-                let instance = inst[0].resourceInstances.filter(val2 => val2.id === val.componentId);
+                let instance = inst[0].resourceInstances.filter(val2 => val2.id === devs[i].componentId);
+                obj.serial = instance[0].serialNumber;
+
                 //get capability
                 let capability = "";
-                // if (typeof instance[0].capabilityApplications[0].capabilityVariants[0].capability !== 'undefined') {
-                //  capability = instance[0].capabilityApplications[0].capabilityVariants[0].capability.eClass;
-                //    capability = capability.substr(capability.lastIndexOf('/')+1); //remove http://www.dfki.de/iui/basys/model/capability#//
-                //  }
-                // else {
-                capability = "Not Found";
-                //  }
+
+                for (let i = 0; i < instance[0].capabilityApplications[0].capabilityVariants.length; i++) {
+                    if (i > 0)
+                        capability += ", ";
+
+                    capability += instance[0].capabilityApplications[0].capabilityVariants[i].name;
+
+                }
+                obj.capability = capability;
 
                 //get type of instance
-                let typeId = instance[0].resourceType.$ref.substr(instance[0].resourceType.$ref.lastIndexOf('/')+1);
-                let type = "";
+                let typeId = instance[0].resourceType.$ref.substr(instance[0].resourceType.$ref.lastIndexOf('/') + 1);
+
                 //loop over manufactures
-                for (let i = 0; i < typ[0].catalogues.length; i++){
+                let type = "";
+                for (let i = 0; i < typ[0].catalogues.length; i++) {
                     //loop over resourceTypes
                     type = typ[0].catalogues[i].resourceTypes.filter(val2 => val2.id === typeId);
                     if (type.length > 0) break; //resource found! Stop searching and overriding type
-
                 }
+                obj.type = type[0].name;
+                obj.docuLink = type[0].documentation;
 
                 //get topology of instance
-                let topId = "",
-                    location = "";
-                if(typeof instance[0].role !== 'undefined'){
-                    topId = instance[0].role.$ref.substr(instance[0].role.$ref.lastIndexOf('/')+1);
+                console.log(instance[0]);
+                if (typeof instance[0].role !== 'undefined') {
+                    let topId = instance[0].role.$ref.substr(instance[0].role.$ref.lastIndexOf('/') + 1);
+                    if (!mockData) {
+                        $.getJSON(APIbaseURL + "/services/topology/parent/" + topId).done(function (top) {
+                            obj.location = top.name;
+                            addDevice(obj);
+                        });
+                    }
+                    else {
+                        obj.location = "S1";
+                        addDevice(obj);
+                    }
                 }
-                //TODO: get topology name over /services/topology/parent/{topId} later to save 3 nested loops
-                if(!mockData){
-                    $.getJSON(APIbaseURL + "/services/topology/parent/" + topId).done(function(top){
-                        if (typeof top !== "undefined"){
-                            location = top.name;
-                        }
-                        else {
-                            location = "Not Found"
-                        }
-                        console.log(location);
-                    });
+                else {
+                    obj.location = "Not Found";
+                    addDevice(obj);
                 }
 
+            }
 
-                //object building
-                return {
-                    "componentId": val.componentId,
-                    "type": type[0].name, //from resource_types
-                    "componentName": val.componentName,
-                    "location": location, //from topology
-                    "serial": instance[0].serialNumber, //from resource_instances
-                    "capability": capability, //from resource_instances
-                    "currentMode": val.currentMode,
-                    "currentState": val.currentState,
-                    "docuLink": type[0].documentation //from resource_types
-                };
-            });
-
+            //services
             services = serv[0].map((val, index, arr) => {
                 // return element to new Array
                 return {
@@ -107,6 +115,7 @@ function loadInitialData(mockData, callback) {
                 };
             });
 
+            //management
             management = man[0].map((val, index, arr) => {
                 // return element to new Array
                 return {
@@ -118,13 +127,24 @@ function loadInitialData(mockData, callback) {
             });
 
             resources = trans[0];
-
             console.log("devices ", devices);
 
+            checkCallback();
+
             //all data needs to be loaded first before executing main()
-            callback();
+            function checkCallback() {
+                //console.log(devCount, devs.length);
+               // console.log(services.length , serv[0].length);
+               // console.log(management.length, man[0].length);
+                if (devCount === devs.length &&
+                    services.length === serv[0].length &&
+                    management.length === man[0].length
+                )
+                    callback();
+            }
+
         })
-        .fail(function() {
+        .fail(function () {
             // Executed if at least one request fails
             console.error("Failed to get JSON data");
         });
@@ -158,15 +178,16 @@ function AppViewModel() {
         mockData: ko.observable(mockData),
         hostname: ko.observable(APIbaseURL)
     };
-    self.changeMockData = function() {
+    self.changeMockData = function () {
         self.restConfig.mockData(!self.restConfig.mockData());
-        loadInitialData(self.restConfig.mockData(), function(){
-            console.log("reloaded data", self.restConfig.mockData());});
+        loadInitialData(self.restConfig.mockData(), function () {
+            console.log("reloaded data", self.restConfig.mockData());
+        });
     };
 
-    ko.computed(function() {
+    ko.computed(function () {
         return ko.toJSON(self.mqttConfig);
-    }).subscribe(function() {
+    }).subscribe(function () {
         // called whenever any of the properties of mqttConfig changes
         console.log("changed mqtt settings");
         initMQTT();
@@ -176,12 +197,11 @@ function AppViewModel() {
 }
 
 
-
 /*################
         MQTT
 ################*/
 
-function initMQTT(){
+function initMQTT() {
 
     // Create a client instance
     client = new Paho.MQTT.Client(viewModel.mqttConfig.hostname(), Number(viewModel.mqttConfig.port()), viewModel.mqttConfig.clientID());
@@ -191,7 +211,7 @@ function initMQTT(){
     client.onMessageArrived = onMessageArrived;
 
     // connect the client
-    client.connect({onSuccess:onConnect});
+    client.connect({onSuccess: onConnect});
 }
 
 
@@ -208,7 +228,7 @@ function onConnect() {
 // called when the client loses its connection
 function onConnectionLost(responseObject) {
     if (responseObject.errorCode !== 0) {
-        console.log("onConnectionLost:"+responseObject.errorMessage);
+        console.log("onConnectionLost:" + responseObject.errorMessage);
     }
 }
 
@@ -223,7 +243,7 @@ function onMessageArrived(message) {
     //override values
     let updatedDevices = devices.map((val, index, arr) => {
 
-        if (val.componentId === msg.componentId){  //update currentMode and currentState
+        if (val.componentId === msg.componentId) {  //update currentMode and currentState
             return {
                 "componentId": val.componentId,
                 "type": val.type,
@@ -246,17 +266,17 @@ function onMessageArrived(message) {
 
 }
 
-$("#stop-btn").click(function(){
+$("#stop-btn").click(function () {
     let unmapped = ko.mapping.toJS(viewModel.devices);
-    let msg = '{"eClass": "http://www.dfki.de/iui/basys/model/component#//CommandRequest","componentId" : "'+unmapped[openedIndex].componentId+'","controlCommand": "STOP"}';
+    let msg = '{"eClass": "http://www.dfki.de/iui/basys/model/component#//CommandRequest","componentId" : "' + unmapped[openedIndex].componentId + '","controlCommand": "STOP"}';
     message = new Paho.MQTT.Message(msg);
     message.destinationName = "basys/components/command";
     client.send(message);
 });
 
-$("#reset-btn").click(function(){
+$("#reset-btn").click(function () {
     let unmapped = ko.mapping.toJS(viewModel.devices);
-    let msg = '{"eClass": "http://www.dfki.de/iui/basys/model/component#//CommandRequest","componentId" : "'+unmapped[openedIndex].componentId+'","controlCommand": "RESET"}';
+    let msg = '{"eClass": "http://www.dfki.de/iui/basys/model/component#//CommandRequest","componentId" : "' + unmapped[openedIndex].componentId + '","controlCommand": "RESET"}';
     message = new Paho.MQTT.Message(msg);
     message.destinationName = "basys/components/command";
     client.send(message);
@@ -267,20 +287,16 @@ $("#reset-btn").click(function(){
         MxGraph
 ################*/
 
-function initGraph(){
-    if (mxClient.isBrowserSupported())
-    {
+function initGraph() {
+    if (mxClient.isBrowserSupported()) {
         var divs = document.getElementsByClassName('mxgraph');
 
-        for (var i = 0; i < divs.length; i++)
-        {
-            (function(container)
-            {
+        for (var i = 0; i < divs.length; i++) {
+            (function (container) {
                 var xml = mxUtils.getTextContent(container);
                 var xmlDocument = mxUtils.parseXml(xml);
 
-                if (xmlDocument.documentElement != null && xmlDocument.documentElement.nodeName == 'mxGraphModel')
-                {
+                if (xmlDocument.documentElement != null && xmlDocument.documentElement.nodeName == 'mxGraphModel') {
                     var codec = new mxCodec(xmlDocument);
                     var node = xmlDocument.documentElement;
 
@@ -314,18 +330,18 @@ function initGraph(){
     }
 }
 
-function markCurrentState(state){
+function markCurrentState(state) {
 
     let vertices = graph.getChildCells(graph.getDefaultParent(), true, false);
 
-    for (let i = 0; i < vertices.length; i++){
+    for (let i = 0; i < vertices.length; i++) {
         if (vertices[i].value === state) {
             currentCell = vertices[i];
         }
     }
 
     //change style of active state
-    if (currentCell !== null){
+    if (currentCell !== null) {
 
         let oldColor = graph.getCellStyle(currentCell)[mxConstants.STYLE_STROKECOLOR];
 
@@ -333,7 +349,7 @@ function markCurrentState(state){
 
         return oldColor;
     }
-    else{
+    else {
         console.error("Current state '" + state + "' not found.");
         return null;
     }
@@ -350,9 +366,9 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
     oldStyle = markCurrentState(state);
 
     //detect changes on currently opened instance for further UI updates
-    sub = ko.computed(function() {
+    sub = ko.computed(function () {
         return ko.toJSON(viewModel.devices()[openedIndex]);
-    }).subscribe(function() {
+    }).subscribe(function () {
         let unmapped = ko.mapping.toJS(viewModel.devices);
         console.log("changed to ", unmapped[openedIndex].currentState);
         graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, oldStyle, [currentCell]);
@@ -376,7 +392,7 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
 #####################*/
 
 
-$( "#devices-link" ).click(function() {
+$("#devices-link").click(function () {
     $('#pagination li').removeClass('active');
     $(this).parent().addClass("active");
 
@@ -385,7 +401,7 @@ $( "#devices-link" ).click(function() {
     $("#serviceContainer").hide();
 });
 
-$( "#management-link" ).click(function() {
+$("#management-link").click(function () {
     $('#pagination li').removeClass('active');
     $(this).parent().addClass("active");
 
@@ -394,7 +410,7 @@ $( "#management-link" ).click(function() {
     $("#serviceContainer").hide();
 });
 
-$( "#service-link" ).click(function() {
+$("#service-link").click(function () {
     $('#pagination li').removeClass('active');
     $(this).parent().addClass("active");
 
@@ -407,8 +423,8 @@ $( "#service-link" ).click(function() {
         Main
 ################*/
 
-function main(){
-    loadInitialData(mockData, function(){
+function main() {
+    loadInitialData(mockData, function () {
         $("#deviceContainer").show();
         $("#managementContainer").hide();
         $("#serviceContainer").hide();
@@ -421,7 +437,7 @@ function main(){
         initMQTT();
 
         graph = initGraph();
-   });
+    });
 }
 
 main();
