@@ -6,7 +6,7 @@ let resources,
     viewModel,
     instances,
     graph,
-    devices = [],
+    devices,
     services = [],
     management = [],
     oldStyle,
@@ -38,6 +38,7 @@ function loadInitialData(mockData, callback) {
 
             //devices
             let devCount = 0;
+            devices = [];
 
             function addDevice(obj) {
                 devices.push(obj);

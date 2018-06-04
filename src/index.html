@@ -49,14 +49,6 @@
             </div>
             <div class="row">
                 <div class="col">
-                    REST URL:
-                </div>
-                <div class="col">
-                    <input class="form-control" data-bind="value: restConfig.hostname"/>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
                     Broker URL:
                 </div>
                 <div class="col">
@@ -79,6 +71,14 @@
                     <button type="button" class="btn btn-sm btn-toggle" data-toggle="button" data-bind="click: changeMockData" aria-pressed="false" autocomplete="off">
                         <div class="handle"></div>
                     </button>
+                </div>
+            </div>
+            <div class="row" data-bind="visible: restConfig.mockData">
+                <div class="col">
+                    REST URL:
+                </div>
+                <div class="col">
+                    <input class="form-control" data-bind="value: restConfig.hostname"/>
                 </div>
             </div>
         </div>
