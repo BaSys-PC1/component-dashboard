@@ -11,7 +11,7 @@ let resources,
     management = [],
     oldStyle,
     currentCell, sub, openedIndex,
-    mockData = true,
+    mockData = false,
     APIbaseURL = "http://10.2.0.68:8080",
     BrokerURL = "broker.mqttdashboard.com",
     BrokerPort = 8000;
