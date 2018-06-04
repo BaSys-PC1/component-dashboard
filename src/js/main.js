@@ -11,118 +11,125 @@ let resources,
     management,
     oldStyle,
     currentCell, sub, openedIndex,
-    mockData = false,
-    APIbaseURL = "http://10.2.0.68:8080",
-    BrokerURL = "basys-lnv-1";
+    mockData = true,
+    APIbaseURL = "10.2.0.68:8080",
+    BrokerURL = "broker.mqttdashboard.com",
+    BrokerPort = 8000;
 
-let dev_url = (mockData) ? "/data/device_components.json" : APIbaseURL + "/services/registry/DEVICE_COMPONENT",
-    man_url = (mockData) ? "/data/management_components.json" : APIbaseURL + "/services/registry/MANAGEMENT_COMPONENT",
-    serv_url = (mockData) ? "/data/service_components.json" : APIbaseURL + "/services/registry/SERVICE_COMPONENT",
-    top_url = (mockData) ? "/data/topology.json" : APIbaseURL + "/services/topology/",
-    inst_url = (mockData) ? "/data/resource_instances.json" : APIbaseURL + "/services/resourceinstance/",
-    typ_url = (mockData) ? "/data/resource_types.json" : APIbaseURL + "/services/resourcetype/",
-    trans_url = "/data/translation.json";
+
 
 //initially get data from all services
-$.when(
-    $.getJSON(dev_url),
-    $.getJSON(man_url),
-    $.getJSON(serv_url),
-    $.getJSON(top_url),
-    $.getJSON(inst_url),
-    $.getJSON(typ_url),
-    $.getJSON(trans_url)
+function loadInitialData(mockData, callback) {
+    let dev_url = (mockData) ? "/data/device_components.json" : APIbaseURL + "/services/registry/DEVICE_COMPONENT",
+        man_url = (mockData) ? "/data/management_components.json" : APIbaseURL + "/services/registry/MANAGEMENT_COMPONENT",
+        serv_url = (mockData) ? "/data/service_components.json" : APIbaseURL + "/services/registry/SERVICE_COMPONENT",
+        inst_url = (mockData) ? "/data/resource_instances.json" : APIbaseURL + "/services/resourceinstance/",
+        typ_url = (mockData) ? "/data/resource_types.json" : APIbaseURL + "/services/resourcetype/",
+        trans_url = "/data/translation.json";
+
+    $.when(
+        $.getJSON(dev_url),
+        $.getJSON(man_url),
+        $.getJSON(serv_url),
+        $.getJSON(inst_url),
+        $.getJSON(typ_url),
+        $.getJSON(trans_url)
     )
-    .done(function(dev, man, serv, top, inst, typ, trans) {
-        //TODO: merge data from all services
+        .done(function(dev, man, serv, inst, typ, trans) {
+            //TODO: merge data from all services
 
-        devices = dev[0].map((val, index, arr) => {
+            devices = dev[0].map((val, index, arr) => {
 
-            //get instance of device
-            let instance = inst[0].resourceInstances.filter(val2 => val2.id === val.componentId);
-            //get capability
-            let capability = "";
-           // if (typeof instance[0].capabilityApplications[0].capabilityVariants[0].capability !== 'undefined') {
-             //  capability = instance[0].capabilityApplications[0].capabilityVariants[0].capability.eClass;
-            //    capability = capability.substr(capability.lastIndexOf('/')+1); //remove http://www.dfki.de/iui/basys/model/capability#//
-          //  }
-           // else {
+                //get instance of device
+                let instance = inst[0].resourceInstances.filter(val2 => val2.id === val.componentId);
+                //get capability
+                let capability = "";
+                // if (typeof instance[0].capabilityApplications[0].capabilityVariants[0].capability !== 'undefined') {
+                //  capability = instance[0].capabilityApplications[0].capabilityVariants[0].capability.eClass;
+                //    capability = capability.substr(capability.lastIndexOf('/')+1); //remove http://www.dfki.de/iui/basys/model/capability#//
+                //  }
+                // else {
                 capability = "Not Found";
-          //  }
+                //  }
 
-            //get type of instance
-            let typeId = instance[0].resourceType.$ref.substr(instance[0].resourceType.$ref.lastIndexOf('/')+1);
-            let type = "";
-            //loop over manufactures
-            for (let i = 0; i < typ[0].catalogues.length; i++){
-                //loop over resourceTypes
-                type = typ[0].catalogues[i].resourceTypes.filter(val2 => val2.id === typeId);
-                if (type.length > 0) break; //resource found! Stop searching and overriding type
+                //get type of instance
+                let typeId = instance[0].resourceType.$ref.substr(instance[0].resourceType.$ref.lastIndexOf('/')+1);
+                let type = "";
+                //loop over manufactures
+                for (let i = 0; i < typ[0].catalogues.length; i++){
+                    //loop over resourceTypes
+                    type = typ[0].catalogues[i].resourceTypes.filter(val2 => val2.id === typeId);
+                    if (type.length > 0) break; //resource found! Stop searching and overriding type
 
-            }
-
-            //get topology of instance
-            let topId = "",
-                location = "";
-            if(typeof instance[0].role !== 'undefined'){
-                topId = instance[0].role.$ref.substr(instance[0].role.$ref.lastIndexOf('/')+1);
-            }
-            //TODO: get topology name over /services/topology/parent/{topId} later to save 3 nested loops
-            $.getJSON(APIbaseURL + "/services/topology/parent/" + topId).done(function(top){
-                if (typeof top !== "undefined"){
-                    location = top.name;
                 }
-                else {
-                    location = "Not Found"
+
+                //get topology of instance
+                let topId = "",
+                    location = "";
+                if(typeof instance[0].role !== 'undefined'){
+                    topId = instance[0].role.$ref.substr(instance[0].role.$ref.lastIndexOf('/')+1);
                 }
-                console.log(location);
+                //TODO: get topology name over /services/topology/parent/{topId} later to save 3 nested loops
+                if(!mockData){
+                    $.getJSON(APIbaseURL + "/services/topology/parent/" + topId).done(function(top){
+                        if (typeof top !== "undefined"){
+                            location = top.name;
+                        }
+                        else {
+                            location = "Not Found"
+                        }
+                        console.log(location);
+                    });
+                }
+
+
+                //object building
+                return {
+                    "componentId": val.componentId,
+                    "type": type[0].name, //from resource_types
+                    "componentName": val.componentName,
+                    "location": location, //from topology
+                    "serial": instance[0].serialNumber, //from resource_instances
+                    "capability": capability, //from resource_instances
+                    "currentMode": val.currentMode,
+                    "currentState": val.currentState,
+                    "docuLink": type[0].documentation //from resource_types
+                };
             });
 
-            //object building
-            return {
-                "componentId": val.componentId,
-                "type": type[0].name, //from resource_types
-                "componentName": val.componentName,
-                "location": location, //from topology
-                "serial": instance[0].serialNumber, //from resource_instances
-                "capability": capability, //from resource_instances
-                "currentMode": val.currentMode,
-                "currentState": val.currentState,
-                "docuLink": type[0].documentation //from resource_types
-            };
+            services = serv[0].map((val, index, arr) => {
+                // return element to new Array
+                return {
+                    "componentId": val.componentId,
+                    "type": "Service",
+                    "componentName": val.componentName,
+                    "location": val.hostName
+                };
+            });
+
+            management = man[0].map((val, index, arr) => {
+                // return element to new Array
+                return {
+                    "componentId": val.componentId,
+                    "type": "Management",
+                    "componentName": val.componentName,
+                    "location": val.hostName
+                };
+            });
+
+            resources = trans[0];
+
+            console.log("devices ", devices);
+
+            //all data needs to be loaded first before executing main()
+            callback();
+        })
+        .fail(function() {
+            // Executed if at least one request fails
+            console.error("Failed to get JSON data");
         });
 
-        services = serv[0].map((val, index, arr) => {
-            // return element to new Array
-            return {
-                "componentId": val.componentId,
-                "type": "Service",
-                "componentName": val.componentName,
-                "location": val.hostName
-            };
-        });
-
-        management = man[0].map((val, index, arr) => {
-            // return element to new Array
-            return {
-                "componentId": val.componentId,
-                "type": "Management",
-                "componentName": val.componentName,
-                "location": val.hostName
-            };
-        });
-
-        resources = trans[0];
-
-        console.log("devices ", devices);
-
-        //all data needs to be loaded first before executing main()
-        main();
-    })
-    .fail(function() {
-        // Executed if at least one request fails
-        console.error("Failed to get JSON data");
-    });
+}
 
 
 /*#################################################
@@ -142,9 +149,19 @@ function AppViewModel() {
     self.services = ko.mapping.fromJS(services);
 
     self.mqttConfig = {
-        hostname: ko.observable("10.2.0.68"),
-        port: ko.observable(9001),
+        hostname: ko.observable(BrokerURL),
+        port: ko.observable(BrokerPort),
         clientID: ko.observable("client-Z3M4")
+    };
+
+    self.restConfig = {
+        mockData: ko.observable(mockData),
+        hostname: ko.observable(APIbaseURL)
+    };
+    self.changeMockData = function() {
+        self.restConfig.mockData(!self.restConfig.mockData());
+        loadInitialData(self.restConfig.mockData(), function(){
+            console.log("reloaded data", self.restConfig.mockData());});
     };
 
     ko.computed(function() {
@@ -390,19 +407,21 @@ $( "#service-link" ).click(function() {
         Main
 ################*/
 
-function main() {
+function main(){
+    loadInitialData(mockData, function(){
+        $("#deviceContainer").show();
+        $("#managementContainer").hide();
+        $("#serviceContainer").hide();
 
-    $("#deviceContainer").show();
-    $("#managementContainer").hide();
-    $("#serviceContainer").hide();
+        i18nextko.init(resources, 'en', ko);
 
-    i18nextko.init(resources, 'en', ko);
+        viewModel = new AppViewModel();
+        ko.applyBindings(viewModel);
 
-    viewModel = new AppViewModel();
-    ko.applyBindings(viewModel);
+        initMQTT();
 
-    initMQTT();
-
-    graph = initGraph();
-
+        graph = initGraph();
+   });
 }
+
+main();
