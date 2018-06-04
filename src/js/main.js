@@ -60,6 +60,8 @@ function loadInitialData(mockData, callback) {
                 //get capability
                 let capability = "";
 
+                console.log(instance[0].capabilityApplications[0]);
+
                 for (let i = 0; i < instance[0].capabilityApplications[0].capabilityVariants.length; i++) {
                     if (i > 0)
                         capability += ", ";
@@ -83,14 +85,18 @@ function loadInitialData(mockData, callback) {
                 obj.docuLink = type[0].documentation;
 
                 //get topology of instance
-                console.log(instance[0]);
                 if (typeof instance[0].role !== 'undefined') {
                     let topId = instance[0].role.$ref.substr(instance[0].role.$ref.lastIndexOf('/') + 1);
                     if (!mockData) {
-                        $.getJSON(APIbaseURL + "/services/topology/parent/" + topId).done(function (top) {
-                            obj.location = top.name;
-                            addDevice(obj);
-                        });
+                        $.getJSON(APIbaseURL + "/services/topology/parent/" + topId)
+                            .done(function (top) {
+                                obj.location = top.name;
+                                addDevice(obj);
+                            })
+                            .fail(function () {
+                                obj.location = "Not Found";
+                                addDevice(obj);
+                            });
                     }
                     else {
                         obj.location = "S1";
@@ -127,20 +133,23 @@ function loadInitialData(mockData, callback) {
             });
 
             resources = trans[0];
-            console.log("devices ", devices);
+
 
             checkCallback();
 
             //all data needs to be loaded first before executing main()
             function checkCallback() {
                 //console.log(devCount, devs.length);
-               // console.log(services.length , serv[0].length);
-               // console.log(management.length, man[0].length);
+                // console.log(services.length , serv[0].length);
+                // console.log(management.length, man[0].length);
                 if (devCount === devs.length &&
                     services.length === serv[0].length &&
                     management.length === man[0].length
-                )
+                ){
+                    console.log("devices ", devices);
                     callback();
+                }
+
             }
 
         })
