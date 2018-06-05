@@ -71,7 +71,7 @@ function loadInitialData(mockData, callback) {
                 obj.capability = capability;
 
                 //get type of instance
-                let typeId = instance[0].resourceType.$ref.substr(instance[0].resourceType.$ref.lastIndexOf('/') + 1);
+                let typeId = instance[0].resourceType.$ref.substr(instance[0].resourceType.$ref.lastIndexOf('#') + 1);
 
                 //loop over manufactures
                 let type = "";
@@ -80,12 +80,13 @@ function loadInitialData(mockData, callback) {
                     type = typ[0].catalogues[i].resourceTypes.filter(val2 => val2.id === typeId);
                     if (type.length > 0) break; //resource found! Stop searching and overriding type
                 }
+                //console.log(type);
                 obj.type = type[0].name;
                 obj.docuLink = type[0].documentation;
 
                 //get topology of instance
                 if (typeof instance[0].role !== 'undefined') {
-                    let topId = instance[0].role.$ref.substr(instance[0].role.$ref.lastIndexOf('/') + 1);
+                    let topId = instance[0].role.$ref.substr(instance[0].role.$ref.lastIndexOf('#') + 1);
                     if (!mockData) {
                         $.getJSON(APIbaseURL + "/services/topology/parent/" + topId)
                             .done(function (top) {
@@ -152,7 +153,7 @@ function loadInitialData(mockData, callback) {
         .fail(function () {
             // Executed if at least one request fails
             console.log("Failed to get JSON data");
-            $(".alert-danger span").text("Failed to get JSON data from " + APIbaseURL).show();
+            $(".alert-danger span").text("Failed to get all JSON data from " + APIbaseURL).show();
             $(".alert-danger").show();
             callback();
         });
