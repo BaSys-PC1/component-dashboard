@@ -96,6 +96,7 @@
         <div class="card-header">
             <h5 class="card-title"><span data-bind="text: componentName"></span>
                 <button type="button" data-toggle="modal" data-target="#finiteAutomaton" class="btn btn-info float-right" data-bind="attr: { 'data-state': currentState, 'data-index': $index }">
+                    <span data-bind="text: currentMode"></span> -
                     <span data-bind="text: currentState"></span>
                 </button>
             </h5>
