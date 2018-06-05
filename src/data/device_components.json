@@ -7,9 +7,9 @@
         "inChannelName": "_PwPREFIxEeidSe5vp9A3oA#in",
         "outChannelName": "_PwPREFIxEeidSe5vp9A3oA#out",
         "statusChannelName": "basys#components#status#_PwPREFIxEeidSe5vp9A3oA",
-        "currentState": "STOPPED",
+        "currentState": "IDLE",
         "currentMode": "PRODUCTION",
-        "hostName": "172.16.55.162"
+        "hostName": "2001:0:9d38:78cf:3008:3fd2:f5fd:f5fc"
     },
     {
         "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
@@ -19,9 +19,9 @@
         "inChannelName": "_r4sy4DD7EeiuBvcKgWzd3Q#in",
         "outChannelName": "_r4sy4DD7EeiuBvcKgWzd3Q#out",
         "statusChannelName": "basys#components#status#_r4sy4DD7EeiuBvcKgWzd3Q",
-        "currentState": "STOPPED",
+        "currentState": "IDLE",
         "currentMode": "PRODUCTION",
-        "hostName": "172.16.55.162"
+        "hostName": "2001:0:9d38:78cf:3008:3fd2:f5fd:f5fc"
     },
     {
         "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
@@ -31,9 +31,9 @@
         "inChannelName": "_wojNMDD7EeiuBvcKgWzd3Q#in",
         "outChannelName": "_wojNMDD7EeiuBvcKgWzd3Q#out",
         "statusChannelName": "basys#components#status#_wojNMDD7EeiuBvcKgWzd3Q",
-        "currentState": "STOPPED",
+        "currentState": "IDLE",
         "currentMode": "PRODUCTION",
-        "hostName": "172.16.55.162"
+        "hostName": "2001:0:9d38:78cf:3008:3fd2:f5fd:f5fc"
     },
     {
         "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
@@ -43,9 +43,9 @@
         "inChannelName": "_mQ0kYDD7EeiuBvcKgWzd3Q#in",
         "outChannelName": "_mQ0kYDD7EeiuBvcKgWzd3Q#out",
         "statusChannelName": "basys#components#status#_mQ0kYDD7EeiuBvcKgWzd3Q",
-        "currentState": "STOPPED",
+        "currentState": "IDLE",
         "currentMode": "PRODUCTION",
-        "hostName": "172.16.55.162"
+        "hostName": "2001:0:9d38:78cf:3008:3fd2:f5fd:f5fc"
     },
     {
         "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
@@ -55,9 +55,9 @@
         "inChannelName": "_RtlHgFIxEeidSe5vp9A3oA#in",
         "outChannelName": "_RtlHgFIxEeidSe5vp9A3oA#out",
         "statusChannelName": "basys#components#status#_RtlHgFIxEeidSe5vp9A3oA",
-        "currentState": "STOPPED",
+        "currentState": "IDLE",
         "currentMode": "PRODUCTION",
-        "hostName": "172.16.55.162"
+        "hostName": "2001:0:9d38:78cf:3008:3fd2:f5fd:f5fc"
     },
     {
         "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
@@ -67,9 +67,9 @@
         "inChannelName": "_rUJzsDJhEei1p5hKOf5Slw#in",
         "outChannelName": "_rUJzsDJhEei1p5hKOf5Slw#out",
         "statusChannelName": "basys#components#status#_rUJzsDJhEei1p5hKOf5Slw",
-        "currentState": "STOPPED",
+        "currentState": "IDLE",
         "currentMode": "PRODUCTION",
-        "hostName": "172.16.55.162"
+        "hostName": "2001:0:9d38:78cf:3008:3fd2:f5fd:f5fc"
     },
     {
         "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
@@ -79,9 +79,9 @@
         "inChannelName": "_uFLRgDD7EeiuBvcKgWzd3Q#in",
         "outChannelName": "_uFLRgDD7EeiuBvcKgWzd3Q#out",
         "statusChannelName": "basys#components#status#_uFLRgDD7EeiuBvcKgWzd3Q",
-        "currentState": "STOPPED",
+        "currentState": "IDLE",
         "currentMode": "PRODUCTION",
-        "hostName": "172.16.55.162"
+        "hostName": "2001:0:9d38:78cf:3008:3fd2:f5fd:f5fc"
     },
     {
         "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
@@ -91,9 +91,9 @@
         "inChannelName": "_I4a_oDD-EeiuBvcKgWzd3Q#in",
         "outChannelName": "_I4a_oDD-EeiuBvcKgWzd3Q#out",
         "statusChannelName": "basys#components#status#_I4a_oDD-EeiuBvcKgWzd3Q",
-        "currentState": "STOPPED",
+        "currentState": "IDLE",
         "currentMode": "PRODUCTION",
-        "hostName": "172.16.55.162"
+        "hostName": "2001:0:9d38:78cf:3008:3fd2:f5fd:f5fc"
     },
     {
         "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
@@ -103,9 +103,9 @@
         "inChannelName": "_jJdx4DD7EeiuBvcKgWzd3Q#in",
         "outChannelName": "_jJdx4DD7EeiuBvcKgWzd3Q#out",
         "statusChannelName": "basys#components#status#_jJdx4DD7EeiuBvcKgWzd3Q",
-        "currentState": "STOPPED",
+        "currentState": "IDLE",
         "currentMode": "PRODUCTION",
-        "hostName": "172.16.55.162"
+        "hostName": "2001:0:9d38:78cf:3008:3fd2:f5fd:f5fc"
     },
     {
         "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
@@ -115,8 +115,8 @@
         "inChannelName": "_SE5NIDB4Eei1bbwBPPZWOA#in",
         "outChannelName": "_SE5NIDB4Eei1bbwBPPZWOA#out",
         "statusChannelName": "basys#components#status#_SE5NIDB4Eei1bbwBPPZWOA",
-        "currentState": "STOPPED",
+        "currentState": "IDLE",
         "currentMode": "PRODUCTION",
-        "hostName": "172.16.55.162"
+        "hostName": "2001:0:9d38:78cf:3008:3fd2:f5fd:f5fc"
     }
 ]
