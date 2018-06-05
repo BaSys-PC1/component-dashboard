@@ -177,10 +177,11 @@ function AppViewModel() {
     self.devices = ko.mapping.fromJS(devices);
     self.services = ko.mapping.fromJS(services);
 
+    let rnd = Math.floor((Math.random() * 100) + 1);
     self.mqttConfig = {
         hostname: ko.observable(BrokerURL),
         port: ko.observable(BrokerPort),
-        clientID: ko.observable("client-Z3M4")
+        clientID: ko.observable("client-" + rnd)
     };
 
     self.restConfig = {
