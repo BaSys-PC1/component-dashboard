@@ -88,7 +88,7 @@ function loadInitialData(mockData, callback) {
                 if (typeof instance[0].role !== 'undefined') {
                     let topId = instance[0].role.$ref.substr(instance[0].role.$ref.lastIndexOf('#') + 1);
                     if (!mockData) {
-                        $.getJSON(APIbaseURL + "/services/topology/parent/" + topId)
+                        $.getJSON(APIbaseURL + "/services/topology/parent/" + topId+ "?callback=?") //treat request as JSONP to avoid cross-domain call issues
                             .done(function (top) {
                                 obj.location = top.name;
                                 addDevice(obj);
