@@ -68,12 +68,12 @@
                    Mock data:
                 </div>
                 <div class="col">
-                    <button type="button" class="btn btn-sm btn-toggle" data-toggle="button" data-bind="click: changeMockData" aria-pressed="false" autocomplete="off">
+                    <button type="button" class="btn btn-sm btn-toggle" data-toggle="button" data-bind="click: changeMockData, css: { active: restConfig.mockData() }" aria-pressed="false" autocomplete="off">
                         <div class="handle"></div>
                     </button>
                 </div>
             </div>
-            <div class="row" data-bind="visible: restConfig.mockData">
+            <div class="row" data-bind="visible: !restConfig.mockData()">
                 <div class="col">
                     REST URL:
                 </div>
@@ -85,6 +85,12 @@
     </div>
 
 </nav>
+
+<div class="alert alert-danger alert-dismissible">
+    <a href="#" class="close" aria-label="close">&times;</a>
+    <span></span>
+</div>
+
 <div class="cardContainer" id="deviceContainer" data-bind="foreach: devices">
     <div class="card">
         <div class="card-header">

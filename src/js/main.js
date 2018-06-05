@@ -12,7 +12,7 @@ let resources,
     oldStyle,
     currentCell, sub, openedIndex,
     mockData = false,
-    APIbaseURL = "http://10.2.0.68:8080",
+    APIbaseURL = "http://10.2.10.3:8080",
     BrokerURL = "broker.mqttdashboard.com",
     BrokerPort = 8000;
 
@@ -23,22 +23,20 @@ function loadInitialData(mockData, callback) {
         man_url = (mockData) ? "/data/management_components.json" : APIbaseURL + "/services/registry/MANAGEMENT_COMPONENT",
         serv_url = (mockData) ? "/data/service_components.json" : APIbaseURL + "/services/registry/SERVICE_COMPONENT",
         inst_url = (mockData) ? "/data/resource_instances.json" : APIbaseURL + "/services/resourceinstance/",
-        typ_url = (mockData) ? "/data/resource_types.json" : APIbaseURL + "/services/resourcetype/",
-        trans_url = "/data/translation.json";
+        typ_url = (mockData) ? "/data/resource_types.json" : APIbaseURL + "/services/resourcetype/";
+
+        //devices
+        let devCount = 0;
+        devices = [];
 
     $.when(
         $.getJSON(dev_url),
         $.getJSON(man_url),
         $.getJSON(serv_url),
         $.getJSON(inst_url),
-        $.getJSON(typ_url),
-        $.getJSON(trans_url)
+        $.getJSON(typ_url)
     )
-        .done(function (dev, man, serv, inst, typ, trans) {
-
-            //devices
-            let devCount = 0;
-            devices = [];
+        .done(function (dev, man, serv, inst, typ) {
 
             function addDevice(obj) {
                 devices.push(obj);
@@ -61,7 +59,7 @@ function loadInitialData(mockData, callback) {
                 //get capability
                 let capability = "";
 
-                console.log(instance[0].capabilityApplications[0]);
+                //console.log(instance[0].capabilityApplications[0]);
 
                 for (let i = 0; i < instance[0].capabilityApplications[0].capabilityVariants.length; i++) {
                     if (i > 0)
@@ -133,9 +131,6 @@ function loadInitialData(mockData, callback) {
                 };
             });
 
-            resources = trans[0];
-
-
             checkCallback();
 
             //all data needs to be loaded first before executing main()
@@ -156,7 +151,10 @@ function loadInitialData(mockData, callback) {
         })
         .fail(function () {
             // Executed if at least one request fails
-            console.error("Failed to get JSON data");
+            console.log("Failed to get JSON data");
+            $(".alert-danger span").text("Failed to get JSON data").show();
+            $(".alert-danger").show();
+            callback();
         });
 
 }
@@ -190,8 +188,12 @@ function AppViewModel() {
     };
     self.changeMockData = function () {
         self.restConfig.mockData(!self.restConfig.mockData());
+        console.log("set to", self.restConfig.mockData());
+        $(".alert").hide();
+
         loadInitialData(self.restConfig.mockData(), function () {
-            console.log("reloaded data", self.restConfig.mockData());
+            ko.mapping.fromJS(devices, viewModel.devices);
+            console.log("new devices", self.devices());
         });
     };
 
@@ -429,24 +431,39 @@ $("#service-link").click(function () {
     $("#serviceContainer").show();
 });
 
+$('.alert .close').click(function(){
+    $(this).parent().hide();
+});
+
+
+
 /*################
         Main
 ################*/
 
 function main() {
+
+    $(".alert").hide();
+    $("#deviceContainer").show();
+    $("#managementContainer").hide();
+    $("#serviceContainer").hide();
+
     loadInitialData(mockData, function () {
-        $("#deviceContainer").show();
-        $("#managementContainer").hide();
-        $("#serviceContainer").hide();
 
-        i18nextko.init(resources, 'en', ko);
+        $.getJSON("/data/translation.json").done(function(trans){
+            resources = trans;
 
-        viewModel = new AppViewModel();
-        ko.applyBindings(viewModel);
+            i18nextko.init(resources, 'en', ko);
 
-        initMQTT();
+            viewModel = new AppViewModel();
+            ko.applyBindings(viewModel);
 
-        graph = initGraph();
+            initMQTT();
+
+            graph = initGraph();
+        });
+
+
     });
 }
 
