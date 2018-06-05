@@ -152,7 +152,7 @@ function loadInitialData(mockData, callback) {
         .fail(function () {
             // Executed if at least one request fails
             console.log("Failed to get JSON data");
-            $(".alert-danger span").text("Failed to get JSON data").show();
+            $(".alert-danger span").text("Failed to get JSON data from " + APIbaseURL).show();
             $(".alert-danger").show();
             callback();
         });
@@ -188,6 +188,9 @@ function AppViewModel() {
     };
     self.changeMockData = function () {
         self.restConfig.mockData(!self.restConfig.mockData());
+        //self.restConfig.mockData.valueHasMutated();
+        self.restConfig.mockData.notifySubscribers(self.restConfig.mockData());
+
         console.log("set to", self.restConfig.mockData());
         $(".alert").hide();
 
@@ -443,11 +446,6 @@ $('.alert .close').click(function(){
 
 function main() {
 
-    $(".alert").hide();
-    $("#deviceContainer").show();
-    $("#managementContainer").hide();
-    $("#serviceContainer").hide();
-
     loadInitialData(mockData, function () {
 
         $.getJSON("/data/translation.json").done(function(trans){
@@ -457,6 +455,8 @@ function main() {
 
             viewModel = new AppViewModel();
             ko.applyBindings(viewModel);
+
+            $("#deviceContainer").show();
 
             initMQTT();
 
