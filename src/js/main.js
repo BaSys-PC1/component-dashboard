@@ -13,8 +13,8 @@ let resources,
     currentCell, sub, openedIndex,
     mockData = false,
     APIbaseURL = "http://10.2.10.3:8080",
-    BrokerURL = "broker.mqttdashboard.com",
-    BrokerPort = 8000;
+    BrokerURL = "10.2.10.3",
+    BrokerPort = 9001;
 
 
 //initially get data from all services
