@@ -117,7 +117,7 @@
                         <a target="_blank" data-bind="attr: { href: docuLink }"><span data-bind="text: type"></span></a> <br>
                         <span data-bind="text: location"></span><br>
                         <span data-bind="text: serial"></span><br>
-                        <span data-bind="text: capability"></span><br>
+                        <span data-bind="text: capability().length"></span> <a href="#capabilityOverview" data-toggle="modal" data-target="#capabilityOverview" data-bind="attr: {'data-index': $index}" class="cap-link">(Show)</a><br>
                     </div>
                 </div>
             </div>
@@ -181,6 +181,8 @@
 </div>
 
 
+
+
 <div class="modal" id="finiteAutomaton" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -197,6 +199,46 @@
                 <div class="mxgraph" style="position:relative;overflow:auto;"></div>
 
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal" id="capabilityOverview" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Capability Overview</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="currentCapability">
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody data-bind="foreach: currentCapability">
+                        <tr>
+                            <th scope="row" data-bind="text: $index"></th>
+                            <td data-bind="text: name"></td>
+                            <td>
+                                <button type="button" class="btn btn-danger" data-bind="visible: taught">Remove</button>
+                                <button type="button" class="btn btn-info" data-bind="visible: !taught">Teach</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>

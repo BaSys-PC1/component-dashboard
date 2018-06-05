@@ -57,16 +57,28 @@ function loadInitialData(mockData, callback) {
                 obj.serial = instance[0].serialNumber;
 
                 //get capability
-                let capability = "";
+                let capability = [];
 
-                //console.log(instance[0].capabilityApplications[0]);
+
+                let capabilityAssertionId = instance[0].capabilityApplications[0].capabilityAssertion.$ref.substr(instance[0].capabilityApplications[0].capabilityAssertion.$ref.lastIndexOf('#')+1);
+                    console.log(capabilityAssertionId);
+
+                    //TODO: maybe wait for async result
+                    $.getJSON(APIbaseURL + "/services/entity/" + capabilityAssertionId)
+                        .done(function(ent){
+                            console.log("lalal" + ent);
+                            capability.push({
+                                'name': ent.name,
+                                'taught': false
+                            });
+                        });
+
 
                 for (let i = 0; i < instance[0].capabilityApplications[0].capabilityVariants.length; i++) {
-                    if (i > 0)
-                        capability += ", ";
-
-                    capability += instance[0].capabilityApplications[0].capabilityVariants[i].name;
-
+                    capability.push({
+                        'name': instance[0].capabilityApplications[0].capabilityVariants[i].name,
+                        'taught': true
+                    });
                 }
                 obj.capability = capability;
 
@@ -176,6 +188,8 @@ function AppViewModel() {
 
     self.devices = ko.mapping.fromJS(devices);
     self.services = ko.mapping.fromJS(services);
+
+    self.currentCapability = ko.observable([]);
 
     let rnd = Math.floor((Math.random() * 100) + 1);
     self.mqttConfig = {
@@ -400,6 +414,18 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
     graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, oldStyle, [currentCell]);
     //reset index
     openedIndex = null;
+
+});
+
+$('#capabilityOverview').on('show.bs.modal', function (event) {
+
+    let button = $(event.relatedTarget); // Button that triggered the modal
+    // Extract info from data-* attributes
+    let openedIndex = button.data('index');
+
+    let unmapped = ko.mapping.toJS(viewModel.devices()[openedIndex].capability);
+
+    viewModel.currentCapability(unmapped);
 
 });
 
