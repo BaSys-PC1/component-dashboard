@@ -12,9 +12,19 @@ let resources,
     oldStyle,
     currentCell, sub, openedIndex,
     mockData = false,
-    APIbaseURL = "http://10.2.10.3:8080",
+    APIbaseURL = "http://10.2.0.68:8080",
     BrokerURL = "10.2.10.3",
-    BrokerPort = 9001;
+    BrokerPort = 9001,
+    processes = [{
+                    name: "CeBIT 2018 mit Teach",
+                    url: "http://10.2.10.7:8081/rest/engine/default/process-definition/key/process_cebit_2018/start",
+                    body: {
+                        "taughtIn": {
+                                        "value": "false",
+                                        "type": "String"
+                                    }
+                        }
+                }];
 
 
 //initially get data from all services
@@ -61,12 +71,10 @@ function loadInitialData(mockData, callback) {
 
 
                 let capabilityAssertionId = instance[0].capabilityApplications[0].capabilityAssertion.$ref.substr(instance[0].capabilityApplications[0].capabilityAssertion.$ref.lastIndexOf('#')+1);
-                    console.log(capabilityAssertionId);
 
                     //TODO: maybe wait for async result
                     $.getJSON(APIbaseURL + "/services/entity/" + capabilityAssertionId)
                         .done(function(ent){
-                            console.log("lalal" + ent);
                             capability.push({
                                 'name': ent.name,
                                 'taught': false
@@ -100,7 +108,7 @@ function loadInitialData(mockData, callback) {
                 if (typeof instance[0].role !== 'undefined') {
                     let topId = instance[0].role.$ref.substr(instance[0].role.$ref.lastIndexOf('#') + 1);
                     if (!mockData) {
-                        $.getJSON(APIbaseURL + "/services/topology/parent/" + topId+ "?callback=?") //treat request as JSONP to avoid cross-domain call issues
+                        $.getJSON(APIbaseURL + "/services/topology/parent/" + topId) //+ "?callback=?" treat request as JSONP to avoid cross-domain call issues
                             .done(function (top) {
                                 obj.location = top.name;
                                 addDevice(obj);
@@ -223,6 +231,8 @@ function AppViewModel() {
         console.log("changed mqtt settings");
         initMQTT();
     });
+
+    self.processes = processes;
 
 
 }
@@ -442,6 +452,7 @@ $("#devices-link").click(function () {
     $("#deviceContainer").show();
     $("#managementContainer").hide();
     $("#serviceContainer").hide();
+    $("#processesContainer").hide();
 });
 
 $("#management-link").click(function () {
@@ -451,6 +462,8 @@ $("#management-link").click(function () {
     $("#deviceContainer").hide();
     $("#managementContainer").show();
     $("#serviceContainer").hide();
+    $("#processesContainer").hide();
+
 });
 
 $("#service-link").click(function () {
@@ -460,6 +473,19 @@ $("#service-link").click(function () {
     $("#deviceContainer").hide();
     $("#managementContainer").hide();
     $("#serviceContainer").show();
+    $("#processesContainer").hide();
+
+});
+
+$("#processes-link").click(function () {
+    $('#pagination li').removeClass('active');
+    $(this).parent().addClass("active");
+
+    $("#deviceContainer").hide();
+    $("#managementContainer").hide();
+    $("#serviceContainer").hide();
+    $("#processesContainer").show();
+
 });
 
 $('.alert .close').click(function(){
