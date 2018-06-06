@@ -12,10 +12,10 @@ let resources,
     oldStyle,
     currentCell, sub, openedIndex,
     mockData = false,
-    APIbaseURL = "http://10.2.0.68:8080",
+    APIbaseURL = "http://10.2.10.3:8080",
     BrokerURL = "10.2.10.3",
     BrokerPort = 9001,
-    camundaURL = "http://10.2.0.28:8081",
+    camundaURL = "http://10.2.0.28:8081", //change to 10.2.10.7
     processes = [
         {
             name: "CeBIT 2018 mit Teaching",
@@ -257,6 +257,23 @@ function AppViewModel() {
         });
     };
 
+    //check every 5 seconds if process is still running to activate button again
+    function checkProcessState(id) {
+        setTimeout(function(){
+            $.ajax({
+                url: camundaURL + "/rest/history/process-instance/" + id,
+                success: function(data){
+                    if (data.state === "COMPLETED"){
+                        viewModel.runningPID(0);
+                    }
+                    else {
+                        checkProcessState(id);
+                    }
+                }
+            });
+        }, 5000);
+    }
+
     self.startProcess = function(process){
         console.log(process);
         $.ajax({
@@ -267,6 +284,7 @@ function AppViewModel() {
             success: function(data) {
                 console.log("started " + data.id);
                 viewModel.runningPID(data.id);
+                checkProcessState(data.id);
             }
         });
     };
