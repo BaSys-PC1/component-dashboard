@@ -52,16 +52,10 @@
                 <div class="col">
                     Broker URL:
                 </div>
-                <div class="col">
+                <div class="col broker">
                     <input class="form-control" data-bind="value: mqttConfig.hostname"/>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    Broker Port:
-                </div>
-                <div class="col">
                     <input class="form-control" data-bind="value: mqttConfig.port"/>
+                    <button type="button" class="btn btn-success"  data-bind="click: changeMQTTdata">Change</button>
                 </div>
             </div>
             <div class="row">
@@ -78,8 +72,9 @@
                 <div class="col">
                     REST URL:
                 </div>
-                <div class="col">
+                <div class="col rest">
                     <input class="form-control" data-bind="value: restConfig.hostname"/>
+                    <button type="button" class="btn btn-success"  data-bind="click: changeRESTdata">Change</button>
                 </div>
             </div>
         </div>

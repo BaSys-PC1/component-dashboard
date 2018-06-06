@@ -12,7 +12,7 @@ let resources,
     oldStyle,
     currentCell, sub, openedIndex,
     mockData = false,
-    APIbaseURL = "http://10.2.10.3:8080",
+    APIbaseURL = "http://10.2.0.68:8080",
     BrokerURL = "10.2.10.3",
     BrokerPort = 9001,
     camundaURL = "http://10.2.0.28:8081", //change to 10.2.10.7
@@ -60,11 +60,11 @@ let resources,
 
 //initially get data from all services
 function loadInitialData(mockData, callback) {
-    let dev_url = (mockData) ? "/data/device_components.json" : APIbaseURL + "/services/registry/DEVICE_COMPONENT",
-        man_url = (mockData) ? "/data/management_components.json" : APIbaseURL + "/services/registry/MANAGEMENT_COMPONENT",
-        serv_url = (mockData) ? "/data/service_components.json" : APIbaseURL + "/services/registry/SERVICE_COMPONENT",
-        inst_url = (mockData) ? "/data/resource_instances.json" : APIbaseURL + "/services/resourceinstance/",
-        typ_url = (mockData) ? "/data/resource_types.json" : APIbaseURL + "/services/resourcetype/";
+    let dev_url = (mockData) ? "/data/device_components.json" : viewModel.restConfig.hostname() + "/services/registry/DEVICE_COMPONENT",
+        man_url = (mockData) ? "/data/management_components.json" : viewModel.restConfig.hostname() + "/services/registry/MANAGEMENT_COMPONENT",
+        serv_url = (mockData) ? "/data/service_components.json" : viewModel.restConfig.hostname() + "/services/registry/SERVICE_COMPONENT",
+        inst_url = (mockData) ? "/data/resource_instances.json" : viewModel.restConfig.hostname() + "/services/resourceinstance/",
+        typ_url = (mockData) ? "/data/resource_types.json" : viewModel.restConfig.hostname() + "/services/resourcetype/";
 
     //devices
     let devCount = 0;
@@ -101,7 +101,7 @@ function loadInitialData(mockData, callback) {
                 let capability = [];
 
 
-                let capabilityAssertionId = instance[0].capabilityApplications[0].capabilityAssertion.$ref.substr(instance[0].capabilityApplications[0].capabilityAssertion.$ref.lastIndexOf('#') + 1);
+                let capabilityAssertionId = instance[0].capabilityApplications[0].capabilityAssertion.$ref.substr(instance[0].capabilityApplications[0].capabilityAssertion.$ref.lastIndexOf('/') + 1);
 
                 //TODO: maybe wait for async result
                 $.getJSON(APIbaseURL + "/services/entity/" + capabilityAssertionId)
@@ -258,8 +258,9 @@ function AppViewModel() {
     };
 
     //check every 5 seconds if process is still running to activate button again
+    let timeout;
     function checkProcessState(id) {
-        setTimeout(function(){
+        timeout = setTimeout(function(){
             $.ajax({
                 url: camundaURL + "/rest/history/process-instance/" + id,
                 success: function(data){
@@ -296,17 +297,22 @@ function AppViewModel() {
             success: function(data) {
                 console.log("deleted running process");
                 viewModel.runningPID(0);
+                clearTimeout(timeout);
             }
         });
     };
 
-    ko.computed(function () {
-        return ko.toJSON(self.mqttConfig);
-    }).subscribe(function () {
-        // called whenever any of the properties of mqttConfig changes
+    self.changeMQTTdata = function(){
         console.log("changed mqtt settings");
         initMQTT();
-    });
+    };
+    self.changeRESTdata = function(){
+        console.log("changed REST settings", self.restConfig.hostname());
+        loadInitialData(self.restConfig.mockData(), function () {
+            ko.mapping.fromJS(devices, viewModel.devices);
+            console.log("new devices", self.devices());
+        });
+    };
 
     self.processes = processes;
 
@@ -575,25 +581,30 @@ $('.alert .close').click(function () {
 
 function main() {
 
-    loadInitialData(mockData, function () {
+    $.getJSON("/data/translation.json").done(function (trans) {
+        resources = trans;
 
-        $.getJSON("/data/translation.json").done(function (trans) {
-            resources = trans;
+        i18nextko.init(resources, 'en', ko);
 
-            i18nextko.init(resources, 'en', ko);
+        viewModel = new AppViewModel();
+        ko.applyBindings(viewModel);
 
-            viewModel = new AppViewModel();
-            ko.applyBindings(viewModel);
+        $("#deviceContainer").show();
 
-            $("#deviceContainer").show();
+        initMQTT();
 
-            initMQTT();
+        graph = initGraph();
 
-            graph = initGraph();
+        loadInitialData(mockData, function () {
+
+            ko.mapping.fromJS(devices, viewModel.devices);
+            console.log("new devices", self.devices());
+
         });
-
-
     });
+
+
+
 }
 
 main();

@@ -1,11 +1,11 @@
-.cardContainer{
+.cardContainer {
   .card {
     width: 500px;
     margin: 10px;
     float: left;
     background-color: lighten(#555555, 15%);
     color: white;
-    .card-body{
+    .card-body {
       padding-left: 0;
       padding-right: 0;
       height: 145px;
@@ -18,10 +18,31 @@
   }
 }
 
-.navbar-collapse{
-  .row{
+.navbar-collapse {
+  .row {
     margin-bottom: 5px;
   }
+  .broker {
+    input {
+      width: 42%;
+      float: left;
+    }
+    button {
+      float: left;
+    }
+  }
+  .rest {
+    input {
+      width: 84%;
+      float: left;
+
+    }
+
+    button {
+      float: left;
+    }
+  }
+
 }
 
 a {
@@ -32,11 +53,11 @@ a {
 #deviceContainer,
 #serviceContainer,
 #managementContainer,
-#processesContainer{
+#processesContainer {
   display: none;
 }
 
-#processesContainer{
+#processesContainer {
   width: 80%;
   margin: 0 auto;
 }
@@ -47,7 +68,8 @@ a {
 @brand-secondary: #ff8300;
 @gray: #6b7381;
 @gray-light: lighten(@gray, 15%);
-@gray-lighter: lighten(@gray, 30%);;
+@gray-lighter: lighten(@gray, 30%);
+;
 
 // Button Colors
 @btn-default-color: @gray;
@@ -57,7 +79,6 @@ a {
 @toggle-default-size: 1.5rem;
 @toggle-default-label-width: 4rem;
 @toggle-default-font-size: .75rem;
-
 
 // Mixin for Switch Colors
 // Variables: @color, @bg, @active-bg
@@ -169,8 +190,6 @@ a {
   }
 
 }
-
-
 
 // Apply Mixin to different sizes & colors
 .btn-toggle {
