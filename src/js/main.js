@@ -6,9 +6,6 @@ let resources,
     viewModel,
     instances,
     graph,
-    devices,
-    services = [],
-    management = [],
     oldStyle,
     currentCell, sub, openedIndex,
     mockData = false,
@@ -66,9 +63,10 @@ function loadInitialData(mockData, callback) {
         inst_url = (mockData) ? "/data/resource_instances.json" : viewModel.restConfig.hostname() + "/services/resourceinstance/",
         typ_url = (mockData) ? "/data/resource_types.json" : viewModel.restConfig.hostname() + "/services/resourcetype/";
 
-    //devices
-    let devCount = 0;
-    devices = [];
+    let devCount = 0,
+        devices = [],
+        services = [],
+        management = [];
 
     $.when(
         $.getJSON(dev_url),
@@ -99,8 +97,6 @@ function loadInitialData(mockData, callback) {
 
                 //get capability
                 let capability = [];
-
-
                 let capabilityAssertionId = instance[0].capabilityApplications[0].capabilityAssertion.$ref.substr(instance[0].capabilityApplications[0].capabilityAssertion.$ref.lastIndexOf('/') + 1);
 
                 //TODO: maybe wait for async result
@@ -131,7 +127,6 @@ function loadInitialData(mockData, callback) {
                     type = typ[0].catalogues[i].resourceTypes.filter(val2 => val2.id === typeId);
                     if (type.length > 0) break; //resource found! Stop searching and overriding type
                 }
-                console.log(type);
                 obj.type = type[0].name;
                 obj.docuLink = type[0].documentation;
 
@@ -194,7 +189,12 @@ function loadInitialData(mockData, callback) {
                     services.length === serv[0].length &&
                     management.length === man[0].length
                 ) {
-                    console.log("devices ", devices);
+                    //update new requested files
+                    ko.mapping.fromJS(devices, viewModel.devices);
+                    ko.mapping.fromJS(services, viewModel.services);
+                    ko.mapping.fromJS(management, viewModel.management);
+
+                    console.log("new devices", viewModel.devices());
                     callback();
                 }
 
@@ -206,7 +206,6 @@ function loadInitialData(mockData, callback) {
             console.log("Failed to get JSON data");
             $(".alert-danger span").text("Failed to get all JSON data from " + APIbaseURL).show();
             $(".alert-danger").show();
-            callback();
         });
 
 }
@@ -225,8 +224,9 @@ function AppViewModel() {
         i18nextko.setLanguage(value);
     });
 
-    self.devices = ko.mapping.fromJS(devices);
-    self.services = ko.mapping.fromJS(services);
+    self.devices = ko.mapping.fromJS([]);
+    self.management = ko.mapping.fromJS([]);
+    self.services = ko.mapping.fromJS([]);
 
     self.currentCapability = ko.observable([]);
     self.runningPID = ko.observable(0);
@@ -252,19 +252,18 @@ function AppViewModel() {
         $(".alert").hide();
 
         loadInitialData(self.restConfig.mockData(), function () {
-            ko.mapping.fromJS(devices, viewModel.devices);
-            console.log("new devices", self.devices());
         });
     };
 
     //check every 5 seconds if process is still running to activate button again
     let timeout;
+
     function checkProcessState(id) {
-        timeout = setTimeout(function(){
+        timeout = setTimeout(function () {
             $.ajax({
                 url: camundaURL + "/rest/history/process-instance/" + id,
-                success: function(data){
-                    if (data.state === "COMPLETED"){
+                success: function (data) {
+                    if (data.state === "COMPLETED") {
                         viewModel.runningPID(0);
                     }
                     else {
@@ -275,26 +274,26 @@ function AppViewModel() {
         }, 5000);
     }
 
-    self.startProcess = function(process){
+    self.startProcess = function (process) {
         console.log(process);
         $.ajax({
             url: process.url,
             type: process.type,
             data: JSON.stringify(process.data),
             contentType: process.contentType,
-            success: function(data) {
+            success: function (data) {
                 console.log("started " + data.id);
                 viewModel.runningPID(data.id);
                 checkProcessState(data.id);
             }
         });
     };
-    self.stopProcess = function(process){
+    self.stopProcess = function (process) {
         console.log(process);
         $.ajax({
-            url:  "http://10.2.0.28:8081/rest/process-instance/" + viewModel.runningPID(),
+            url: "http://10.2.0.28:8081/rest/process-instance/" + viewModel.runningPID(),
             type: "DELETE",
-            success: function(data) {
+            success: function (data) {
                 console.log("deleted running process");
                 viewModel.runningPID(0);
                 clearTimeout(timeout);
@@ -302,11 +301,11 @@ function AppViewModel() {
         });
     };
 
-    self.changeMQTTdata = function(){
+    self.changeMQTTdata = function () {
         console.log("changed mqtt settings");
         initMQTT();
     };
-    self.changeRESTdata = function(){
+    self.changeRESTdata = function () {
         console.log("changed REST settings", self.restConfig.hostname());
         loadInitialData(self.restConfig.mockData(), function () {
             ko.mapping.fromJS(devices, viewModel.devices);
@@ -596,14 +595,8 @@ function main() {
         graph = initGraph();
 
         loadInitialData(mockData, function () {
-
-            ko.mapping.fromJS(devices, viewModel.devices);
-            console.log("new devices", self.devices());
-
         });
     });
-
-
 
 }
 
