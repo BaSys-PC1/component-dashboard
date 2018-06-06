@@ -186,22 +186,15 @@
         <thead class="thead-dark">
         <tr>
             <th scope="col">Name</th>
-            <th scope="col">Status</th>
+            <th scope="col">Commands</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody data-bind="foreach: processes">
         <tr>
-            <td>Prozess starten</td>
+            <td data-bind="text: name"></td>
             <td>
-                <button type="button" class="btn btn-success">Start</button>
-                <button type="button" class="btn btn-danger">Stop</button>
-            </td>
-        </tr>
-        <tr>
-            <td>2. Prozess starten</td>
-            <td>
-                <button type="button" class="btn btn-success">Start</button>
-                <button type="button" class="btn btn-danger">Stop</button>
+                <button type="button" class="btn btn-success btn-process-start" data-bind="click: $parent.startProcess, disable: $parent.runningPID() != 0">Start</button>
+                <button type="button" class="btn btn-danger btn-process-stop"  data-bind="click: $parent.stopProcess">Stop</button>
             </td>
         </tr>
         </tbody>

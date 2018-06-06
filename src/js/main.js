@@ -15,16 +15,47 @@ let resources,
     APIbaseURL = "http://10.2.0.68:8080",
     BrokerURL = "10.2.10.3",
     BrokerPort = 9001,
-    processes = [{
-                    name: "CeBIT 2018 mit Teach",
-                    url: "http://10.2.10.7:8081/rest/engine/default/process-definition/key/process_cebit_2018/start",
-                    body: {
-                        "taughtIn": {
-                                        "value": "false",
-                                        "type": "String"
-                                    }
-                        }
-                }];
+    camundaURL = "http://10.2.0.28:8081",
+    processes = [
+        {
+            name: "CeBIT 2018 mit Teaching",
+            url: camundaURL + "/rest/engine/default/process-definition/key/process_cebit_2018/start",
+            type: "POST",
+            data: {
+                "variables": {
+                    "taughtIn": {
+                        "value": "true",
+                        "type": "String"
+                    }
+                },
+                "businessKey": "cebit2018"
+            },
+            contentType: "application/json"
+        },
+        {
+            name: "CeBIT 2018 ohne Teaching",
+            url: camundaURL + "/rest/engine/default/process-definition/key/process_cebit_2018/start",
+            type: "POST",
+            data: {
+                "variables": {
+                    "taughtIn": {
+                        "value": "false",
+                        "type": "String"
+                    }
+                },
+                "businessKey": "cebit2018"
+            },
+            contentType: "application/json"
+        },
+        {
+            name: "Teach-In",
+            url: camundaURL + "/rest/engine/default/process-definition/key/process_cebit_teachin_main/start",
+            type: "POST",
+            data: {
+                "businessKey": "teachin2018"
+            },
+            contentType: "application/json"
+        }];
 
 
 //initially get data from all services
@@ -35,9 +66,9 @@ function loadInitialData(mockData, callback) {
         inst_url = (mockData) ? "/data/resource_instances.json" : APIbaseURL + "/services/resourceinstance/",
         typ_url = (mockData) ? "/data/resource_types.json" : APIbaseURL + "/services/resourcetype/";
 
-        //devices
-        let devCount = 0;
-        devices = [];
+    //devices
+    let devCount = 0;
+    devices = [];
 
     $.when(
         $.getJSON(dev_url),
@@ -70,16 +101,16 @@ function loadInitialData(mockData, callback) {
                 let capability = [];
 
 
-                let capabilityAssertionId = instance[0].capabilityApplications[0].capabilityAssertion.$ref.substr(instance[0].capabilityApplications[0].capabilityAssertion.$ref.lastIndexOf('#')+1);
+                let capabilityAssertionId = instance[0].capabilityApplications[0].capabilityAssertion.$ref.substr(instance[0].capabilityApplications[0].capabilityAssertion.$ref.lastIndexOf('#') + 1);
 
-                    //TODO: maybe wait for async result
-                    $.getJSON(APIbaseURL + "/services/entity/" + capabilityAssertionId)
-                        .done(function(ent){
-                            capability.push({
-                                'name': ent.name,
-                                'taught': false
-                            });
+                //TODO: maybe wait for async result
+                $.getJSON(APIbaseURL + "/services/entity/" + capabilityAssertionId)
+                    .done(function (ent) {
+                        capability.push({
+                            'name': ent.name,
+                            'taught': false
                         });
+                    });
 
 
                 for (let i = 0; i < instance[0].capabilityApplications[0].capabilityVariants.length; i++) {
@@ -91,8 +122,8 @@ function loadInitialData(mockData, callback) {
                 obj.capability = capability;
 
                 //get type of instance
-                let typeId = instance[0].resourceType.$ref.substr(instance[0].resourceType.$ref.lastIndexOf('#') + 1);
-
+                let typeId = instance[0].resourceType.$ref.substr(instance[0].resourceType.$ref.lastIndexOf('/') + 1);
+                console.log(instance[0].resourceType.$ref);
                 //loop over manufactures
                 let type = "";
                 for (let i = 0; i < typ[0].catalogues.length; i++) {
@@ -100,7 +131,7 @@ function loadInitialData(mockData, callback) {
                     type = typ[0].catalogues[i].resourceTypes.filter(val2 => val2.id === typeId);
                     if (type.length > 0) break; //resource found! Stop searching and overriding type
                 }
-                //console.log(type);
+                console.log(type);
                 obj.type = type[0].name;
                 obj.docuLink = type[0].documentation;
 
@@ -162,7 +193,7 @@ function loadInitialData(mockData, callback) {
                 if (devCount === devs.length &&
                     services.length === serv[0].length &&
                     management.length === man[0].length
-                ){
+                ) {
                     console.log("devices ", devices);
                     callback();
                 }
@@ -198,6 +229,8 @@ function AppViewModel() {
     self.services = ko.mapping.fromJS(services);
 
     self.currentCapability = ko.observable([]);
+    self.runningPID = ko.observable(0);
+
 
     let rnd = Math.floor((Math.random() * 100) + 1);
     self.mqttConfig = {
@@ -221,6 +254,31 @@ function AppViewModel() {
         loadInitialData(self.restConfig.mockData(), function () {
             ko.mapping.fromJS(devices, viewModel.devices);
             console.log("new devices", self.devices());
+        });
+    };
+
+    self.startProcess = function(process){
+        console.log(process);
+        $.ajax({
+            url: process.url,
+            type: process.type,
+            data: JSON.stringify(process.data),
+            contentType: process.contentType,
+            success: function(data) {
+                console.log("started " + data.id);
+                viewModel.runningPID(data.id);
+            }
+        });
+    };
+    self.stopProcess = function(process){
+        console.log(process);
+        $.ajax({
+            url:  "http://10.2.0.28:8081/rest/process-instance/" + viewModel.runningPID(),
+            type: "DELETE",
+            success: function(data) {
+                console.log("deleted running process");
+                viewModel.runningPID(0);
+            }
         });
     };
 
@@ -488,10 +546,9 @@ $("#processes-link").click(function () {
 
 });
 
-$('.alert .close').click(function(){
+$('.alert .close').click(function () {
     $(this).parent().hide();
 });
-
 
 
 /*################
@@ -502,7 +559,7 @@ function main() {
 
     loadInitialData(mockData, function () {
 
-        $.getJSON("/data/translation.json").done(function(trans){
+        $.getJSON("/data/translation.json").done(function (trans) {
             resources = trans;
 
             i18nextko.init(resources, 'en', ko);
