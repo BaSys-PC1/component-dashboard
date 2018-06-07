@@ -393,7 +393,6 @@ function onMessageArrived(message) {
 $("#stop-btn").click(function () {
     let unmapped = ko.mapping.toJS(viewModel.devices);
     let msg = '{"eClass": "http://www.dfki.de/iui/basys/model/component#//CommandRequest","componentId" : "' + unmapped[openedIndex].componentId + '","controlCommand": "STOP"}';
-    console.log(msg);
     message = new Paho.MQTT.Message(msg);
     message.destinationName = "basys/components/command";
     client.send(message);
@@ -411,7 +410,6 @@ $('.mode-group label').click( function() {
     let unmapped = ko.mapping.toJS(viewModel.devices);
     console.log($(this).data("mode") + "clicked");
     let msg = '{"eClass" : "http://www.dfki.de/iui/basys/model/component#//ChangeModeRequest","componentId" :"' + unmapped[openedIndex].componentId + '","mode" : "' + $(this).data("mode") + '"}';
-    console.log(msg);
     message = new Paho.MQTT.Message(msg);
     message.destinationName = "basys/components/command";
     client.send(message);
@@ -499,6 +497,16 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
     openedIndex = button.data('index');
 
     oldStyle = markCurrentState(state);
+
+    //set toggle button
+    $(".mode-group > label.active").removeClass("active");
+    $(".mode-group > label").addClass("disabled");
+
+    $("#l_"+viewModel.devices()[openedIndex].currentMode()).addClass('active').removeClass('disabled');
+
+    if(state === "STOPPED"){
+        $(".mode-group > label.disabled").removeClass("disabled");
+    }
 
     //detect changes on currently opened instance for further UI updates
     sub = ko.computed(function () {
