@@ -498,7 +498,7 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
 
     oldStyle = markCurrentState(state);
 
-    //set toggle button
+    //set toggle buttons
     $(".mode-group > label.active").removeClass("active");
     $(".mode-group > label").addClass("disabled");
 
@@ -516,6 +516,16 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
         console.log("changed to ", unmapped[openedIndex].currentState);
         graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, oldStyle, [currentCell]);
         oldStyle = markCurrentState(unmapped[openedIndex].currentState);
+
+        //set toggle buttons
+        $(".mode-group > label.active").removeClass("active");
+        $(".mode-group > label").addClass("disabled");
+
+        $("#l_"+unmapped[openedIndex].currentMode).addClass('active').removeClass('disabled');
+
+        if(unmapped[openedIndex].currentState === "STOPPED"){
+            $(".mode-group > label.disabled").removeClass("disabled");
+        }
     });
 
 }).on('hidden.bs.modal', function (event) {
