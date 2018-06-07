@@ -393,6 +393,7 @@ function onMessageArrived(message) {
 $("#stop-btn").click(function () {
     let unmapped = ko.mapping.toJS(viewModel.devices);
     let msg = '{"eClass": "http://www.dfki.de/iui/basys/model/component#//CommandRequest","componentId" : "' + unmapped[openedIndex].componentId + '","controlCommand": "STOP"}';
+    console.log(msg);
     message = new Paho.MQTT.Message(msg);
     message.destinationName = "basys/components/command";
     client.send(message);
@@ -401,6 +402,16 @@ $("#stop-btn").click(function () {
 $("#reset-btn").click(function () {
     let unmapped = ko.mapping.toJS(viewModel.devices);
     let msg = '{"eClass": "http://www.dfki.de/iui/basys/model/component#//CommandRequest","componentId" : "' + unmapped[openedIndex].componentId + '","controlCommand": "RESET"}';
+    message = new Paho.MQTT.Message(msg);
+    message.destinationName = "basys/components/command";
+    client.send(message);
+});
+
+$('.mode-group label').click( function() {
+    let unmapped = ko.mapping.toJS(viewModel.devices);
+    console.log($(this).data("mode") + "clicked");
+    let msg = '{"eClass" : "http://www.dfki.de/iui/basys/model/component#//ChangeModeRequest","componentId" :"' + unmapped[openedIndex].componentId + '","mode" : "' + $(this).data("mode") + '"}';
+    console.log(msg);
     message = new Paho.MQTT.Message(msg);
     message.destinationName = "basys/components/command";
     client.send(message);
@@ -574,6 +585,7 @@ $("#processes-link").click(function () {
 $('.alert .close').click(function () {
     $(this).parent().hide();
 });
+
 
 
 /*################
