@@ -206,6 +206,19 @@
                 <h5 class="modal-title">PackML Automaton</h5>
                 <button type="button" id="stop-btn" class="btn btn-danger ml-3">Stop</button>
                 <button type="button" id="reset-btn" class="btn btn-warning ml-3">Reset</button>
+
+                <div class="btn-group btn-group-toggle ml-3" data-toggle="buttons">
+                    <label class="btn btn-info active">
+                        <input type="radio" name="options" id="r_production" autocomplete="off" checked> PRODUCTION
+                    </label>
+                    <label class="btn btn-info">
+                        <input type="radio" name="options" id="r_changeover" autocomplete="off"> CHANGEOVER
+                    </label>
+                    <label class="btn btn-info">
+                        <input type="radio" name="options" id="r_simulation" autocomplete="off"> SIMULATION
+                    </label>
+                </div>
+
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

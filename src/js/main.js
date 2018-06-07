@@ -98,6 +98,7 @@ function loadInitialData(mockData, callback) {
                 //get capability
                 let capability = [];
                 let capabilityAssertionId = instance[0].capabilityApplications[0].capabilityAssertion.$ref.substr(instance[0].capabilityApplications[0].capabilityAssertion.$ref.lastIndexOf('/') + 1);
+                console.log("hier" + capabilityAssertionId);
 
                 //TODO: maybe wait for async result
                 $.getJSON(APIbaseURL + "/services/entity/" + capabilityAssertionId)
@@ -106,6 +107,7 @@ function loadInitialData(mockData, callback) {
                             'name': ent.name,
                             'taught': false
                         });
+                        console.log("hier auch" + ent.name);
                     });
 
 
@@ -119,7 +121,7 @@ function loadInitialData(mockData, callback) {
 
                 //get type of instance
                 let typeId = instance[0].resourceType.$ref.substr(instance[0].resourceType.$ref.lastIndexOf('/') + 1);
-                console.log(instance[0].resourceType.$ref);
+                //console.log(instance[0].resourceType.$ref);
                 //loop over manufactures
                 let type = "";
                 for (let i = 0; i < typ[0].catalogues.length; i++) {
@@ -132,7 +134,7 @@ function loadInitialData(mockData, callback) {
 
                 //get topology of instance
                 if (typeof instance[0].role !== 'undefined') {
-                    let topId = instance[0].role.$ref.substr(instance[0].role.$ref.lastIndexOf('#') + 1);
+                    let topId = instance[0].role.$ref.substr(instance[0].role.$ref.lastIndexOf('/') + 1);
                     if (!mockData) {
                         $.getJSON(APIbaseURL + "/services/topology/parent/" + topId) //+ "?callback=?" treat request as JSONP to avoid cross-domain call issues
                             .done(function (top) {
