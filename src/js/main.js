@@ -12,7 +12,7 @@ let resources,
     APIbaseURL = "http://10.2.0.68:8080",
     BrokerURL = "10.2.10.3",
     BrokerPort = 9001,
-    camundaURL = "http://10.2.0.28:8081", //change to 10.2.10.7
+    camundaURL = "http://10.2.10.7:8081", //change to 10.2.0.28
     processes = [
         {
             name: "CeBIT 2018 mit Teaching",
@@ -77,11 +77,28 @@ function loadInitialData(mockData, callback) {
     )
         .done(function (dev, man, serv, inst, typ) {
 
+            function addCapability(index, id){
+                $.getJSON(viewModel.restConfig.hostname() + "/services/entity/" + id)
+                    .done(function (ent) {
+                        //console.log("adding "+ent.name+"to" , devices[index-1]);
+                        devices[index-1].capability.push({
+                            'name': ent.name,
+                            'taught': false
+                        });
+                        capabilityCounter++;
+                        checkCallback();
+                    });
+            }
+
             function addDevice(obj) {
-                devices.push(obj);
+                let index = devices.push(obj);
+
+                addCapability(index, obj.capabilityAssertionId);
+
                 devCount++;
                 checkCallback();
             }
+            let capabilityCounter = 0;
 
             let devs = dev[0];
             for (let i = 0; i < devs.length; i++) {
@@ -97,19 +114,7 @@ function loadInitialData(mockData, callback) {
 
                 //get capability
                 let capability = [];
-                let capabilityAssertionId = instance[0].capabilityApplications[0].capabilityAssertion.$ref.substr(instance[0].capabilityApplications[0].capabilityAssertion.$ref.lastIndexOf('/') + 1);
-                console.log("hier" + capabilityAssertionId);
-
-                //TODO: maybe wait for async result
-                $.getJSON(viewModel.restConfig.hostname() + "/services/entity/" + capabilityAssertionId)
-                    .done(function (ent) {
-                        capability.push({
-                            'name': ent.name,
-                            'taught': false
-                        });
-                        console.log("hier auch" + ent.name);
-                    });
-
+                obj.capabilityAssertionId = instance[0].capabilityApplications[0].capabilityAssertion.$ref.substr(instance[0].capabilityApplications[0].capabilityAssertion.$ref.lastIndexOf('/') + 1);
 
                 for (let i = 0; i < instance[0].capabilityApplications[0].capabilityVariants.length; i++) {
                     capability.push({
@@ -189,14 +194,15 @@ function loadInitialData(mockData, callback) {
                 // console.log(management.length, man[0].length);
                 if (devCount === devs.length &&
                     services.length === serv[0].length &&
-                    management.length === man[0].length
+                    management.length === man[0].length &&
+                    capabilityCounter === devs.length
                 ) {
                     //update new requested files
                     ko.mapping.fromJS(devices, viewModel.devices);
                     ko.mapping.fromJS(services, viewModel.services);
                     ko.mapping.fromJS(management, viewModel.management);
 
-                    console.log("new devices", viewModel.devices());
+                    console.log("new devices", devices);
                     callback();
                 }
 
