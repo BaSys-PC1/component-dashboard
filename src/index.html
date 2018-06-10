@@ -20,7 +20,8 @@
 <body>
 <nav class="navbar navbar-light bg-light">
     <a class="navbar-brand" href="#">
-        <img src="img/logo_190_52_30jahre.png" width="150" alt="">
+        <img src="img/logo_190_52_30jahre.png" class="mr-3" width="150" alt="">
+        <img src="img/BaSys-Logo.png" width="150" alt="">
     </a>
 
     <ul class="nav navbar-nav flex-row" id="pagination">
@@ -261,8 +262,8 @@
                             <th scope="row" data-bind="text: $index"></th>
                             <td data-bind="text: name"></td>
                             <td>
-                                <button type="button" class="btn btn-danger disabled" data-bind="visible: taught">Remove</button>
-                                <button type="button" class="btn btn-info" data-bind="visible: !taught">Teach</button>
+                                <button type="button" id="remove-btn" class="btn btn-danger disabled" data-bind="visible: taught">Remove</button>
+                                <button type="button" id="teach-btn" class="btn btn-info" data-bind="visible: !taught">Teach</button>
                             </td>
                         </tr>
                         </tbody>

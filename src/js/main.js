@@ -101,7 +101,7 @@ function loadInitialData(mockData, callback) {
                 console.log("hier" + capabilityAssertionId);
 
                 //TODO: maybe wait for async result
-                $.getJSON(APIbaseURL + "/services/entity/" + capabilityAssertionId)
+                $.getJSON(viewModel.restConfig.hostname() + "/services/entity/" + capabilityAssertionId)
                     .done(function (ent) {
                         capability.push({
                             'name': ent.name,
@@ -136,7 +136,7 @@ function loadInitialData(mockData, callback) {
                 if (typeof instance[0].role !== 'undefined') {
                     let topId = instance[0].role.$ref.substr(instance[0].role.$ref.lastIndexOf('/') + 1);
                     if (!mockData) {
-                        $.getJSON(APIbaseURL + "/services/topology/parent/" + topId) //+ "?callback=?" treat request as JSONP to avoid cross-domain call issues
+                        $.getJSON(viewModel.restConfig.hostname() + "/services/topology/parent/" + topId) //+ "?callback=?" treat request as JSONP to avoid cross-domain call issues
                             .done(function (top) {
                                 obj.location = top.name;
                                 addDevice(obj);
@@ -206,7 +206,7 @@ function loadInitialData(mockData, callback) {
         .fail(function () {
             // Executed if at least one request fails
             console.log("Failed to get JSON data");
-            $(".alert-danger span").text("Failed to get all JSON data from " + APIbaseURL).show();
+            $(".alert-danger span").text("Failed to get all JSON data from " + viewModel.restConfig.hostname()).show();
             $(".alert-danger").show();
         });
 
@@ -404,6 +404,23 @@ $("#reset-btn").click(function () {
     message = new Paho.MQTT.Message(msg);
     message.destinationName = "basys/components/command";
     client.send(message);
+});
+
+
+$("#remove-btn").click(function () {
+    let unmapped = ko.mapping.toJS(viewModel.devices);
+    //TODO
+    $.ajax({
+        url: viewModel.restConfig.hostname() + "/services/resourceinstance/"+unmapped[openedIndex].componentId+"/capability/_jNgp8FNhEeibbdo05KXxGQ/variant/_gTTk01-lEeixtLE-b5nbbQ",
+        type: "DELETE"
+    })
+
+});
+
+
+$("#teach-btn").click(function () {
+    let unmapped = ko.mapping.toJS(viewModel.devices);
+    //TODO
 });
 
 $('.mode-group label').click( function() {
