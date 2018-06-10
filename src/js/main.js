@@ -8,11 +8,11 @@ let resources,
     graph,
     oldStyle,
     currentCell, sub, openedIndex,
-    mockData = false,
+    mockData = true,
     APIbaseURL = "http://10.2.0.68:8080",
     BrokerURL = "10.2.10.3",
     BrokerPort = 9001,
-    camundaURL = "http://10.2.10.7:8081", //change to 10.2.0.28
+    camundaURL = "http://10.2.10.3:8081", //change to 10.2.0.28
     processes = [
         {
             name: "CeBIT 2018 mit Teaching",
@@ -93,7 +93,9 @@ function loadInitialData(mockData, callback) {
             function addDevice(obj) {
                 let index = devices.push(obj);
 
-                addCapability(index, obj.capabilityAssertionId);
+                if (!mockData){
+                    addCapability(index, obj.capabilityAssertionId);
+                }
 
                 devCount++;
                 checkCallback();
@@ -192,6 +194,11 @@ function loadInitialData(mockData, callback) {
                 //console.log(devCount, devs.length);
                 // console.log(services.length , serv[0].length);
                 // console.log(management.length, man[0].length);
+
+                if (mockData){
+                    capabilityCounter = devs.length;
+                }
+
                 if (devCount === devs.length &&
                     services.length === serv[0].length &&
                     management.length === man[0].length &&
@@ -259,8 +266,7 @@ function AppViewModel() {
         console.log("set to", self.restConfig.mockData());
         $(".alert").hide();
 
-        loadInitialData(self.restConfig.mockData(), function () {
-        });
+        loadInitialData(self.restConfig.mockData(), function () {});
     };
 
     //check every 5 seconds if process is still running to activate button again
@@ -299,7 +305,7 @@ function AppViewModel() {
     self.stopProcess = function (process) {
         console.log(process);
         $.ajax({
-            url: "http://10.2.0.28:8081/rest/process-instance/" + viewModel.runningPID(),
+            url: camundaURL + "/rest/process-instance/" + viewModel.runningPID(),
             type: "DELETE",
             success: function (data) {
                 console.log("deleted running process");
@@ -309,16 +315,22 @@ function AppViewModel() {
         });
     };
 
+    self.startTeaching = function(){
+        $.ajax({
+            url: camundaURL + "/engine-rest/message",
+            type: "POST",
+            data: '{"messageName" : "Process.TeachIn.Prepare",  "businessKey" : "cebit2018"}',
+            contentType: "application/json"
+        });
+    };
+
     self.changeMQTTdata = function () {
         console.log("changed mqtt settings");
         initMQTT();
     };
     self.changeRESTdata = function () {
         console.log("changed REST settings", self.restConfig.hostname());
-        loadInitialData(self.restConfig.mockData(), function () {
-            ko.mapping.fromJS(devices, viewModel.devices);
-            console.log("new devices", self.devices());
-        });
+        loadInitialData(self.restConfig.mockData(), function () {});
     };
 
     self.processes = processes;
@@ -366,33 +378,39 @@ function onConnectionLost(responseObject) {
 function onMessageArrived(message) {
     console.log("arrived", message);
     let msg = JSON.parse(message.payloadString);
-    console.log(msg.componentId);
+    console.log(msg.componentId, msg.currentState);
 
-    let devices = ko.mapping.toJS(viewModel.devices()); //convert mapped object back to a regular JS object
+    //if change to IDLE: Update all elements
+    if(msg.currentState === "IDLE"){
+        loadInitialData(viewModel.restConfig.mockData(), function () {});
+    }
+    else {
+        //otherwise: only override values of current component
 
-    //override values
-    let updatedDevices = devices.map((val, index, arr) => {
+        let devices = ko.mapping.toJS(viewModel.devices()); //convert mapped object back to a regular JS object
+        let updatedDevices = devices.map((val, index, arr) => {
 
-        if (val.componentId === msg.componentId) {  //update currentMode and currentState
-            return {
-                "componentId": val.componentId,
-                "type": val.type,
-                "componentName": val.componentName,
-                "location": val.location,
-                "serial": val.serial,
-                "capability": val.capability,
-                "currentMode": msg.currentMode, //update
-                "currentState": msg.currentState, //update
-                "docuLink": val.docuLink
+            if (val.componentId === msg.componentId) {  //update currentMode and currentState
+                return {
+                    "componentId": val.componentId,
+                    "type": val.type,
+                    "componentName": val.componentName,
+                    "location": val.location,
+                    "serial": val.serial,
+                    "capability": val.capability,
+                    "currentMode": msg.currentMode, //update
+                    "currentState": msg.currentState, //update
+                    "docuLink": val.docuLink
+                }
             }
-        }
-        else { //don't change properties
-            return val;
-        }
-    });
+            else { //don't change properties
+                return val;
+            }
+        });
 
-    //update viewModel
-    ko.mapping.fromJS(updatedDevices, viewModel.devices);
+        //update viewModel
+        ko.mapping.fromJS(updatedDevices, viewModel.devices);
+    }
 
 }
 
@@ -421,12 +439,6 @@ $("#remove-btn").click(function () {
         type: "DELETE"
     })
 
-});
-
-
-$("#teach-btn").click(function () {
-    let unmapped = ko.mapping.toJS(viewModel.devices);
-    //TODO
 });
 
 $('.mode-group label').click( function() {
@@ -571,7 +583,6 @@ $('#capabilityOverview').on('show.bs.modal', function (event) {
     let unmapped = ko.mapping.toJS(viewModel.devices()[openedIndex].capability);
 
     viewModel.currentCapability(unmapped);
-
 });
 
 
@@ -649,7 +660,7 @@ function main() {
 
         graph = initGraph();
 
-        loadInitialData(mockData, function () {
+        loadInitialData(viewModel.restConfig.mockData(), function () {
         });
     });
 
