@@ -7,7 +7,11 @@
       "serial_k": "Serial",
       "capability_k": "Capability",
       "set_language": "Language",
-      "menu_devices": "Devices"
+      "set_change": "Change",
+      "menu_devices": "Devices",
+      "menu_processes": "Processes",
+      "modal_close": "Close",
+      "show": "Show"
     }
   },
   "de": {
@@ -18,7 +22,11 @@
       "serial_k": "Seriennr.",
       "capability_k": "Fähigkeit",
       "set_language": "Sprache",
-      "menu_devices": "Geräte"
+      "set_change": "Ändern",
+      "menu_devices": "Geräte",
+      "menu_processes": "Prozesse",
+      "modal_close": "Schließen",
+      "show": "Anzeigen"
     }
   }
 }

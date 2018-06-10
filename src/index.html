@@ -28,7 +28,7 @@
         <li class="nav-item active"><a id="devices-link" class="nav-link pr-3" href="#"><span data-bind="i18n: 'menu_devices'"></span></a></li>
         <li class="nav-item"><a id="service-link" class="nav-link pr-3" href="#">Services</a></li>
         <li class="nav-item"><a id="management-link" class="nav-link pr-3" href="#">Management</a></li>
-        <li class="nav-item"><a id="processes-link" class="nav-link" href="#">Processes</a></li>
+        <li class="nav-item"><a id="processes-link" class="nav-link" href="#"><span data-bind="i18n: 'menu_processes'"></span></a></li>
     </ul>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
@@ -56,7 +56,7 @@
                 <div class="col broker">
                     <input class="form-control" data-bind="value: mqttConfig.hostname"/>
                     <input class="form-control" data-bind="value: mqttConfig.port"/>
-                    <button type="button" class="btn btn-success"  data-bind="click: changeMQTTdata">Change</button>
+                    <button type="button" class="btn btn-success"  data-bind="click: changeMQTTdata"><span data-bind="i18n: 'set_change'"></span></button>
                 </div>
             </div>
             <div class="row">
@@ -75,7 +75,7 @@
                 </div>
                 <div class="col rest">
                     <input class="form-control" data-bind="value: restConfig.hostname"/>
-                    <button type="button" class="btn btn-success"  data-bind="click: changeRESTdata">Change</button>
+                    <button type="button" class="btn btn-success"  data-bind="click: changeRESTdata"><span data-bind="i18n: 'set_change'"></span></button>
                 </div>
             </div>
         </div>
@@ -114,7 +114,7 @@
                         <a target="_blank" data-bind="attr: { href: docuLink }"><span data-bind="text: type"></span></a> <br>
                         <span data-bind="text: location"></span><br>
                         <span data-bind="text: serial"></span><br>
-                        <span data-bind="text: capability().length-1"></span> <a href="#capabilityOverview" data-toggle="modal" data-target="#capabilityOverview" data-bind="attr: {'data-index': $index}" class="cap-link">(Show)</a><br>
+                        <span data-bind="text: capability().length-1"></span> <a href="#capabilityOverview" data-toggle="modal" data-target="#capabilityOverview" data-bind="attr: {'data-index': $index}" class="cap-link">(<span data-bind="i18n: 'show'"></span>)</a><br>
                     </div>
                 </div>
             </div>
@@ -230,7 +230,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><span data-bind="i18n: 'modal_close'"></span></button>
             </div>
         </div>
     </div>
