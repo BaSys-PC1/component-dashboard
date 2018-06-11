@@ -16,7 +16,7 @@ let resources,
     processes = [
         {
             name: "CeBIT 2018 mit Teaching",
-            url: camundaURL + "/rest/engine/default/process-definition/key/process_cebit_2018/start",
+            url: "/rest/engine/default/process-definition/key/process_cebit_2018/start",
             type: "POST",
             data: {
                 "variables": {
@@ -31,7 +31,7 @@ let resources,
         },
         {
             name: "CeBIT 2018 ohne Teaching",
-            url: camundaURL + "/rest/engine/default/process-definition/key/process_cebit_2018/start",
+            url: "/rest/engine/default/process-definition/key/process_cebit_2018/start",
             type: "POST",
             data: {
                 "variables": {
@@ -46,7 +46,7 @@ let resources,
         },
         {
             name: "Teach-In",
-            url: camundaURL + "/rest/engine/default/process-definition/key/process_cebit_teachin_main/start",
+            url: "/rest/engine/default/process-definition/key/process_cebit_teachin_main/start",
             type: "POST",
             data: {
                 "businessKey": "teachin2018"
@@ -248,6 +248,7 @@ function AppViewModel() {
     self.currentCapability = ko.observable([]);
     self.runningPID = ko.observable(0);
 
+    self.processes = processes;
 
     let rnd = Math.floor((Math.random() * 100) + 1);
     self.mqttConfig = {
@@ -260,6 +261,11 @@ function AppViewModel() {
         mockData: ko.observable(mockData),
         hostname: ko.observable(APIbaseURL)
     };
+
+    self.camundaConfig = {
+        hostname: ko.observable(camundaURL)
+    };
+
     self.changeMockData = function () {
         self.restConfig.mockData(!self.restConfig.mockData());
         //self.restConfig.mockData.valueHasMutated();
@@ -272,13 +278,24 @@ function AppViewModel() {
         });
     };
 
+    self.changeMQTTdata = function () {
+        console.log("changed mqtt settings");
+        initMQTT();
+    };
+    self.changeRESTdata = function () {
+        console.log("changed REST settings", self.restConfig.hostname());
+        loadInitialData(self.restConfig.mockData(), function () {
+        });
+    };
+
+
     //check every 5 seconds if process is still running to activate button again
     let timeout;
 
     function checkProcessState(id) {
         timeout = setTimeout(function () {
             $.ajax({
-                url: camundaURL + "/rest/history/process-instance/" + id,
+                url: viewModel.camundaConfig.hostname() + "/rest/history/process-instance/" + id,
                 success: function (data) {
                     if (data.state === "COMPLETED") {
                         viewModel.runningPID(0);
@@ -294,7 +311,7 @@ function AppViewModel() {
     self.startProcess = function (process) {
         console.log(process);
         $.ajax({
-            url: process.url,
+            url: viewModel.camundaConfig.hostname() + process.url,
             type: process.type,
             data: JSON.stringify(process.data),
             contentType: process.contentType,
@@ -308,7 +325,7 @@ function AppViewModel() {
     self.stopProcess = function (process) {
         console.log(process);
         $.ajax({
-            url: camundaURL + "/rest/process-instance/" + viewModel.runningPID(),
+            url: viewModel.camundaConfig.hostname() + "/rest/process-instance/" + viewModel.runningPID(),
             type: "DELETE",
             success: function (data) {
                 console.log("deleted running process");
@@ -320,7 +337,7 @@ function AppViewModel() {
 
     self.startTeaching = function () {
         $.ajax({
-            url: camundaURL + "/engine-rest/message",
+            url: viewModel.camundaConfig.hostname() + "/engine-rest/message",
             type: "POST",
             data: '{"messageName" : "Process.TeachIn.Prepare",  "businessKey" : "cebit2018"}',
             contentType: "application/json"
@@ -337,18 +354,6 @@ function AppViewModel() {
             contentType: "application/json"
         });
     };
-
-    self.changeMQTTdata = function () {
-        console.log("changed mqtt settings");
-        initMQTT();
-    };
-    self.changeRESTdata = function () {
-        console.log("changed REST settings", self.restConfig.hostname());
-        loadInitialData(self.restConfig.mockData(), function () {
-        });
-    };
-
-    self.processes = processes;
 
 
 }
