@@ -348,10 +348,24 @@ function AppViewModel() {
     self.removeCapability = function (capability) {
         let unmapped = ko.mapping.toJS(viewModel.devices);
         console.log("remove from component " + unmapped[openedIndex].componentId + " the capability assertion id " + unmapped[openedIndex].capabilityAssertionId + " with the variant id " + capability.id);
+
+
         $.ajax({
             url: viewModel.restConfig.hostname() + "/services/resourceinstance/" + unmapped[openedIndex].componentId + "/capability/" + unmapped[openedIndex].capabilityAssertionId + "/variant/" + capability.id,
             type: "DELETE",
-            contentType: "application/json"
+            contentType: "application/json",
+            success: function () {
+                //GUI updates
+                //remove capability from devices
+                unmapped[openedIndex].capability = $.grep(unmapped[openedIndex].capability, function (e) {
+                    return e.id !== capability.id;
+                });
+                ko.mapping.fromJS(unmapped, viewModel.devices);
+
+                //remove capability from modal
+                viewModel.currentCapability(unmapped[openedIndex].capability)
+
+            }
         });
     };
 
