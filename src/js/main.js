@@ -119,13 +119,17 @@ function loadInitialData(mockData, callback) {
                 let capability = [];
                 obj.capabilityAssertionId = instance[0].capabilityApplications[0].capabilityAssertion.$ref.substr(instance[0].capabilityApplications[0].capabilityAssertion.$ref.lastIndexOf('/') + 1);
 
-                for (let i = 0; i < instance[0].capabilityApplications[0].capabilityVariants.length; i++) {
-                    capability.push({
-                        'id': instance[0].capabilityApplications[0].capabilityVariants[i].id, //needed for removing
-                        'name': instance[0].capabilityApplications[0].capabilityVariants[i].name,
-                        'taught': true
-                    });
+                if (typeof instance[0].capabilityApplications[0].capabilityVariants !== "undefined"){
+                    for (let i = 0; i < instance[0].capabilityApplications[0].capabilityVariants.length; i++) {
+                        capability.push({
+                            'id': instance[0].capabilityApplications[0].capabilityVariants[i].id, //needed for removing
+                            'name': instance[0].capabilityApplications[0].capabilityVariants[i].name,
+                            'taught': true
+                        });
+                    }
                 }
+
+
                 obj.capability = capability;
 
                 //get type of instance
@@ -140,6 +144,8 @@ function loadInitialData(mockData, callback) {
                 }
                 obj.type = type[0].name;
                 obj.docuLink = type[0].documentation;
+
+                console.log("jajaja", instance[0]);
 
                 //get topology of instance
                 if (typeof instance[0].role !== 'undefined') {
