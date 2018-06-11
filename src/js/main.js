@@ -9,7 +9,7 @@ let resources,
     oldStyle,
     currentCell, sub, openedIndex,
     mockData = false,
-    APIbaseURL = "http://10.2.10.3:8080",
+    APIbaseURL = "http://10.2.0.68:8080",
     BrokerURL = "10.2.10.3",
     BrokerPort = 9001,
     camundaURL = "http://10.2.10.3:8081", //change to 10.2.0.28
