@@ -77,11 +77,11 @@ function loadInitialData(mockData, callback) {
     )
         .done(function (dev, man, serv, inst, typ) {
 
-            function addCapability(index, id){
+            function addTeachCapability(index, id) {
                 $.getJSON(viewModel.restConfig.hostname() + "/services/entity/" + id)
                     .done(function (ent) {
                         //console.log("adding "+ent.name+"to" , devices[index-1]);
-                        devices[index-1].capability.push({
+                        devices[index - 1].capability.push({
                             'name': ent.name,
                             'taught': false
                         });
@@ -93,13 +93,14 @@ function loadInitialData(mockData, callback) {
             function addDevice(obj) {
                 let index = devices.push(obj);
 
-                if (!mockData){
-                    addCapability(index, obj.capabilityAssertionId);
+                if (!mockData) {
+                    addTeachCapability(index, obj.capabilityAssertionId);
                 }
 
                 devCount++;
                 checkCallback();
             }
+
             let capabilityCounter = 0;
 
             let devs = dev[0];
@@ -120,6 +121,7 @@ function loadInitialData(mockData, callback) {
 
                 for (let i = 0; i < instance[0].capabilityApplications[0].capabilityVariants.length; i++) {
                     capability.push({
+                        'id': instance[0].capabilityApplications[0].capabilityVariants[i].id, //needed for removing
                         'name': instance[0].capabilityApplications[0].capabilityVariants[i].name,
                         'taught': true
                     });
@@ -195,7 +197,7 @@ function loadInitialData(mockData, callback) {
                 // console.log(services.length , serv[0].length);
                 // console.log(management.length, man[0].length);
 
-                if (mockData){
+                if (mockData) {
                     capabilityCounter = devs.length;
                 }
 
@@ -266,7 +268,8 @@ function AppViewModel() {
         console.log("set to", self.restConfig.mockData());
         $(".alert").hide();
 
-        loadInitialData(self.restConfig.mockData(), function () {});
+        loadInitialData(self.restConfig.mockData(), function () {
+        });
     };
 
     //check every 5 seconds if process is still running to activate button again
@@ -315,11 +318,22 @@ function AppViewModel() {
         });
     };
 
-    self.startTeaching = function(){
+    self.startTeaching = function () {
         $.ajax({
             url: camundaURL + "/engine-rest/message",
             type: "POST",
             data: '{"messageName" : "Process.TeachIn.Prepare",  "businessKey" : "cebit2018"}',
+            contentType: "application/json"
+        });
+    };
+
+
+    self.removeCapability = function (capability) {
+        let unmapped = ko.mapping.toJS(viewModel.devices);
+        console.log("remove from component " + unmapped[openedIndex].componentId + " the capability assertion id " + unmapped[openedIndex].capabilityAssertionId + " with the variant id " + capability.id);
+        $.ajax({
+            url: viewModel.restConfig.hostname() + "/services/resourceinstance/" + unmapped[openedIndex].componentId + "/capability/" + unmapped[openedIndex].capabilityAssertionId + "/variant/" + capability.id,
+            type: "DELETE",
             contentType: "application/json"
         });
     };
@@ -330,7 +344,8 @@ function AppViewModel() {
     };
     self.changeRESTdata = function () {
         console.log("changed REST settings", self.restConfig.hostname());
-        loadInitialData(self.restConfig.mockData(), function () {});
+        loadInitialData(self.restConfig.mockData(), function () {
+        });
     };
 
     self.processes = processes;
@@ -381,8 +396,9 @@ function onMessageArrived(message) {
     console.log(msg.componentId, msg.currentState);
 
     //if change to IDLE: Update all elements
-    if(msg.currentState === "IDLE"){
-        loadInitialData(viewModel.restConfig.mockData(), function () {});
+    if (msg.currentState === "IDLE") {
+        loadInitialData(viewModel.restConfig.mockData(), function () {
+        });
     }
     else {
         //otherwise: only override values of current component
@@ -430,18 +446,7 @@ $("#reset-btn").click(function () {
     client.send(message);
 });
 
-
-$("#remove-btn").click(function () {
-    let unmapped = ko.mapping.toJS(viewModel.devices);
-    //TODO
-    $.ajax({
-        url: viewModel.restConfig.hostname() + "/services/resourceinstance/"+unmapped[openedIndex].componentId+"/capability/_jNgp8FNhEeibbdo05KXxGQ/variant/_gTTk01-lEeixtLE-b5nbbQ",
-        type: "DELETE"
-    })
-
-});
-
-$('.mode-group label').click( function() {
+$('.mode-group label').click(function () {
     let unmapped = ko.mapping.toJS(viewModel.devices);
     console.log($(this).data("mode") + "clicked");
     let msg = '{"eClass" : "http://www.dfki.de/iui/basys/model/component#//ChangeModeRequest","componentId" :"' + unmapped[openedIndex].componentId + '","mode" : "' + $(this).data("mode") + '"}';
@@ -537,9 +542,9 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
     $(".mode-group > label.active").removeClass("active");
     $(".mode-group > label").addClass("disabled");
 
-    $("#l_"+viewModel.devices()[openedIndex].currentMode()).addClass('active').removeClass('disabled');
+    $("#l_" + viewModel.devices()[openedIndex].currentMode()).addClass('active').removeClass('disabled');
 
-    if(state === "STOPPED"){
+    if (state === "STOPPED") {
         $(".mode-group > label.disabled").removeClass("disabled");
     }
 
@@ -556,9 +561,9 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
         $(".mode-group > label.active").removeClass("active");
         $(".mode-group > label").addClass("disabled");
 
-        $("#l_"+unmapped[openedIndex].currentMode).addClass('active').removeClass('disabled');
+        $("#l_" + unmapped[openedIndex].currentMode).addClass('active').removeClass('disabled');
 
-        if(unmapped[openedIndex].currentState === "STOPPED"){
+        if (unmapped[openedIndex].currentState === "STOPPED") {
             $(".mode-group > label.disabled").removeClass("disabled");
         }
     });
@@ -578,11 +583,16 @@ $('#capabilityOverview').on('show.bs.modal', function (event) {
 
     let button = $(event.relatedTarget); // Button that triggered the modal
     // Extract info from data-* attributes
-    let openedIndex = button.data('index');
+    openedIndex = button.data('index');
 
     let unmapped = ko.mapping.toJS(viewModel.devices()[openedIndex].capability);
 
     viewModel.currentCapability(unmapped);
+}).on('hidden.bs.modal', function (event) {
+
+    //reset index
+    openedIndex = null;
+
 });
 
 
@@ -637,7 +647,6 @@ $("#processes-link").click(function () {
 $('.alert .close').click(function () {
     $(this).parent().hide();
 });
-
 
 
 /*################

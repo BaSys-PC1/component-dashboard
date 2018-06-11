@@ -262,7 +262,7 @@
                             <th scope="row" data-bind="text: $index"></th>
                             <td data-bind="text: name"></td>
                             <td>
-                                <button type="button" id="remove-btn" class="btn btn-danger" data-bind="visible: taught, css:{disabled: name != 'Apply light blue cap'}">Remove</button>
+                                <button type="button" id="remove-btn" class="btn btn-danger" data-bind="visible: taught, click: $parent.removeCapability, css:{disabled: name != 'Apply light blue cap'}">Remove</button>
                                 <button type="button" id="teach-btn" class="btn btn-info" data-bind="visible: !taught, click: $parent.startTeaching, css:{disabled: name != 'UR3 PickAndPlace'}">Teach</button>
                             </td>
                         </tr>
