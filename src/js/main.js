@@ -414,12 +414,12 @@ function onMessageArrived(message) {
     let msg = JSON.parse(message.payloadString);
     console.log(msg.componentId, msg.currentState);
 
-    //if change to IDLE: Update all elements
-    if (msg.currentState === "IDLE") {
+    //if change to IDLE: Update all elements (for teachin)
+   /* if (msg.currentState === "IDLE") {
         loadInitialData(viewModel.restConfig.mockData(), function () {
         });
     }
-    else {
+    else {*/
         //otherwise: only override values of current component
 
         let devices = ko.mapping.toJS(viewModel.devices()); //convert mapped object back to a regular JS object
@@ -445,7 +445,7 @@ function onMessageArrived(message) {
 
         //update viewModel
         ko.mapping.fromJS(updatedDevices, viewModel.devices);
-    }
+    //}
 
 }
 
