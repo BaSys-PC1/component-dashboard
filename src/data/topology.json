@@ -47,12 +47,8 @@
                                                     "id": "_rcKlkFIxEeidSe5vp9A3oA",
                                                     "name": "Handtaster",
                                                     "assignedResourceType": {
-                                                        "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//ResourceType",
-                                                        "$ref": "model.resourcetype#_GHTn8lIxEeidSe5vp9A3oA"
-                                                    },
-                                                    "assignedResourceInstance": {
-                                                        "eClass": "http://www.dfki.de/iui/basys/model/resourceinstance#//ResourceInstance",
-                                                        "$ref": "model.resourceinstance#_PwPREFIxEeidSe5vp9A3oA"
+                                                        "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//Tool",
+                                                        "$ref": "http://localhost:8080/services/entity/_GHTn8lIxEeidSe5vp9A3oA"
                                                     }
                                                 }
                                             ]
@@ -70,22 +66,14 @@
                                                         "pressure": 50
                                                     },
                                                     "assignedResourceType": {
-                                                        "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//ResourceType",
-                                                        "$ref": "model.resourcetype#_yIFSQjB3Eei1bbwBPPZWOA"
-                                                    },
-                                                    "assignedResourceInstance": {
-                                                        "eClass": "http://www.dfki.de/iui/basys/model/resourceinstance#//ResourceInstance",
-                                                        "$ref": "model.resourceinstance#_SE5NIDB4Eei1bbwBPPZWOA"
+                                                        "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//Tool",
+                                                        "$ref": "http://localhost:8080/services/entity/_yIFSQjB3Eei1bbwBPPZWOA"
                                                     }
                                                 },
                                                 {
                                                     "binding": "",
                                                     "id": "_AzQQwDB5Eei1bbwBPPZWOA",
-                                                    "name": "Werkerführung",
-                                                    "assignedResourceInstance": {
-                                                        "eClass": "http://www.dfki.de/iui/basys/model/resourceinstance#//ResourceInstance",
-                                                        "$ref": "model.resourceinstance#_8cLJ8FIxEeidSe5vp9A3oA"
-                                                    }
+                                                    "name": "Werkerführung"
                                                 },
                                                 {
                                                     "eClass": "http://www.dfki.de/iui/basys/model/topology#//AGVStation",
@@ -112,12 +100,30 @@
                                             "name": "Inspektion",
                                             "equipmentModules": [
                                                 {
+                                                    "id": "_IvknEDB5Eei1bbwBPPZWOA",
+                                                    "name": "Sichtkontrolle",
+                                                    "assignedResourceType": {
+                                                        "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//Robot",
+                                                        "$ref": "http://localhost:8080/services/entity/_NnuuyTD7EeiuBvcKgWzd3Q"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "id": "_7yRYkmmvEei3B5AQTC2gAw",
+                                            "name": "Materialbereitstellung",
+                                            "equipmentModules": [
+                                                {
                                                     "id": "_HlgntTB5Eei1bbwBPPZWOA",
-                                                    "name": "Positioniereinheit"
+                                                    "name": "Positioniereinheit",
+                                                    "assignedResourceType": {
+                                                        "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//Robot",
+                                                        "$ref": "http://localhost:8080/services/entity/_LILOCTD5EeiuBvcKgWzd3Q"
+                                                    }
                                                 },
                                                 {
-                                                    "id": "_IvknEDB5Eei1bbwBPPZWOA",
-                                                    "name": "Sichtkontrolle"
+                                                    "id": "_KjUf0GsVEeiPYI9_h6Hhzw",
+                                                    "name": "IO-Anzeige"
                                                 }
                                             ]
                                         }
@@ -139,11 +145,24 @@
                             "storageUnits": [
                                 {
                                     "id": "_O8321zB5Eei1bbwBPPZWOA",
-                                    "name": "",
+                                    "name": "Cola-Station",
                                     "equipmentModules": [
                                         {
                                             "id": "_ROxA8zB5Eei1bbwBPPZWOA",
-                                            "name": "Positioniereinheit"
+                                            "name": "Positioniereinheit",
+                                            "assignedResourceType": {
+                                                "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//Robot",
+                                                "$ref": "http://localhost:8080/services/entity/_0xCaqTD9EeiuBvcKgWzd3Q"
+                                            }
+                                        },
+                                        {
+                                            "binding": "",
+                                            "id": "_bbI0sGsZEeixZrynCv8ohQ",
+                                            "name": "IO Signal",
+                                            "assignedResourceType": {
+                                                "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//Tool",
+                                                "$ref": "http://localhost:8080/services/entity/_XEoEQmsVEeiPYI9_h6Hhzw"
+                                            }
                                         }
                                     ]
                                 }
@@ -155,12 +174,8 @@
                             "id": "_gUuXFFIxEeidSe5vp9A3oA",
                             "name": "Laser Projection",
                             "assignedResourceType": {
-                                "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//ResourceType",
-                                "$ref": "model.resourcetype#_BcwkYlIxEeidSe5vp9A3oA"
-                            },
-                            "assignedResourceInstance": {
-                                "eClass": "http://www.dfki.de/iui/basys/model/resourceinstance#//ResourceInstance",
-                                "$ref": "model.resourceinstance#_RtlHgFIxEeidSe5vp9A3oA"
+                                "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//Tool",
+                                "$ref": "http://localhost:8080/services/entity/_BcwkYlIxEeidSe5vp9A3oA"
                             }
                         },
                         {
@@ -172,6 +187,32 @@
                             "eClass": "http://www.dfki.de/iui/basys/model/topology#//AGVStation",
                             "id": "_5AENVV2TEeit97PGgoQOAQ",
                             "name": "Station-Wait"
+                        },
+                        {
+                            "id": "_yb80hGnSEeiQ6ti_SIagCw",
+                            "name": "Milkrunner",
+                            "equipmentModules": [
+                                {
+                                    "id": "_6lOowWnSEeiQ6ti_SIagCw",
+                                    "name": "Positioniereinheit",
+                                    "assignedResourceType": {
+                                        "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//Robot",
+                                        "$ref": "http://localhost:8080/services/entity/_Hi37STD5EeiuBvcKgWzd3Q"
+                                    }
+                                },
+                                {
+                                    "id": "_uATSAWtmEeihVrieHNgo3Q",
+                                    "name": "Dialogsystem",
+                                    "assignedResourceType": {
+                                        "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//Tool",
+                                        "$ref": "http://localhost:8080/services/entity/_Euwm8mtnEeihVrieHNgo3Q"
+                                    }
+                                }
+                            ],
+                            "assignedResourceType": {
+                                "eClass": "http://www.dfki.de/iui/basys/model/resourcetype#//AVG",
+                                "$ref": "http://localhost:8080/services/entity/_ZRW8sjJhEei1p5hKOf5Slw"
+                            }
                         }
                     ]
                 },

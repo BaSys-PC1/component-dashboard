@@ -11,7 +11,7 @@
         "currentMode": "PRODUCTION",
         "communicationProvider": "",
         "connectionString": "",
-        "hostName": "2001:0:9d38:78cf:3008:3fd2:f5fd:f5fc"
+        "hostName": "2001:0:9d38:78cf:1482:2b11:f5fd:f5fc"
     },
     {
         "eClass": "http://www.dfki.de/iui/basys/model/component#//ComponentInfo",
@@ -25,6 +25,6 @@
         "currentMode": "PRODUCTION",
         "communicationProvider": "",
         "connectionString": "",
-        "hostName": "2001:0:9d38:78cf:3008:3fd2:f5fd:f5fc"
+        "hostName": "2001:0:9d38:78cf:1482:2b11:f5fd:f5fc"
     }
 ]
