@@ -274,7 +274,6 @@ function AppViewModel() {
 
     self.changeMockData = function () {
         self.restConfig.mockData(!self.restConfig.mockData());
-        //self.restConfig.mockData.valueHasMutated();
         self.restConfig.mockData.notifySubscribers(self.restConfig.mockData());
 
         console.log("set to", self.restConfig.mockData());
@@ -342,7 +341,7 @@ function AppViewModel() {
     };
 
     self.startTeaching = function () {
-        /* cebit
+
         let unmapped = ko.mapping.toJS(viewModel.devices);
 
         //TODO: do only if button is not disabled, this is just a 0:44 hotfix
@@ -355,12 +354,12 @@ function AppViewModel() {
                 contentType: "application/json"
             });
         }
-        */
+
     };
 
 
     self.removeCapability = function (capability) {
-        /* cebit
+
         let unmapped = ko.mapping.toJS(viewModel.devices);
         console.log("remove from component " + unmapped[openedIndex].componentId + " the capability assertion id " + unmapped[openedIndex].capabilityAssertionId + " with the variant id " + capability.id);
 
@@ -385,7 +384,7 @@ function AppViewModel() {
                 }
             });
         }
-        */
+
     };
 
 
@@ -467,7 +466,7 @@ function onMessageArrived(message) {
     //}
 
 }
-/* cebit
+
 $("#stop-btn").click(function () {
     let unmapped = ko.mapping.toJS(viewModel.devices);
     let msg = '{"eClass": "http://www.dfki.de/iui/basys/model/component#//CommandRequest","componentId" : "' + unmapped[openedIndex].componentId + '","controlCommand": "STOP"}';
@@ -492,7 +491,7 @@ $('.mode-group label').click(function () {
     message.destinationName = "basys/components/command";
     client.send(message);
 });
-*/
+
 
 /*################
         MxGraph
