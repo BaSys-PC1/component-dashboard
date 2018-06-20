@@ -75,11 +75,11 @@ function loadInitialData(mockData, callback) {
         $.getJSON(inst_url),
         $.getJSON(typ_url)
     )
-        .done(function (dev, man, serv, inst, typ) {
+        .done( (dev, man, serv, inst, typ) => {
 
             function addTeachCapability(index, id) {
                 $.getJSON(viewModel.restConfig.hostname() + "/services/entity/" + id)
-                    .done(function (ent) {
+                    .done( ent => {
                         //console.log("adding "+ent.name+"to" , devices[index-1]);
                         devices[index - 1].capability.push({
                             'name': ent.name,
@@ -152,11 +152,11 @@ function loadInitialData(mockData, callback) {
                     let topId = instance[0].role.$ref.substr(instance[0].role.$ref.lastIndexOf('/') + 1);
                     if (!mockData) {
                         $.getJSON(viewModel.restConfig.hostname() + "/services/topology/parent/" + topId) //+ "?callback=?" treat request as JSONP to avoid cross-domain call issues
-                            .done(function (top) {
+                            .done( top => {
                                 obj.location = top.name;
                                 addDevice(obj);
                             })
-                            .fail(function () {
+                            .fail( () => {
                                 obj.location = "Not Found";
                                 addDevice(obj);
                             });
@@ -224,7 +224,7 @@ function loadInitialData(mockData, callback) {
             }
 
         })
-        .fail(function () {
+        .fail( () => {
             // Executed if at least one request fails
             console.log("Failed to get JSON data");
             $(".alert-danger span").text("Failed to get all JSON data from " + viewModel.restConfig.hostname()).show();
@@ -243,7 +243,7 @@ function loadInitialData(mockData, callback) {
 function AppViewModel() {
     let self = this;
     self.language = ko.observable('en');
-    self.language.subscribe(function (value) {
+    self.language.subscribe( value => {
         i18nextko.setLanguage(value);
     });
 
@@ -272,24 +272,23 @@ function AppViewModel() {
         hostname: ko.observable(camundaURL)
     };
 
-    self.changeMockData = function () {
+    self.changeMockData = () => {
         self.restConfig.mockData(!self.restConfig.mockData());
         self.restConfig.mockData.notifySubscribers(self.restConfig.mockData());
 
         console.log("set to", self.restConfig.mockData());
         $(".alert").hide();
 
-        loadInitialData(self.restConfig.mockData(), function () {
-        });
+        loadInitialData(self.restConfig.mockData(), () => {});
     };
 
-    self.changeMQTTdata = function () {
+    self.changeMQTTdata = () => {
         console.log("changed mqtt settings");
         initMQTT();
     };
-    self.changeRESTdata = function () {
+    self.changeRESTdata = () => {
         console.log("changed REST settings", self.restConfig.hostname());
-        loadInitialData(self.restConfig.mockData(), function () {
+        loadInitialData(self.restConfig.mockData(), () => {
         });
     };
 
@@ -298,10 +297,10 @@ function AppViewModel() {
     let timeout;
 
     function checkProcessState(id) {
-        timeout = setTimeout(function () {
+        timeout = setTimeout( () => {
             $.ajax({
                 url: viewModel.camundaConfig.hostname() + "/rest/history/process-instance/" + id,
-                success: function (data) {
+                success: data => {
                     if (data.state === "COMPLETED") {
                         viewModel.runningPID(0);
                     }
@@ -313,26 +312,26 @@ function AppViewModel() {
         }, 5000);
     }
 
-    self.startProcess = function (process) {
+    self.startProcess = process => {
         console.log(process);
         $.ajax({
             url: viewModel.camundaConfig.hostname() + process.url,
             type: process.type,
             data: JSON.stringify(process.data),
             contentType: process.contentType,
-            success: function (data) {
+            success: (data) => {
                 console.log("started " + data.id);
                 viewModel.runningPID(data.id);
                 checkProcessState(data.id);
             }
         });
     };
-    self.stopProcess = function (process) {
+    self.stopProcess = process => {
         console.log(process);
         $.ajax({
             url: viewModel.camundaConfig.hostname() + "/rest/process-instance/" + viewModel.runningPID(),
             type: "DELETE",
-            success: function (data) {
+            success: data => {
                 console.log("deleted running process");
                 viewModel.runningPID(0);
                 clearTimeout(timeout);
@@ -340,7 +339,7 @@ function AppViewModel() {
         });
     };
 
-    self.startTeaching = function () {
+    self.startTeaching = () => {
 
         let unmapped = ko.mapping.toJS(viewModel.devices);
 
@@ -358,7 +357,7 @@ function AppViewModel() {
     };
 
 
-    self.removeCapability = function (capability) {
+    self.removeCapability = capability => {
 
         let unmapped = ko.mapping.toJS(viewModel.devices);
         console.log("remove from component " + unmapped[openedIndex].componentId + " the capability assertion id " + unmapped[openedIndex].capabilityAssertionId + " with the variant id " + capability.id);
@@ -370,10 +369,10 @@ function AppViewModel() {
                 url: viewModel.restConfig.hostname() + "/services/resourceinstance/" + unmapped[openedIndex].componentId + "/capability/" + unmapped[openedIndex].capabilityAssertionId + "/variant/" + capability.id,
                 type: "DELETE",
                 contentType: "application/json",
-                success: function () {
+                success: ()  => {
                     //GUI updates
                     //remove capability from devices
-                    unmapped[openedIndex].capability = $.grep(unmapped[openedIndex].capability, function (e) {
+                    unmapped[openedIndex].capability = $.grep(unmapped[openedIndex].capability, e => {
                         return e.id !== capability.id;
                     });
                     ko.mapping.fromJS(unmapped, viewModel.devices);
@@ -434,7 +433,7 @@ function onMessageArrived(message) {
 
     //if change to IDLE: Update all elements (for teachin)
    /* if (msg.currentState === "IDLE") {
-        loadInitialData(viewModel.restConfig.mockData(), function () {
+        loadInitialData(viewModel.restConfig.mockData(), () => {
         });
     }
     else {*/
@@ -467,7 +466,7 @@ function onMessageArrived(message) {
 
 }
 
-$("#stop-btn").click(function () {
+$("#stop-btn").click( () => {
     let unmapped = ko.mapping.toJS(viewModel.devices);
     let msg = '{"eClass": "http://www.dfki.de/iui/basys/model/component#//CommandRequest","componentId" : "' + unmapped[openedIndex].componentId + '","controlCommand": "STOP"}';
     message = new Paho.MQTT.Message(msg);
@@ -475,7 +474,7 @@ $("#stop-btn").click(function () {
     client.send(message);
 });
 
-$("#reset-btn").click(function () {
+$("#reset-btn").click( () => {
     let unmapped = ko.mapping.toJS(viewModel.devices);
     let msg = '{"eClass": "http://www.dfki.de/iui/basys/model/component#//CommandRequest","componentId" : "' + unmapped[openedIndex].componentId + '","controlCommand": "RESET"}';
     message = new Paho.MQTT.Message(msg);
@@ -483,7 +482,7 @@ $("#reset-btn").click(function () {
     client.send(message);
 });
 
-$('.mode-group label').click(function () {
+$('.mode-group label').click( () => {
     let unmapped = ko.mapping.toJS(viewModel.devices);
     console.log($(this).data("mode") + "clicked");
     let msg = '{"eClass" : "http://www.dfki.de/iui/basys/model/component#//ChangeModeRequest","componentId" :"' + unmapped[openedIndex].componentId + '","mode" : "' + $(this).data("mode") + '"}';
@@ -499,16 +498,16 @@ $('.mode-group label').click(function () {
 
 function initGraph() {
     if (mxClient.isBrowserSupported()) {
-        var divs = document.getElementsByClassName('mxgraph');
+        let divs = document.getElementsByClassName('mxgraph');
 
-        for (var i = 0; i < divs.length; i++) {
-            (function (container) {
-                var xml = mxUtils.getTextContent(container);
-                var xmlDocument = mxUtils.parseXml(xml);
+        for (let i = 0; i < divs.length; i++) {
+            (container => {
+                let xml = mxUtils.getTextContent(container);
+                let xmlDocument = mxUtils.parseXml(xml);
 
                 if (xmlDocument.documentElement != null && xmlDocument.documentElement.nodeName == 'mxGraphModel') {
-                    var codec = new mxCodec(xmlDocument);
-                    var node = xmlDocument.documentElement;
+                    let codec = new mxCodec(xmlDocument);
+                    let node = xmlDocument.documentElement;
 
                     container.innerHTML = '';
 
@@ -518,7 +517,7 @@ function initGraph() {
                     //graph.htmlLabels = true;
 
                     // Changes the default style for edges "in-place"
-                    var style = graph.getStylesheet().getDefaultEdgeStyle();
+                    let style = graph.getStylesheet().getDefaultEdgeStyle();
                     //style[mxConstants.STYLE_EDGE] = mxEdgeStyle.ElbowConnector;
 
                     style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
@@ -566,7 +565,7 @@ function markCurrentState(state) {
 
 }
 
-$('#finiteAutomaton').on('show.bs.modal', function (event) {
+$('#finiteAutomaton').on('show.bs.modal', event => {
 
     let button = $(event.relatedTarget); // Button that triggered the modal
     // Extract info from data-* attributes
@@ -586,9 +585,9 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
     }
 
     //detect changes on currently opened instance for further UI updates
-    sub = ko.computed(function () {
+    sub = ko.computed( () => {
         return ko.toJSON(viewModel.devices()[openedIndex]);
-    }).subscribe(function () {
+    }).subscribe( () => {
         let unmapped = ko.mapping.toJS(viewModel.devices);
         console.log("changed to ", unmapped[openedIndex].currentState);
         graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, oldStyle, [currentCell]);
@@ -605,7 +604,7 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
         }
     });
 
-}).on('hidden.bs.modal', function (event) {
+}).on('hidden.bs.modal', event => {
 
     //remove subscription
     sub.dispose();
@@ -616,7 +615,7 @@ $('#finiteAutomaton').on('show.bs.modal', function (event) {
 
 });
 
-$('#capabilityOverview').on('show.bs.modal', function (event) {
+$('#capabilityOverview').on('show.bs.modal', event => {
 
     let button = $(event.relatedTarget); // Button that triggered the modal
     // Extract info from data-* attributes
@@ -625,7 +624,7 @@ $('#capabilityOverview').on('show.bs.modal', function (event) {
     let unmapped = ko.mapping.toJS(viewModel.devices()[openedIndex].capability);
 
     viewModel.currentCapability(unmapped);
-}).on('hidden.bs.modal', function (event) {
+}).on('hidden.bs.modal', event => {
 
     //reset index
     openedIndex = null;
@@ -638,7 +637,7 @@ $('#capabilityOverview').on('show.bs.modal', function (event) {
 #####################*/
 
 
-$("#devices-link").click(function () {
+$("#devices-link").click( () => {
     $('#pagination li').removeClass('active');
     $(this).parent().addClass("active");
 
@@ -648,7 +647,7 @@ $("#devices-link").click(function () {
     $("#processesContainer").hide();
 });
 
-$("#management-link").click(function () {
+$("#management-link").click( () => {
     $('#pagination li').removeClass('active');
     $(this).parent().addClass("active");
 
@@ -659,7 +658,7 @@ $("#management-link").click(function () {
 
 });
 
-$("#service-link").click(function () {
+$("#service-link").click( () => {
     $('#pagination li').removeClass('active');
     $(this).parent().addClass("active");
 
@@ -670,7 +669,7 @@ $("#service-link").click(function () {
 
 });
 
-$("#processes-link").click(function () {
+$("#processes-link").click( () => {
     $('#pagination li').removeClass('active');
     $(this).parent().addClass("active");
 
@@ -681,7 +680,7 @@ $("#processes-link").click(function () {
 
 });
 
-$('.alert .close').click(function () {
+$('.alert .close').click( () => {
     $(this).parent().hide();
 });
 
@@ -692,7 +691,7 @@ $('.alert .close').click(function () {
 
 function main() {
 
-    $.getJSON("/data/translation.json").done(function (trans) {
+    $.getJSON("/data/translation.json").done( trans => {
         resources = trans;
 
         i18nextko.init(resources, 'en', ko);
@@ -706,8 +705,7 @@ function main() {
 
         graph = initGraph();
 
-        loadInitialData(viewModel.restConfig.mockData(), function () {
-        });
+        loadInitialData(viewModel.restConfig.mockData(), () => {});
     });
 
 }
