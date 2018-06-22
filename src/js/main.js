@@ -78,7 +78,7 @@ function loadInitialData(mockData, callback) {
         .done( (dev, man, serv, inst, typ) => {
 
             function addTeachCapability(index, id) {
-                $.getJSON(viewModel.restConfig.hostname() + "/services/entity/" + id)
+                $.getJSON(`${viewModel.restConfig.hostname()}/services/entity/${id}`)
                     .done( ent => {
                         //console.log("adding "+ent.name+"to" , devices[index-1]);
                         devices[index - 1].capability.push({
@@ -134,7 +134,6 @@ function loadInitialData(mockData, callback) {
 
                 //get type of instance
                 let typeId = instance[0].resourceType.$ref.substr(instance[0].resourceType.$ref.lastIndexOf('/') + 1);
-                //console.log(instance[0].resourceType.$ref);
                 //loop over manufactures
                 let type = "";
                 for (let i = 0; i < typ[0].catalogues.length; i++) {
@@ -144,8 +143,6 @@ function loadInitialData(mockData, callback) {
                 }
                 obj.type = type[0].name;
                 obj.docuLink = type[0].documentation;
-
-                console.log("jajaja", instance[0]);
 
                 //get topology of instance
                 if (typeof instance[0].role !== 'undefined') {
@@ -227,7 +224,7 @@ function loadInitialData(mockData, callback) {
         .fail( () => {
             // Executed if at least one request fails
             console.log("Failed to get JSON data");
-            $(".alert-danger span").text("Failed to get all JSON data from " + viewModel.restConfig.hostname()).show();
+            $(".alert-danger span").text(`Failed to get all JSON data from ${viewModel.restConfig.hostname()}`).show();
             $(".alert-danger").show();
         });
 
@@ -260,7 +257,7 @@ function AppViewModel() {
     self.mqttConfig = {
         hostname: ko.observable(BrokerURL),
         port: ko.observable(BrokerPort),
-        clientID: ko.observable("client-" + rnd)
+        clientID: ko.observable(`client-${rnd}`)
     };
 
     self.restConfig = {
