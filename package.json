@@ -14,9 +14,11 @@
     "grunt-contrib-less": "^1.4.1",
     "grunt-contrib-uglify": "^3.3.0",
     "grunt-contrib-watch": "^1.0.1",
+    "grunt-express-server": "^0.5.4",
     "grunt-wiredep": "^3.0.1"
   },
   "dependencies": {
+    "express": "^4.16.3",
     "normalize.preprocessor": "^8.0.0",
     "npm": "^6.0.0"
   }

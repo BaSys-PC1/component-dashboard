@@ -20,3 +20,19 @@ Build www folder:
 ```bash
 grunt release
 ```
+
+# Docker
+Build docker image:
+```bash
+docker build -t jomo02/robot-status-webapp .
+```
+
+Run docker image:
+```bash
+docker run -p 80:8080 -d --name rs_webapp jomo02/robot-status-webapp
+```
+
+Stop docker container:
+```bash
+docker stop rs_webapp
+```

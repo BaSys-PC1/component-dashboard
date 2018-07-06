@@ -115,6 +115,15 @@ module.exports = function(grunt) {
                 ],
                 tasks: ['copy:for_www']
             }
+        },
+        express: {
+            web: {
+                options: {
+                    port: 8080,
+                    script: '<%= paths.dist %>/js/server.js',
+                    background: true,
+                }
+            }
         }
     });
 
@@ -127,11 +136,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-wiredep');
+    grunt.loadNpmTasks('grunt-express-server');
 
 
     // Default task(s).
     grunt.registerTask('default', ['clean', 'bower:install', 'less:live', 'copy:for_www', 'copy:fontAwesome']);
     grunt.registerTask('release', ['clean','bower:install', 'less:live', 'copy:for_www', 'copy:fontAwesome']);
     grunt.registerTask('run', ['clean','bower:install', 'less:dev', 'copy:for_www','copy:fontAwesome', 'connect', 'watch']);
+    grunt.registerTask('server', ['express:web', 'watch']);
 
 };
