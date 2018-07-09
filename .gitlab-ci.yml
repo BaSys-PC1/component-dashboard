@@ -1,6 +1,6 @@
 deploy_production:
   stage: deploy
-  image: ubuntu:latest
+  image: ubuntu:16.04
   before_script:
    - apt-get update -y && apt-get install sshpass
   script:
