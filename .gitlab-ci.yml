@@ -6,6 +6,7 @@ deploy_production:
   script:
   - sshpass -p "${SERVER_PASS}" ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no mrk-admin@hybrit-lnv-1
   - ls
-  - ./update_webapp.sh
+  - git pull
+  - ./docker.sh
   only:
   - master
