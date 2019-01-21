@@ -9,11 +9,13 @@ let resources,
     oldStyle,
     currentCell, sub, openedIndex,
     mockData = false,
-    APIbaseURL = "http://10.2.10.3:8080",
-    BrokerURL = "10.2.10.4",
-    BrokerPort = 9001,
-    camundaURL = "http://10.2.10.4:8080", //change to 10.2.0.28
-    processes = [
+	options = {
+		"APIbaseURL" : "http://10.2.10.3:8080",
+		"BrokerURL" : "10.2.10.4",
+		"BrokerPort" : 9001,
+		"CamundaURL" : "http://10.2.10.4:8080"
+	},
+	processes = [
         {
             name: "CeBIT 2018 mit Teaching",
             url: "/rest/engine/default/process-definition/key/process_cebit_2018/start",
@@ -255,18 +257,18 @@ function AppViewModel() {
 
     let rnd = Math.floor((Math.random() * 100) + 1);
     self.mqttConfig = {
-        hostname: ko.observable(BrokerURL),
-        port: ko.observable(BrokerPort),
+        hostname: ko.observable(options.BrokerURL),
+        port: ko.observable(options.BrokerPort),
         clientID: ko.observable(`client-${rnd}`)
     };
 
     self.restConfig = {
         mockData: ko.observable(mockData),
-        hostname: ko.observable(APIbaseURL)
+        hostname: ko.observable(options.APIbaseURL)
     };
 
     self.camundaConfig = {
-        hostname: ko.observable(camundaURL)
+        hostname: ko.observable(options.CamundaURL)
     };
 
     self.changeMockData = () => {
@@ -686,25 +688,39 @@ $('.alert .close').click( () => {
         Main
 ################*/
 
+function start() {
+	$.getJSON("/data/translation.json").done( trans => {
+		resources = trans;
+
+		i18nextko.init(resources, 'en', ko);
+
+		viewModel = new AppViewModel();
+		ko.applyBindings(viewModel);
+
+		$("#deviceContainer").show();
+
+		initMQTT();
+
+		graph = initGraph();
+
+		loadInitialData(viewModel.restConfig.mockData(), () => {});
+	});
+}
+
 function main() {
 
-    $.getJSON("/data/translation.json").done( trans => {
-        resources = trans;
-
-        i18nextko.init(resources, 'en', ko);
-
-        viewModel = new AppViewModel();
-        ko.applyBindings(viewModel);
-
-        $("#deviceContainer").show();
-
-        initMQTT();
-
-        graph = initGraph();
-
-        loadInitialData(viewModel.restConfig.mockData(), () => {});
-    });
-
+	$.getJSON("/config")
+		.done( newOptions => {
+			console.log("successfully retrieved options");
+			options = newOptions;
+			console.log(options);
+			start();			
+		})
+		.fail(function() {			
+			console.log("using static default options");
+			console.log(options);
+			start();
+		});  
 }
 
 main();
