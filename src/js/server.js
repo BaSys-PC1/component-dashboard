@@ -21,15 +21,15 @@ app.get('/config', function (req, res) {
 		APIbaseURL = process.env.BASYS_REST_URL;
 	}
 	if(process.env.MQTT_BROKER_IP) { 
-		console.log("BrokerURL = " + process.env.BASYS_REST_URL)
+		console.log("BrokerURL = " + process.env.MQTT_BROKER_IP)
 		BrokerURL = process.env.MQTT_BROKER_IP;
 	}
 	if(process.env.MQTT_BROKER_PORT) { 
-		console.log("BrokerPort = " + process.env.BASYS_REST_URL)
+		console.log("BrokerPort = " + process.env.MQTT_BROKER_PORT)
 		BrokerPort = process.env.MQTT_BROKER_PORT;
 	}
 	if(process.env.CAMUNDA_REST_URL) { 
-		console.log("CamundaURL = " + process.env.BASYS_REST_URL)
+		console.log("CamundaURL = " + process.env.CAMUNDA_REST_URL)
 		CamundaURL = process.env.CAMUNDA_REST_URL;
 	}
 	var options = {
