@@ -21,6 +21,18 @@ Build www folder:
 grunt release
 ```
 
+# Generate Licenses
+
+Generate all build dependency licenses:
+```bash
+grunt license
+```
+
+Generate all production dependency licenses:
+```bash
+bower-license -e json
+```
+
 # Docker
 Set the needed BaSys/MQTT/Camunda Urls in docker.sh file:
 ```bash
