@@ -124,7 +124,15 @@ module.exports = function(grunt) {
                     background: true,
                 }
             }
-        }
+        },
+        license: {
+            options: {
+                // Task-specific options go here.
+            },
+            your_target: {
+                // Target-specific file lists and/or options go here.
+            },
+        },
     });
 
     // Load the plugins
@@ -137,7 +145,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-wiredep');
     grunt.loadNpmTasks('grunt-express-server');
-
+    grunt.loadNpmTasks('grunt-license');
 
     // Default task(s).
     grunt.registerTask('default', ['clean', 'bower:install', 'less:live', 'copy:for_www', 'copy:fontAwesome']);

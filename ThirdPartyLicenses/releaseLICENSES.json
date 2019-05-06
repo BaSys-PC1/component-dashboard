@@ -1,0 +1,70 @@
+{
+  "babylonjs@3.3.0": {
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/BabylonJS/Babylon.js.git"
+    },
+    "homepage": "https://www.babylonjs.com"
+  },
+  "jquery@3.3.1": {
+    "licenses": [
+      "MIT"
+    ]
+  },
+  "paho-mqtt@1.0.1": {
+    "licenses": [
+      "epl-v10"
+    ],
+    "homepage": "https://github.com/larrytin/paho.mqtt.javascript"
+  },
+  "components-font-awesome@5.4.2": {
+    "licenses": [
+      "CC-BY-4.0",
+      "MIT",
+      "OFL-1.1"
+    ],
+    "repository": "https://github.com/components/font-awesome"
+  },
+  "i18next-ko@3.0.1": {
+    "licenses": [
+      "MIT"
+    ],
+    "homepage": "https://github.com/leMaik/i18next-ko",
+    "repository": "https://github.com/leMaik/i18next-ko"
+  },
+  "knockout-mapping@2.4.1": {
+    "licenses": "UNKNOWN",
+    "homepage": "https://github.com/SteveSanderson/knockout.mapping"
+  },
+  "pep@0.6.10": {
+    "licenses": [
+      "MIT"
+    ],
+    "repository": "https://github.com/briangonzalez/jquery.pep.js"
+  },
+  "bootstrap@4.3.1": {
+    "licenses": [
+      "MIT"
+    ],
+    "homepage": "https://github.com/twbs/bootstrap",
+    "repository": "https://github.com/twbs/bootstrap"
+  },
+  "knockout@3.5.0": {
+    "licenses": [
+      "MIT"
+    ],
+    "homepage": "http://knockoutjs.com/",
+    "repository": "https://github.com/knockout/knockout"
+  },
+  "mxgraph@3.9.12": {
+    "licenses": [
+      "Apache-2.0",
+      "Apache*"
+    ],
+    "homepage": "https://github.com/jgraph/mxgraph",
+    "repository": "https://github.com/jgraph/mxgraph"
+  }
+}
