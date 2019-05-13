@@ -1,8 +1,8 @@
 {
-  "name": "robot-status-webapp",
+  "name": "component-dashboard",
   "version": "0.1.0",
-  "license": "EPLv1",
-  "description": "Dashboard for robots in HRC",
+  "license": "EPLv2",
+  "description": "BaSys 4.0 Component Dashboard",
   "author": "Jonas Mohr (jonas.mohr@dfki.de)",
   "main": "Gruntfile.js",
   "devDependencies": {
