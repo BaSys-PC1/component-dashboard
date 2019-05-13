@@ -20,11 +20,18 @@
     "paho-mqtt": "*",
     "mxgraph": "^3.9.3",
     "knockout-mapping": "^2.4.1",
-    "components-font-awesome": "^5.0.6"
+    "components-font-awesome": "^5.0.6",
+    "pep": "^0.6.10"
   },
   "exportsOverride": {
     "i18next-ko": {
-      "js": "lib/i18next-ko.bundle.js"
+      ".": "lib/i18next-ko.bundle.js"
+    },
+    "bootstrap": {
+      ".": "dist/*"
+    },
+    "knockout-mapping": {
+      ".": "build/output/*"
     }
   }
 }
