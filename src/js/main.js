@@ -63,21 +63,24 @@ function loadInitialData(mockData, callback) {
         man_url = (mockData) ? "/data/management_components.json" : viewModel.restConfig.hostname() + "/services/registry/MANAGEMENT_COMPONENT",
         serv_url = (mockData) ? "/data/service_components.json" : viewModel.restConfig.hostname() + "/services/registry/SERVICE_COMPONENT",
         inst_url = (mockData) ? "/data/resource_instances.json" : viewModel.restConfig.hostname() + "/services/resourceinstance/",
-        typ_url = (mockData) ? "/data/resource_types.json" : viewModel.restConfig.hostname() + "/services/resourcetype/";
+        typ_url = (mockData) ? "/data/resource_types.json" : viewModel.restConfig.hostname() + "/services/resourcetype/",
+        lic_url = "/licenses/releaseLICENSES";
 
     let devCount = 0,
         devices = [],
         services = [],
-        management = [];
+        management = [],
+        licenses = [];
 
     $.when(
         $.getJSON(dev_url),
         $.getJSON(man_url),
         $.getJSON(serv_url),
         $.getJSON(inst_url),
-        $.getJSON(typ_url)
+        $.getJSON(typ_url),
+        $.getJSON(lic_url)
     )
-        .done( (dev, man, serv, inst, typ) => {
+        .done( (dev, man, serv, inst, typ, lic) => {
 
             function addTeachCapability(index, id) {
                 $.getJSON(`${viewModel.restConfig.hostname()}/services/entity/${id}`)
@@ -194,6 +197,10 @@ function loadInitialData(mockData, callback) {
                 };
             });
 
+            licenses = Object.keys(lic[0]).map(function(key) {
+                return {'name': key, 'type' : lic[0][key].licenses};
+            });
+
             checkCallback();
 
             //all data needs to be loaded first before executing main()
@@ -215,6 +222,8 @@ function loadInitialData(mockData, callback) {
                     ko.mapping.fromJS(devices, viewModel.devices);
                     ko.mapping.fromJS(services, viewModel.services);
                     ko.mapping.fromJS(management, viewModel.management);
+
+                    ko.mapping.fromJS(licenses, viewModel.licenses);
 
                     console.log("new devices", devices);
                     callback();
@@ -249,6 +258,7 @@ function AppViewModel() {
     self.devices = ko.mapping.fromJS([]);
     self.management = ko.mapping.fromJS([]);
     self.services = ko.mapping.fromJS([]);
+    self.licenses = ko.mapping.fromJS([]);
 
     self.currentCapability = ko.observable([]);
     self.runningPID = ko.observable(0);

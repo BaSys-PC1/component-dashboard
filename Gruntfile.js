@@ -73,6 +73,16 @@ module.exports = function(grunt) {
                     dest: '<%= paths.dist %>/libs/webfonts'
                     }
                 ]
+            },
+            licenses:{ //place fonts in the right relatively linked directory
+                files:[
+                    {
+                        expand: true,
+                    cwd: 'ThirdPartyLicenses/',
+                    src: ['releaseLICENSES'],
+                    dest: '<%= paths.dist %>/licenses'
+                    }
+                ]
             }
         },
 
@@ -148,9 +158,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-license');
 
     // Default task(s).
-    grunt.registerTask('default', ['clean', 'bower:install', 'less:live', 'copy:for_www', 'copy:fontAwesome']);
-    grunt.registerTask('release', ['clean','bower:install', 'less:live', 'copy:for_www', 'copy:fontAwesome']);
-    grunt.registerTask('run', ['clean','bower:install', 'less:dev', 'copy:for_www','copy:fontAwesome', 'connect', 'watch']);
+    grunt.registerTask('default', ['clean', 'bower:install', 'less:live', 'copy']);
+    grunt.registerTask('release', ['clean','bower:install', 'less:live', 'copy']);
+    grunt.registerTask('run', ['clean','bower:install', 'less:dev', 'copy', 'connect', 'watch']);
     grunt.registerTask('server', ['express:web', 'watch']);
 
 };

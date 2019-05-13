@@ -86,6 +86,9 @@
                     <input class="form-control" data-bind="value: camundaConfig.hostname"/>
                 </div>
             </div>
+            <button type="button" data-toggle="modal" data-target="#buildLicenses" class="btn btn-info float-right">
+                <i class="fas fa-question-circle fa-2x"></i>
+            </button>
         </div>
     </div>
 
@@ -284,6 +287,37 @@
      </div>
     </div>
  </div>
+
+<div class="modal" id="buildLicenses" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Licenses</h5>
+            </div>
+            <div class="modal-body">
+
+                <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Package</th>
+                        <th scope="col">License</th>
+                    </tr>
+                    </thead>
+                    <tbody data-bind="foreach: licenses">
+                    <tr>
+                        <td data-bind="text: name"></td>
+                        <td data-bind="text: type"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><span data-bind="i18n: 'modal_close'"></span></button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
  <script src="libs/knockout/knockout.js"></script>
