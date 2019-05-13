@@ -1,6 +1,6 @@
 {
-  "name": "robot-status-webapp",
-  "description": "Dashboard for robots in HRC",
+  "name": "component-dashboard",
+  "description": "BaSys 4.0 Component Dashboard",
   "main": "Gruntfile.js",
   "authors": [
     "Jonas Mohr (jonas.mohr@dfki.de)"
