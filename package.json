@@ -24,6 +24,6 @@
     "bower-license": "^0.4.4",
     "express": "^4.16.4",
     "normalize.preprocessor": "^8.0.0",
-    "npm": "^6.9.0"
+    "npm": "^6.14.6"
   }
 }
